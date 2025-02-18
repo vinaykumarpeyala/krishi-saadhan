@@ -273,7 +273,6 @@ Public Class ProductManagementForm
 
     Private Sub btnClear_Click(sender As Object, e As EventArgs) Handles btnClear.Click
         ClearFields()
-
     End Sub
 
     ' Button to Redirect to Admin Dashboard
@@ -355,9 +354,8 @@ Public Class ProductManagementForm
         End If
     End Sub
 
-    Private Sub homepage_Click(sender As Object, e As EventArgs) Handles homepage.Click
+    Private Sub homepage_Click(sender As Object, e As EventArgs)
         Dim adminpage As New AdminDashboard()
         adminpage.Show()
-
     End Sub
 End Class

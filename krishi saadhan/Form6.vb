@@ -5,7 +5,8 @@ Public Class StockManagementForm
 
     Private Sub StockManagementForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         LoadProductsAndStock()
-        txtStockId.Visible = False ' Hide Stock ID textbox initially
+        txtStockId.Visible = False
+        lblStockId.Visible = False
     End Sub
 
     ' Load products and stock details into DataGridView
@@ -268,23 +269,28 @@ Public Class StockManagementForm
     ' Show txtStockId when Update or Delete is clicked
     Private Sub btnUpdateStock_MouseClick(sender As Object, e As MouseEventArgs) Handles btnUpdateStock.MouseClick
         txtStockId.Visible = True
+        lblStockId.Visible = True
     End Sub
 
     Private Sub btnDeleteStock_MouseClick(sender As Object, e As MouseEventArgs) Handles btnDeleteStock.MouseClick
         txtStockId.Visible = True
+        lblStockId.Visible = True
     End Sub
 
     ' Hide txtStockId when other buttons are clicked
     Private Sub btnAddStock_MouseClick(sender As Object, e As MouseEventArgs) Handles btnAddStock.MouseClick
         txtStockId.Visible = False
+        lblStockId.Visible = False
     End Sub
 
     Private Sub btnCheckLowStock_MouseClick(sender As Object, e As MouseEventArgs) Handles btnCheckLowStock.MouseClick
         txtStockId.Visible = False
+        lblStockId.Visible = False
     End Sub
 
     Private Sub btnReturnToHomePage_MouseClick(sender As Object, e As MouseEventArgs) Handles btnReturnToHomePage.MouseClick
         txtStockId.Visible = False
+        lblStockId.Visible = False
     End Sub
 
     ' Refresh DataGridView button

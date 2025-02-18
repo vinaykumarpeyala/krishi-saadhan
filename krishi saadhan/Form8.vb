@@ -5,6 +5,7 @@ Public Class BillForm
     Dim billingTable As DataTable
     Private userId As Integer
     Private currentSaleID As Integer
+    Private currentCustomerID As Integer?
 
     Public Sub New(billingTable As DataTable, userId As Integer)
         InitializeComponent()
@@ -97,6 +98,7 @@ Public Class BillForm
 
                 Using cmd As New SqlCommand(query, conn)
                     cmd.Parameters.AddWithValue("@CustomerName", "%" & customerName & "%")
+                    cmd.CommandTimeout = 120 ' Increase the command timeout
                     Using adapter As New SqlDataAdapter(cmd)
                         Dim dt As New DataTable()
                         adapter.Fill(dt)
@@ -129,8 +131,10 @@ Public Class BillForm
                     End Using
                 End Using
             End Using
+        Catch ex As SqlException When ex.Number = -2 ' SQL Server timeout error number
+            MessageBox.Show("Error searching customer details: Execution Timeout Expired. The timeout period elapsed prior to completion of the operation or the server is not responding", "Timeout Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         Catch ex As Exception
-            MessageBox.Show("Error searching customer details: " & ex.Message)
+            MessageBox.Show("Error searching customer details: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 
@@ -182,8 +186,90 @@ Public Class BillForm
         End If
     End Function
 
+    ' Handle Proceed button click to insert new customer and proceed with payment process
+    Private Sub btnProceed_Click(sender As Object, e As EventArgs) Handles btnProceed.Click
+        Dim customerName As String = txtCustomerName.Text.Trim()
+        Dim customerPhone As String = txtCustomerPhone.Text.Trim()
+
+        If String.IsNullOrEmpty(customerName) Or String.IsNullOrEmpty(customerPhone) Then
+            MessageBox.Show("Please enter both Customer Name and Phone Number.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Return
+        End If
+
+        Try
+            Using conn As New SqlConnection(connectionString)
+                conn.Open()
+                ' Check if customer already exists by name
+                Dim checkNameQuery As String = "SELECT CustomerID FROM Customers WHERE CustomerName = @CustomerName"
+                Using checkNameCmd As New SqlCommand(checkNameQuery, conn)
+                    checkNameCmd.Parameters.AddWithValue("@CustomerName", customerName)
+                    Dim nameResult = checkNameCmd.ExecuteScalar()
+
+                    If nameResult IsNot Nothing Then
+                        ' Name matches, now check if both name and phone number match
+                        Dim checkQuery As String = "SELECT CustomerID FROM Customers WHERE CustomerName = @CustomerName AND CustomerPhone = @CustomerPhone"
+                        Using checkCmd As New SqlCommand(checkQuery, conn)
+                            checkCmd.Parameters.AddWithValue("@CustomerName", customerName)
+                            checkCmd.Parameters.AddWithValue("@CustomerPhone", customerPhone)
+                            Dim checkResult = checkCmd.ExecuteScalar()
+
+                            If checkResult IsNot Nothing Then
+                                ' Both name and phone number match
+                                currentCustomerID = Convert.ToInt32(checkResult)
+                                txtCustID.Text = currentCustomerID.ToString()
+                            Else
+                                ' Name matches but phone number doesn't, treat as new customer
+                                InsertNewCustomer(customerName, customerPhone)
+                            End If
+                        End Using
+                    Else
+                        ' Name does not match, treat as new customer
+                        InsertNewCustomer(customerName, customerPhone)
+                    End If
+                End Using
+            End Using
+
+            ' Prompt to update additional details
+            Dim updateResult = MessageBox.Show("Would you like to update the email and address for this customer?", "Update Details", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+            If updateResult = DialogResult.Yes Then
+                txtCustomerEmail.Visible = True
+                txtCustomerAddress.Visible = True
+                btnSaveDetails.Visible = True
+                btnConfirmPayment.Visible = False
+            Else
+                btnConfirmPayment.Visible = True
+            End If
+
+        Catch ex As Exception
+            MessageBox.Show("Error processing customer details: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    Private Sub InsertNewCustomer(customerName As String, customerPhone As String)
+        Try
+            Using conn As New SqlConnection(connectionString)
+                conn.Open()
+                Dim insertQuery As String = "INSERT INTO Customers (CustomerName, CustomerPhone) OUTPUT INSERTED.CustomerID VALUES (@CustomerName, @CustomerPhone)"
+                Using insertCmd As New SqlCommand(insertQuery, conn)
+                    insertCmd.Parameters.AddWithValue("@CustomerName", customerName)
+                    insertCmd.Parameters.AddWithValue("@CustomerPhone", customerPhone)
+                    insertCmd.CommandTimeout = 30 ' Set the command timeout
+                    currentCustomerID = Convert.ToInt32(insertCmd.ExecuteScalar())
+                    txtCustID.Text = currentCustomerID.ToString()
+                End Using
+            End Using
+        Catch ex As Exception
+            MessageBox.Show("Error inserting new customer: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
     ' Update the btnConfirmPayment_Click to use the new payment mode method
     Private Sub btnConfirmPayment_Click(sender As Object, e As EventArgs) Handles btnConfirmPayment.Click
+        If currentCustomerID Is Nothing Then
+            MessageBox.Show("Please enter customer details and proceed.", "Customer Required", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Return
+        End If
+
         If Not (rdoCash.Checked Or rdoCredit.Checked Or rdoDebit.Checked) Then
             MessageBox.Show("Please select a payment mode.", "Payment Mode Required", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Return
@@ -216,7 +302,7 @@ Public Class BillForm
                 Dim insertSaleQuery As String = "INSERT INTO Sales (CustomerID, UserID, TotalAmount) OUTPUT INSERTED.SaleID VALUES (@CustomerID, @UserID, 0)"
                 Using cmd As New SqlCommand(insertSaleQuery, conn)
                     cmd.CommandTimeout = 30 ' Set the command timeout
-                    cmd.Parameters.AddWithValue("@CustomerID", Convert.ToInt32(txtCustID.Text))
+                    cmd.Parameters.AddWithValue("@CustomerID", currentCustomerID)
                     cmd.Parameters.AddWithValue("@UserID", userId)
                     saleID = Convert.ToInt32(cmd.ExecuteScalar())
                 End Using

@@ -41,7 +41,7 @@ Partial Class PrintBillForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(800, 450)
+        Me.ClientSize = New System.Drawing.Size(853, 482)
         Me.Name = "PrintBillForm"
         Me.Text = "Form12"
         Me.ResumeLayout(False)

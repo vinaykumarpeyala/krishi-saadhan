@@ -22,7 +22,6 @@ Partial Class BillForm
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(BillForm))
         Me.txtCustomerName = New System.Windows.Forms.TextBox()
         Me.txtCustomerAddress = New System.Windows.Forms.TextBox()
         Me.txtCustomerEmail = New System.Windows.Forms.TextBox()
@@ -52,8 +51,7 @@ Partial Class BillForm
         Me.txtCardNumber = New System.Windows.Forms.TextBox()
         Me.ComboBoxBankName = New System.Windows.Forms.ComboBox()
         Me.DateTimePicker1 = New System.Windows.Forms.DateTimePicker()
-        Me.PrintPreviewDialog1 = New System.Windows.Forms.PrintPreviewDialog()
-        Me.PrintDocument1 = New System.Drawing.Printing.PrintDocument()
+        Me.btnProceed = New System.Windows.Forms.Button()
         CType(Me.dgvBillDetails, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.dgvCustomerDetails, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBox1.SuspendLayout()
@@ -116,7 +114,7 @@ Partial Class BillForm
         '
         'btnSaveDetails
         '
-        Me.btnSaveDetails.Location = New System.Drawing.Point(112, 287)
+        Me.btnSaveDetails.Location = New System.Drawing.Point(231, 290)
         Me.btnSaveDetails.Name = "btnSaveDetails"
         Me.btnSaveDetails.Size = New System.Drawing.Size(75, 23)
         Me.btnSaveDetails.TabIndex = 7
@@ -322,21 +320,21 @@ Partial Class BillForm
         Me.DateTimePicker1.Size = New System.Drawing.Size(200, 22)
         Me.DateTimePicker1.TabIndex = 16
         '
-        'PrintPreviewDialog1
+        'btnProceed
         '
-        Me.PrintPreviewDialog1.AutoScrollMargin = New System.Drawing.Size(0, 0)
-        Me.PrintPreviewDialog1.AutoScrollMinSize = New System.Drawing.Size(0, 0)
-        Me.PrintPreviewDialog1.ClientSize = New System.Drawing.Size(400, 300)
-        Me.PrintPreviewDialog1.Enabled = True
-        Me.PrintPreviewDialog1.Icon = CType(resources.GetObject("PrintPreviewDialog1.Icon"), System.Drawing.Icon)
-        Me.PrintPreviewDialog1.Name = "PrintPreviewDialog1"
-        Me.PrintPreviewDialog1.Visible = False
+        Me.btnProceed.Location = New System.Drawing.Point(27, 283)
+        Me.btnProceed.Name = "btnProceed"
+        Me.btnProceed.Size = New System.Drawing.Size(75, 23)
+        Me.btnProceed.TabIndex = 17
+        Me.btnProceed.Text = "Button1"
+        Me.btnProceed.UseVisualStyleBackColor = True
         '
         'BillForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1229, 542)
+        Me.ClientSize = New System.Drawing.Size(1229, 552)
+        Me.Controls.Add(Me.btnProceed)
         Me.Controls.Add(Me.DateTimePicker1)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.btnPrintBill)
@@ -393,9 +391,8 @@ Partial Class BillForm
     Friend WithEvents txtCardNumber As TextBox
     Friend WithEvents ComboBoxBankName As ComboBox
     Friend WithEvents DateTimePicker1 As DateTimePicker
-    Friend WithEvents PrintPreviewDialog1 As PrintPreviewDialog
-    Friend WithEvents PrintDocument1 As Printing.PrintDocument
     Friend WithEvents rdoDebit As RadioButton
     Friend WithEvents rdoCredit As RadioButton
     Friend WithEvents rdoCash As RadioButton
+    Friend WithEvents btnProceed As Button
 End Class
