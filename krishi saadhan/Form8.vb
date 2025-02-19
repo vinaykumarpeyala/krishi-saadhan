@@ -26,7 +26,7 @@ Public Class BillForm
         btnConfirmPayment.Visible = False
         dgvBillDetails.DataSource = billingTable
 
-        ' Populate ComboBox with real bank names
+        ' Populate ComboBox with bank names
         ComboBoxBankName.Items.AddRange(New String() {
             "Bank of Baroda", "Canara", "ICICI", "SBI", "HDFC",
             "Yes Bank", "Kotak Mahindra Bank", "TJSB"})
@@ -37,6 +37,201 @@ Public Class BillForm
         rdoDebit.Checked = False
     End Sub
 
+    ' Validation functions
+    Private Function IsValidName(name As String) As Boolean
+        Return Not String.IsNullOrWhiteSpace(name) AndAlso name.All(Function(c) Char.IsLetter(c) OrElse Char.IsWhiteSpace(c))
+    End Function
+
+    Private Function IsValidPhoneNumber(phone As String) As Boolean
+        Return Not String.IsNullOrWhiteSpace(phone) AndAlso phone.Length = 10 AndAlso phone.All(Function(c) Char.IsDigit(c))
+    End Function
+
+    ' TextBox validation events
+    Private Sub txtCustomerName_TextChanged(sender As Object, e As EventArgs) Handles txtCustomerName.TextChanged
+        If Not IsValidName(txtCustomerName.Text.Trim()) Then
+            txtCustomerName.BackColor = Color.LightPink
+            Return
+        Else
+            txtCustomerName.BackColor = Color.White
+        End If
+
+        Dim customerName As String = txtCustomerName.Text.Trim()
+        ResetFields()
+
+        If String.IsNullOrEmpty(customerName) Then
+            Return
+        End If
+
+        Try
+            Using conn As New SqlConnection(connectionString)
+                conn.Open()
+                Dim query As String = "SELECT CustomerID, CustomerName, CustomerPhone FROM Customers WHERE CustomerName LIKE @CustomerName"
+                Using cmd As New SqlCommand(query, conn)
+                    cmd.Parameters.AddWithValue("@CustomerName", "%" & customerName & "%")
+                    Using adapter As New SqlDataAdapter(cmd)
+                        Dim dt As New DataTable()
+                        adapter.Fill(dt)
+
+                        If dt.Rows.Count > 0 Then
+                            dgvCustomerDetails.AutoGenerateColumns = False
+                            dgvCustomerDetails.Columns.Clear()
+
+                            With dgvCustomerDetails
+                                .Columns.Add(New DataGridViewTextBoxColumn With {
+                                    .Name = "CustomerID",
+                                    .HeaderText = "Customer ID",
+                                    .DataPropertyName = "CustomerID"
+                                })
+                                .Columns.Add(New DataGridViewTextBoxColumn With {
+                                    .Name = "CustomerName",
+                                    .HeaderText = "Name",
+                                    .DataPropertyName = "CustomerName"
+                                })
+                                .Columns.Add(New DataGridViewTextBoxColumn With {
+                                    .Name = "CustomerPhone",
+                                    .HeaderText = "Phone",
+                                    .DataPropertyName = "CustomerPhone"
+                                })
+                                .DataSource = dt
+                                .Visible = True
+                            End With
+                        End If
+                    End Using
+                End Using
+            End Using
+        Catch ex As Exception
+            MessageBox.Show("Error searching customer details: " & ex.Message)
+        End Try
+    End Sub
+
+    Private Sub txtCustomerPhone_TextChanged(sender As Object, e As EventArgs) Handles txtCustomerPhone.TextChanged
+        If Not String.IsNullOrEmpty(txtCustomerPhone.Text) AndAlso Not txtCustomerPhone.Text.All(Function(c) Char.IsDigit(c)) Then
+            txtCustomerPhone.Text = String.Join("", txtCustomerPhone.Text.Where(Function(c) Char.IsDigit(c)))
+            txtCustomerPhone.SelectionStart = txtCustomerPhone.Text.Length
+        End If
+
+        If txtCustomerPhone.Text.Length > 10 Then
+            txtCustomerPhone.Text = txtCustomerPhone.Text.Substring(0, 10)
+            txtCustomerPhone.SelectionStart = txtCustomerPhone.Text.Length
+        End If
+
+        If Not String.IsNullOrEmpty(txtCustomerPhone.Text) AndAlso txtCustomerPhone.Text.Length < 10 Then
+            txtCustomerPhone.BackColor = Color.LightPink
+        Else
+            txtCustomerPhone.BackColor = Color.White
+        End If
+    End Sub
+
+    ' DataGridView cell click handler
+    Private Sub dgvCustomerDetails_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvCustomerDetails.CellClick
+        If e.RowIndex >= 0 Then
+            Try
+                Dim row As DataGridViewRow = dgvCustomerDetails.Rows(e.RowIndex)
+                currentCustomerID = Convert.ToInt32(row.Cells("CustomerID").Value)
+                txtCustID.Text = currentCustomerID.ToString()
+                txtCustomerName.Text = row.Cells("CustomerName").Value.ToString()
+                txtCustomerPhone.Text = row.Cells("CustomerPhone").Value.ToString()
+
+                ' Load additional customer details
+                Using conn As New SqlConnection(connectionString)
+                    conn.Open()
+                    Dim query As String = "SELECT CustomerEmail, CustomerAddress FROM Customers WHERE CustomerID = @CustomerID"
+                    Using cmd As New SqlCommand(query, conn)
+                        cmd.Parameters.AddWithValue("@CustomerID", currentCustomerID)
+                        Using reader As SqlDataReader = cmd.ExecuteReader()
+                            If reader.Read() Then
+                                txtCustomerEmail.Text = If(reader.IsDBNull(0), "", reader.GetString(0))
+                                txtCustomerAddress.Text = If(reader.IsDBNull(1), "", reader.GetString(1))
+                            End If
+                        End Using
+                    End Using
+                End Using
+
+                txtCustID.Visible = True
+                lblCustID.Visible = True
+                txtCustomerEmail.Visible = True
+                txtCustomerAddress.Visible = True
+                btnSaveDetails.Visible = True
+                btnConfirmPayment.Visible = True
+            Catch ex As Exception
+                MessageBox.Show("Error selecting customer: " & ex.Message)
+            End Try
+        End If
+    End Sub
+
+    ' Updated Proceed button functionality
+    Private Sub btnProceed_Click(sender As Object, e As EventArgs) Handles btnProceed.Click
+        Dim customerName As String = txtCustomerName.Text.Trim()
+        Dim customerPhone As String = txtCustomerPhone.Text.Trim()
+
+        ' Validate inputs
+        If Not IsValidName(customerName) Then
+            MessageBox.Show("Please enter a valid customer name using only letters and spaces.", "Invalid Input", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Return
+        End If
+
+        If Not IsValidPhoneNumber(customerPhone) Then
+            MessageBox.Show("Please enter a valid 10-digit phone number.", "Invalid Input", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Return
+        End If
+
+        Try
+            Using conn As New SqlConnection(connectionString)
+                conn.Open()
+                ' Check if customer exists by phone number
+                Dim checkQuery As String = "SELECT CustomerID FROM Customers WHERE CustomerPhone = @CustomerPhone"
+                Using checkCmd As New SqlCommand(checkQuery, conn)
+                    checkCmd.Parameters.AddWithValue("@CustomerPhone", customerPhone)
+                    Dim existingCustomerId = checkCmd.ExecuteScalar()
+
+                    If existingCustomerId IsNot Nothing Then
+                        ' Customer exists - load their details
+                        currentCustomerID = Convert.ToInt32(existingCustomerId)
+                        LoadCustomerDetails(currentCustomerID)
+                        btnConfirmPayment.Visible = True
+                    Else
+                        ' Show additional fields for new customer
+                        txtCustomerEmail.Visible = True
+                        txtCustomerAddress.Visible = True
+                        btnSaveDetails.Visible = True
+                        btnConfirmPayment.Visible = False
+                    End If
+                End Using
+            End Using
+        Catch ex As Exception
+            MessageBox.Show("Error processing customer details: " & ex.Message)
+        End Try
+    End Sub
+
+    Private Sub LoadCustomerDetails(customerId As Integer)
+        Try
+            Using conn As New SqlConnection(connectionString)
+                conn.Open()
+                Dim query As String = "SELECT * FROM Customers WHERE CustomerID = @CustomerID"
+                Using cmd As New SqlCommand(query, conn)
+                    cmd.Parameters.AddWithValue("@CustomerID", customerId)
+                    Using reader As SqlDataReader = cmd.ExecuteReader()
+                        If reader.Read() Then
+                            txtCustID.Text = reader("CustomerID").ToString()
+                            txtCustomerName.Text = reader("CustomerName").ToString()
+                            txtCustomerPhone.Text = reader("CustomerPhone").ToString()
+                            txtCustomerEmail.Text = If(reader("CustomerEmail") Is DBNull.Value, "", reader("CustomerEmail").ToString())
+                            txtCustomerAddress.Text = If(reader("CustomerAddress") Is DBNull.Value, "", reader("CustomerAddress").ToString())
+
+                            txtCustID.Visible = True
+                            lblCustID.Visible = True
+                            txtCustomerEmail.Visible = True
+                            txtCustomerAddress.Visible = True
+                        End If
+                    End Using
+                End Using
+            End Using
+        Catch ex As Exception
+            MessageBox.Show("Error loading customer details: " & ex.Message)
+        End Try
+    End Sub
+
+    ' Payment mode radio button handlers
     Private Sub rdoCash_CheckedChanged(sender As Object, e As EventArgs) Handles rdoCash.CheckedChanged
         If rdoCash.Checked Then
             PanelCardDetails.Visible = False
@@ -55,127 +250,6 @@ Public Class BillForm
         End If
     End Sub
 
-    ' Add this helper method to check DataGridView setup
-    Private Sub VerifyDataGridViewColumns()
-        Debug.Print("DataGridView Columns:")
-        For Each col As DataGridViewColumn In dgvCustomerDetails.Columns
-            Debug.Print($"Column Name: {col.Name}, DataPropertyName: {col.DataPropertyName}")
-        Next
-    End Sub
-
-    Private Sub dgvCustomerDetails_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvCustomerDetails.CellClick
-        If e.RowIndex >= 0 Then
-            Try
-                Dim row As DataGridViewRow = dgvCustomerDetails.Rows(e.RowIndex)
-                ' Populate all textboxes from the selected row
-                txtCustID.Text = row.Cells("CustomerID").Value.ToString()
-                txtCustomerName.Text = row.Cells("CustomerName").Value.ToString()
-                txtCustomerPhone.Text = row.Cells("CustomerPhone").Value.ToString()
-
-                txtCustID.Visible = True
-                lblCustID.Visible = True
-                btnConfirmPayment.Visible = True
-            Catch ex As Exception
-                MessageBox.Show("Error selecting customer: " & ex.Message)
-            End Try
-        End If
-    End Sub
-
-    ' Modified customer search method
-    Private Sub txtCustomerName_TextChanged(sender As Object, e As EventArgs) Handles txtCustomerName.TextChanged
-        Dim customerName As String = txtCustomerName.Text.Trim()
-        ResetFields()
-
-        If String.IsNullOrEmpty(customerName) Then
-            Return
-        End If
-
-        Try
-            Using conn As New SqlConnection(connectionString)
-                conn.Open()
-                ' Modified query to explicitly select required columns
-                Dim query As String = "SELECT CustomerID, CustomerName, CustomerPhone FROM Customers WHERE CustomerName LIKE @CustomerName"
-
-                Using cmd As New SqlCommand(query, conn)
-                    cmd.Parameters.AddWithValue("@CustomerName", "%" & customerName & "%")
-                    cmd.CommandTimeout = 120 ' Increase the command timeout
-                    Using adapter As New SqlDataAdapter(cmd)
-                        Dim dt As New DataTable()
-                        adapter.Fill(dt)
-
-                        If dt.Rows.Count > 0 Then
-                            dgvCustomerDetails.AutoGenerateColumns = False
-                            dgvCustomerDetails.Columns.Clear()
-
-                            ' Set up columns with correct bindings
-                            With dgvCustomerDetails
-                                .Columns.Add(New DataGridViewTextBoxColumn With {
-                                .Name = "CustomerID",
-                                .HeaderText = "Customer ID",
-                                .DataPropertyName = "CustomerID"
-                            })
-                                .Columns.Add(New DataGridViewTextBoxColumn With {
-                                .Name = "CustomerName",
-                                .HeaderText = "Name",
-                                .DataPropertyName = "CustomerName"
-                            })
-                                .Columns.Add(New DataGridViewTextBoxColumn With {
-                                .Name = "CustomerPhone",
-                                .HeaderText = "Phone",
-                                .DataPropertyName = "CustomerPhone"
-                            })
-                                .DataSource = dt
-                                .Visible = True
-                            End With
-                        End If
-                    End Using
-                End Using
-            End Using
-        Catch ex As SqlException When ex.Number = -2 ' SQL Server timeout error number
-            MessageBox.Show("Error searching customer details: Execution Timeout Expired. The timeout period elapsed prior to completion of the operation or the server is not responding", "Timeout Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        Catch ex As Exception
-            MessageBox.Show("Error searching customer details: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
-
-    Private Sub btnSaveDetails_Click(sender As Object, e As EventArgs) Handles btnSaveDetails.Click
-        Try
-            Using conn As New SqlConnection(connectionString)
-                conn.Open()
-                Dim updateQuery As String = "UPDATE Customers SET CustomerEmail = @CustomerEmail, CustomerAddress = @CustomerAddress WHERE CustomerID = @CustomerID"
-                Using cmd As New SqlCommand(updateQuery, conn)
-                    cmd.Parameters.AddWithValue("@CustomerID", Convert.ToInt32(txtCustID.Text))
-                    cmd.Parameters.AddWithValue("@CustomerEmail", If(String.IsNullOrEmpty(txtCustomerEmail.Text), DBNull.Value, txtCustomerEmail.Text.Trim()))
-                    cmd.Parameters.AddWithValue("@CustomerAddress", If(String.IsNullOrEmpty(txtCustomerAddress.Text), DBNull.Value, txtCustomerAddress.Text.Trim()))
-                    cmd.ExecuteNonQuery()
-                End Using
-            End Using
-
-            MessageBox.Show("Customer details updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
-            txtCustomerEmail.Visible = False
-            txtCustomerAddress.Visible = False
-            btnSaveDetails.Visible = False
-            btnConfirmPayment.Visible = True
-
-        Catch ex As Exception
-            MessageBox.Show("Error updating customer details: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
-
-    Private Sub ResetFields()
-        txtCustID.Clear()
-        txtCustomerEmail.Clear()
-        txtCustomerAddress.Clear()
-
-        txtCustID.Visible = False
-        lblCustID.Visible = False
-        dgvCustomerDetails.Visible = False
-        txtCustomerEmail.Visible = False
-        txtCustomerAddress.Visible = False
-        btnSaveDetails.Visible = False
-        btnConfirmPayment.Visible = False
-    End Sub
-
     Private Function GetPaymentMode() As String
         If rdoCash.Checked Then
             Return "Cash"
@@ -186,92 +260,72 @@ Public Class BillForm
         End If
     End Function
 
-    ' Handle Proceed button click to insert new customer and proceed with payment process
-    Private Sub btnProceed_Click(sender As Object, e As EventArgs) Handles btnProceed.Click
-        Dim customerName As String = txtCustomerName.Text.Trim()
-        Dim customerPhone As String = txtCustomerPhone.Text.Trim()
+    Private Sub ResetFields()
+        txtCustomerEmail.Clear()
+        txtCustomerAddress.Clear()
+        txtCustID.Visible = False
+        lblCustID.Visible = False
+        dgvCustomerDetails.Visible = False
+        txtCustomerEmail.Visible = False
+        txtCustomerAddress.Visible = False
+        btnSaveDetails.Visible = False
+        btnConfirmPayment.Visible = False
+    End Sub
 
-        If String.IsNullOrEmpty(customerName) Or String.IsNullOrEmpty(customerPhone) Then
-            MessageBox.Show("Please enter both Customer Name and Phone Number.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+    ' Save Details button handler
+    Private Sub btnSaveDetails_Click(sender As Object, e As EventArgs) Handles btnSaveDetails.Click
+        If Not IsValidName(txtCustomerName.Text.Trim()) OrElse Not IsValidPhoneNumber(txtCustomerPhone.Text.Trim()) Then
+            MessageBox.Show("Please ensure name and phone number are valid.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Return
         End If
 
         Try
             Using conn As New SqlConnection(connectionString)
                 conn.Open()
-                ' Check if customer already exists by name
-                Dim checkNameQuery As String = "SELECT CustomerID FROM Customers WHERE CustomerName = @CustomerName"
-                Using checkNameCmd As New SqlCommand(checkNameQuery, conn)
-                    checkNameCmd.Parameters.AddWithValue("@CustomerName", customerName)
-                    Dim nameResult = checkNameCmd.ExecuteScalar()
-
-                    If nameResult IsNot Nothing Then
-                        ' Name matches, now check if both name and phone number match
-                        Dim checkQuery As String = "SELECT CustomerID FROM Customers WHERE CustomerName = @CustomerName AND CustomerPhone = @CustomerPhone"
-                        Using checkCmd As New SqlCommand(checkQuery, conn)
-                            checkCmd.Parameters.AddWithValue("@CustomerName", customerName)
-                            checkCmd.Parameters.AddWithValue("@CustomerPhone", customerPhone)
-                            Dim checkResult = checkCmd.ExecuteScalar()
-
-                            If checkResult IsNot Nothing Then
-                                ' Both name and phone number match
-                                currentCustomerID = Convert.ToInt32(checkResult)
-                                txtCustID.Text = currentCustomerID.ToString()
-                            Else
-                                ' Name matches but phone number doesn't, treat as new customer
-                                InsertNewCustomer(customerName, customerPhone)
-                            End If
-                        End Using
-                    Else
-                        ' Name does not match, treat as new customer
-                        InsertNewCustomer(customerName, customerPhone)
-                    End If
-                End Using
+                If currentCustomerID Is Nothing Then
+                    ' Insert new customer
+                    Dim insertQuery As String = "INSERT INTO Customers (CustomerName, CustomerPhone, CustomerEmail, CustomerAddress) OUTPUT INSERTED.CustomerID VALUES (@CustomerName, @CustomerPhone, @CustomerEmail, @CustomerAddress)"
+                    Using cmd As New SqlCommand(insertQuery, conn)
+                        cmd.Parameters.AddWithValue("@CustomerName", txtCustomerName.Text.Trim())
+                        cmd.Parameters.AddWithValue("@CustomerPhone", txtCustomerPhone.Text.Trim())
+                        cmd.Parameters.AddWithValue("@CustomerEmail", If(String.IsNullOrEmpty(txtCustomerEmail.Text), DBNull.Value, txtCustomerEmail.Text))
+                        cmd.Parameters.AddWithValue("@CustomerAddress", If(String.IsNullOrEmpty(txtCustomerAddress.Text), DBNull.Value, txtCustomerAddress.Text))
+                        currentCustomerID = Convert.ToInt32(cmd.ExecuteScalar())
+                        txtCustID.Text = currentCustomerID.ToString()
+                    End Using
+                    MessageBox.Show("New customer added successfully.")
+                Else
+                    ' Update existing customer
+                    Dim updateQuery As String = "UPDATE Customers SET CustomerEmail = @CustomerEmail, CustomerAddress = @CustomerAddress WHERE CustomerID = @CustomerID"
+                    Using cmd As New SqlCommand(updateQuery, conn)
+                        cmd.Parameters.AddWithValue("@CustomerID", currentCustomerID)
+                        cmd.Parameters.AddWithValue("@CustomerEmail", If(String.IsNullOrEmpty(txtCustomerEmail.Text), DBNull.Value, txtCustomerEmail.Text))
+                        cmd.Parameters.AddWithValue("@CustomerAddress", If(String.IsNullOrEmpty(txtCustomerAddress.Text), DBNull.Value, txtCustomerAddress.Text))
+                        cmd.ExecuteNonQuery()
+                    End Using
+                    MessageBox.Show("Customer details updated successfully.")
+                End If
             End Using
 
-            ' Prompt to update additional details
-            Dim updateResult = MessageBox.Show("Would you like to update the email and address for this customer?", "Update Details", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
-            If updateResult = DialogResult.Yes Then
-                txtCustomerEmail.Visible = True
-                txtCustomerAddress.Visible = True
-                btnSaveDetails.Visible = True
-                btnConfirmPayment.Visible = False
-            Else
-                btnConfirmPayment.Visible = True
-            End If
+            btnSaveDetails.Visible = False
+            btnConfirmPayment.Visible = True
+            txtCustID.Visible = True
+            lblCustID.Visible = True
 
         Catch ex As Exception
-            MessageBox.Show("Error processing customer details: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show("Error saving customer details: " & ex.Message)
         End Try
     End Sub
 
-    Private Sub InsertNewCustomer(customerName As String, customerPhone As String)
-        Try
-            Using conn As New SqlConnection(connectionString)
-                conn.Open()
-                Dim insertQuery As String = "INSERT INTO Customers (CustomerName, CustomerPhone) OUTPUT INSERTED.CustomerID VALUES (@CustomerName, @CustomerPhone)"
-                Using insertCmd As New SqlCommand(insertQuery, conn)
-                    insertCmd.Parameters.AddWithValue("@CustomerName", customerName)
-                    insertCmd.Parameters.AddWithValue("@CustomerPhone", customerPhone)
-                    insertCmd.CommandTimeout = 30 ' Set the command timeout
-                    currentCustomerID = Convert.ToInt32(insertCmd.ExecuteScalar())
-                    txtCustID.Text = currentCustomerID.ToString()
-                End Using
-            End Using
-        Catch ex As Exception
-            MessageBox.Show("Error inserting new customer: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
-        End Try
-    End Sub
-
-    ' Update the btnConfirmPayment_Click to use the new payment mode method
+    ' Payment confirmation handler
     Private Sub btnConfirmPayment_Click(sender As Object, e As EventArgs) Handles btnConfirmPayment.Click
         If currentCustomerID Is Nothing Then
-            MessageBox.Show("Please enter customer details and proceed.", "Customer Required", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            MessageBox.Show("Please save customer details first.")
             Return
         End If
 
         If Not (rdoCash.Checked Or rdoCredit.Checked Or rdoDebit.Checked) Then
-            MessageBox.Show("Please select a payment mode.", "Payment Mode Required", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            MessageBox.Show("Please select a payment mode.")
             Return
         End If
 
@@ -285,15 +339,18 @@ Public Class BillForm
             ' Process the payment
             ProcessPayment(currentSaleID)
 
-            MessageBox.Show("Payment processed successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            MessageBox.Show("Payment processed successfully!")
+
+            ' Show print bill form
             Dim printBillForm As New PrintBillForm(billingTable, txtCustID.Text, txtCustomerName.Text, txtCustomerPhone.Text, GetPaymentMode(), ComboBoxBankName.SelectedItem?.ToString(), txtCardNumber.Text, txtExpiryDate.Text)
             printBillForm.ShowDialog()
 
         Catch ex As Exception
-            MessageBox.Show("Error processing payment: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+
+            MessageBox.Show("An error occurred while processing the payment: " & ex.Message)
+            End
         End Try
     End Sub
-
     Private Function InsertSale() As Integer
         Dim saleID As Integer
         Try
@@ -301,14 +358,13 @@ Public Class BillForm
                 conn.Open()
                 Dim insertSaleQuery As String = "INSERT INTO Sales (CustomerID, UserID, TotalAmount) OUTPUT INSERTED.SaleID VALUES (@CustomerID, @UserID, 0)"
                 Using cmd As New SqlCommand(insertSaleQuery, conn)
-                    cmd.CommandTimeout = 30 ' Set the command timeout
                     cmd.Parameters.AddWithValue("@CustomerID", currentCustomerID)
                     cmd.Parameters.AddWithValue("@UserID", userId)
                     saleID = Convert.ToInt32(cmd.ExecuteScalar())
                 End Using
             End Using
         Catch ex As Exception
-            MessageBox.Show("Error inserting sale: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show("Error inserting sale: " & ex.Message)
             Throw
         End Try
         Return saleID
@@ -321,7 +377,6 @@ Public Class BillForm
                 For Each row As DataRow In billingTable.Rows
                     Dim insertSaleDetailsQuery As String = "INSERT INTO SalesDetails (SaleID, ProductID, Quantity, Price, Total, BatchID) VALUES (@SaleID, @ProductID, @Quantity, @Price, @Total, @BatchID)"
                     Using cmd As New SqlCommand(insertSaleDetailsQuery, conn)
-                        cmd.CommandTimeout = 30 ' Set the command timeout
                         cmd.Parameters.AddWithValue("@SaleID", saleID)
                         cmd.Parameters.AddWithValue("@ProductID", row("ProductID"))
                         cmd.Parameters.AddWithValue("@Quantity", row("Quantity"))
@@ -336,14 +391,13 @@ Public Class BillForm
                 Dim totalAmount As Decimal = billingTable.AsEnumerable().Sum(Function(row) row.Field(Of Decimal)("Total"))
                 Dim updateTotalAmountQuery As String = "UPDATE Sales SET TotalAmount = @TotalAmount WHERE SaleID = @SaleID"
                 Using cmd As New SqlCommand(updateTotalAmountQuery, conn)
-                    cmd.CommandTimeout = 30 ' Set the command timeout
                     cmd.Parameters.AddWithValue("@TotalAmount", totalAmount)
                     cmd.Parameters.AddWithValue("@SaleID", saleID)
                     cmd.ExecuteNonQuery()
                 End Using
             End Using
         Catch ex As Exception
-            MessageBox.Show("Error inserting sale details: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show("Error inserting sale details: " & ex.Message)
             Throw
         End Try
     End Sub
@@ -361,7 +415,6 @@ Public Class BillForm
                 Dim insertPaymentQuery As String = "INSERT INTO Payments (SaleID, PaymentMode, BankName, CardNumber, ExpiryDate, TotalAmount) " &
                                       "VALUES (@SaleID, @PaymentMode, @BankName, @CardNumber, @ExpiryDate, @TotalAmount)"
                 Using cmd As New SqlCommand(insertPaymentQuery, conn)
-                    cmd.CommandTimeout = 30 ' Set the command timeout
                     cmd.Parameters.AddWithValue("@SaleID", saleID)
                     cmd.Parameters.AddWithValue("@PaymentMode", paymentMode)
                     cmd.Parameters.AddWithValue("@BankName", If(String.IsNullOrEmpty(bankName), DBNull.Value, bankName))
@@ -370,10 +423,40 @@ Public Class BillForm
                     cmd.Parameters.AddWithValue("@TotalAmount", totalAmount)
                     cmd.ExecuteNonQuery()
                 End Using
+
+                ' Update stock quantities
+                For Each row As DataRow In billingTable.Rows
+                    Dim updateStockQuery As String = "UPDATE Stock SET BatchQuantity = BatchQuantity - @SoldQuantity WHERE BatchID = @BatchID"
+                    Using cmd As New SqlCommand(updateStockQuery, conn)
+                        cmd.Parameters.AddWithValue("@SoldQuantity", row("Quantity"))
+                        cmd.Parameters.AddWithValue("@BatchID", row("BatchID"))
+                        cmd.ExecuteNonQuery()
+                    End Using
+                Next
             End Using
         Catch ex As Exception
-            MessageBox.Show("Error processing payment: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            MessageBox.Show("Error processing payment: " & ex.Message)
             Throw
         End Try
     End Sub
+
+    Private Sub ClearForm()
+        txtCustomerName.Clear()
+        txtCustomerPhone.Clear()
+        txtCustomerEmail.Clear()
+        txtCustomerAddress.Clear()
+        txtCustID.Clear()
+        txtCardNumber.Clear()
+        txtExpiryDate.Clear()
+        ComboBoxBankName.SelectedIndex = -1
+        rdoCash.Checked = False
+        rdoCredit.Checked = False
+        rdoDebit.Checked = False
+        PanelCardDetails.Visible = False
+        currentCustomerID = Nothing
+        currentSaleID = 0
+        billingTable.Clear()
+        ResetFields()
+    End Sub
+
 End Class
