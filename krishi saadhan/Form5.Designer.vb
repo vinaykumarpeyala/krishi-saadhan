@@ -35,13 +35,14 @@ Partial Class ProductManagementForm
         Me.btnClear = New System.Windows.Forms.Button()
         Me.btnDelete = New System.Windows.Forms.Button()
         Me.Label1 = New System.Windows.Forms.Label()
-        Me.Label2 = New System.Windows.Forms.Label()
+        Me.lblQuantity = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.lblProductID = New System.Windows.Forms.Label()
         Me.txtBatchID = New System.Windows.Forms.TextBox()
         Me.txtBatchQuantity = New System.Windows.Forms.TextBox()
         Me.pnlAddStock = New System.Windows.Forms.Panel()
+        Me.Label9 = New System.Windows.Forms.Label()
         Me.Label8 = New System.Windows.Forms.Label()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.Label6 = New System.Windows.Forms.Label()
@@ -52,7 +53,6 @@ Partial Class ProductManagementForm
         Me.OpenFileDialog1 = New System.Windows.Forms.OpenFileDialog()
         Me.txtSearch = New System.Windows.Forms.TextBox()
         Me.Label5 = New System.Windows.Forms.Label()
-        Me.Label9 = New System.Windows.Forms.Label()
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.DateTimePicker1 = New System.Windows.Forms.DateTimePicker()
         CType(Me.dgvProducts, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -151,7 +151,7 @@ Partial Class ProductManagementForm
         'btnClear
         '
         Me.btnClear.BackColor = System.Drawing.Color.PowderBlue
-        Me.btnClear.Location = New System.Drawing.Point(95, 140)
+        Me.btnClear.Location = New System.Drawing.Point(23, 80)
         Me.btnClear.Name = "btnClear"
         Me.btnClear.Size = New System.Drawing.Size(138, 46)
         Me.btnClear.TabIndex = 10
@@ -178,15 +178,15 @@ Partial Class ProductManagementForm
         Me.Label1.TabIndex = 12
         Me.Label1.Text = "Select Category:"
         '
-        'Label2
+        'lblQuantity
         '
-        Me.Label2.AutoSize = True
-        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label2.Location = New System.Drawing.Point(57, 211)
-        Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(75, 18)
-        Me.Label2.TabIndex = 13
-        Me.Label2.Text = "Quantity:"
+        Me.lblQuantity.AutoSize = True
+        Me.lblQuantity.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblQuantity.Location = New System.Drawing.Point(57, 211)
+        Me.lblQuantity.Name = "lblQuantity"
+        Me.lblQuantity.Size = New System.Drawing.Size(75, 18)
+        Me.lblQuantity.TabIndex = 13
+        Me.lblQuantity.Text = "Quantity:"
         '
         'Label3
         '
@@ -247,6 +247,16 @@ Partial Class ProductManagementForm
         Me.pnlAddStock.Size = New System.Drawing.Size(382, 239)
         Me.pnlAddStock.TabIndex = 19
         '
+        'Label9
+        '
+        Me.Label9.AutoSize = True
+        Me.Label9.Font = New System.Drawing.Font("Times New Roman", 10.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label9.Location = New System.Drawing.Point(109, 21)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(152, 20)
+        Me.Label9.TabIndex = 24
+        Me.Label9.Text = "STOCK DETAILS"
+        '
         'Label8
         '
         Me.Label8.AutoSize = True
@@ -306,7 +316,7 @@ Partial Class ProductManagementForm
         'btnAddStock
         '
         Me.btnAddStock.BackColor = System.Drawing.Color.PowderBlue
-        Me.btnAddStock.Location = New System.Drawing.Point(27, 82)
+        Me.btnAddStock.Location = New System.Drawing.Point(104, 140)
         Me.btnAddStock.Name = "btnAddStock"
         Me.btnAddStock.Size = New System.Drawing.Size(134, 46)
         Me.btnAddStock.TabIndex = 21
@@ -333,16 +343,6 @@ Partial Class ProductManagementForm
         Me.Label5.Size = New System.Drawing.Size(51, 18)
         Me.Label5.TabIndex = 24
         Me.Label5.Text = "Filter:"
-        '
-        'Label9
-        '
-        Me.Label9.AutoSize = True
-        Me.Label9.Font = New System.Drawing.Font("Times New Roman", 10.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label9.Location = New System.Drawing.Point(109, 21)
-        Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(152, 20)
-        Me.Label9.TabIndex = 24
-        Me.Label9.Text = "STOCK DETAILS"
         '
         'Panel1
         '
@@ -381,7 +381,7 @@ Partial Class ProductManagementForm
         Me.Controls.Add(Me.lblProductID)
         Me.Controls.Add(Me.Label4)
         Me.Controls.Add(Me.Label3)
-        Me.Controls.Add(Me.Label2)
+        Me.Controls.Add(Me.lblQuantity)
         Me.Controls.Add(Me.Label1)
         Me.Controls.Add(Me.btnAddImage)
         Me.Controls.Add(Me.pbProductImage)
@@ -416,7 +416,7 @@ Partial Class ProductManagementForm
     Friend WithEvents btnClear As Button
     Friend WithEvents btnDelete As Button
     Friend WithEvents Label1 As Label
-    Friend WithEvents Label2 As Label
+    Friend WithEvents lblQuantity As Label
     Friend WithEvents Label3 As Label
     Friend WithEvents Label4 As Label
     Friend WithEvents lblProductID As Label

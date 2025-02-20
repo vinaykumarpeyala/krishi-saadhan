@@ -15,6 +15,8 @@ Public Class ProductManagementForm
         lblProductID.Visible = False
         btnAddStock.Visible = False ' Hide Add Stock button initially
         pnlAddStock.Visible = False ' Hide Add Stock panel initially
+        txtQuantity.Visible = False ' Hide Quantity field initially
+        lblQuantity.Visible = False ' Hide Quantity label initially
     End Sub
 
     Private Sub LoadCategories()
@@ -72,9 +74,8 @@ Public Class ProductManagementForm
     Private Sub btnAdd_Click(sender As Object, e As EventArgs) Handles btnAdd.Click
         If String.IsNullOrWhiteSpace(txtProductName.Text) OrElse
            String.IsNullOrWhiteSpace(txtPrice.Text) OrElse
-           cmbCategory.SelectedIndex = -1 OrElse
-           String.IsNullOrWhiteSpace(txtQuantity.Text) Then
-            MessageBox.Show("Please fill all fields!", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+           cmbCategory.SelectedIndex = -1 Then
+            MessageBox.Show("Please fill all fields except quantity!", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Exit Sub
         End If
 
@@ -92,12 +93,11 @@ Public Class ProductManagementForm
                 imageData = ms.ToArray()
             End Using
 
-            Dim query As String = "INSERT INTO Products (ProductName, CategoryID, Price, StockQuantity, ProductPhoto) VALUES (@name, @category, @price, @quantity, @image)"
+            Dim query As String = "INSERT INTO Products (ProductName, CategoryID, Price, StockQuantity, ProductPhoto) VALUES (@name, @category, @price, 0, @image)"
             Using cmd As New SqlCommand(query, con)
                 cmd.Parameters.AddWithValue("@name", txtProductName.Text)
                 cmd.Parameters.AddWithValue("@category", cmbCategory.SelectedValue)
                 cmd.Parameters.AddWithValue("@price", Convert.ToDecimal(txtPrice.Text))
-                cmd.Parameters.AddWithValue("@quantity", Convert.ToInt32(txtQuantity.Text))
                 cmd.Parameters.AddWithValue("@image", imageData)
 
                 con.Open()
@@ -142,9 +142,11 @@ Public Class ProductManagementForm
                 pbProductImage.Image = Nothing
             End If
 
-            ' Show Product ID label
+            ' Show Product ID and Quantity labels
             txtProductID.Visible = True
             lblProductID.Visible = True
+            txtQuantity.Visible = True
+            lblQuantity.Visible = True
             btnAddStock.Visible = True ' Show Add Stock button when a product is selected
         End If
     End Sub
@@ -182,9 +184,9 @@ Public Class ProductManagementForm
         Try
             Dim query As String
             If updateImagePath Then
-                query = "UPDATE Products SET ProductName=@name, CategoryID=@category, Price=@price, StockQuantity=@quantity, ProductPhoto=@image WHERE ProductID=@id"
+                query = "UPDATE Products SET ProductName=@name, CategoryID=@category, Price=@price, ProductPhoto=@image WHERE ProductID=@id"
             Else
-                query = "UPDATE Products SET ProductName=@name, CategoryID=@category, Price=@price, StockQuantity=@quantity WHERE ProductID=@id"
+                query = "UPDATE Products SET ProductName=@name, CategoryID=@category, Price=@price WHERE ProductID=@id"
             End If
 
             Using cmd As New SqlCommand(query, con)
@@ -192,7 +194,6 @@ Public Class ProductManagementForm
                 cmd.Parameters.AddWithValue("@name", txtProductName.Text)
                 cmd.Parameters.AddWithValue("@category", cmbCategory.SelectedValue)
                 cmd.Parameters.AddWithValue("@price", Convert.ToDecimal(txtPrice.Text))
-                cmd.Parameters.AddWithValue("@quantity", Convert.ToInt32(txtQuantity.Text))
 
                 If updateImagePath Then
                     cmd.Parameters.AddWithValue("@image", imageData)
@@ -268,6 +269,8 @@ Public Class ProductManagementForm
         pnlAddStock.Visible = False ' Hide Add Stock panel when fields are cleared
         txtProductID.Visible = False
         lblProductID.Visible = False
+        txtQuantity.Visible = False
+        lblQuantity.Visible = False
         imagePath = String.Empty
     End Sub
 

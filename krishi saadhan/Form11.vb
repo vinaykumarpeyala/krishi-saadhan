@@ -52,7 +52,10 @@ Public Class ResetPasswordForm
         End Try
     End Sub
 
-    Private Sub ResetPasswordForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-
+    Private Sub btnClear_Click(sender As Object, e As EventArgs) Handles btnClear.Click
+        txtNewPassword.Clear()
+        txtConfirmPassword.Clear()
     End Sub
+
+
 End Class

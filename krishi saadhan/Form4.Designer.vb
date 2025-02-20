@@ -43,11 +43,14 @@ Partial Class SellerDashboard
         Me.Label7 = New System.Windows.Forms.Label()
         Me.PictureBoxProduct = New System.Windows.Forms.PictureBox()
         Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.btnRemoveItem = New System.Windows.Forms.Button()
+        Me.btnClearBill = New System.Windows.Forms.Button()
         Me.txtBatchID = New System.Windows.Forms.TextBox()
         Me.Panel2 = New System.Windows.Forms.Panel()
-        Me.DateTimePicker1 = New System.Windows.Forms.DateTimePicker()
-        Me.Label8 = New System.Windows.Forms.Label()
         Me.PictureBox1 = New System.Windows.Forms.PictureBox()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.DateTimePicker1 = New System.Windows.Forms.DateTimePicker()
+        Me.lblSubTotal = New System.Windows.Forms.Label()
         CType(Me.numericQuantity, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.dgvProducts, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.dgvBilling, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -115,7 +118,7 @@ Partial Class SellerDashboard
         'btnGenerateTotal
         '
         Me.btnGenerateTotal.BackColor = System.Drawing.Color.DodgerBlue
-        Me.btnGenerateTotal.Location = New System.Drawing.Point(137, 34)
+        Me.btnGenerateTotal.Location = New System.Drawing.Point(117, 27)
         Me.btnGenerateTotal.Name = "btnGenerateTotal"
         Me.btnGenerateTotal.Size = New System.Drawing.Size(92, 40)
         Me.btnGenerateTotal.TabIndex = 7
@@ -125,7 +128,7 @@ Partial Class SellerDashboard
         'btnAddToBill
         '
         Me.btnAddToBill.BackColor = System.Drawing.Color.DodgerBlue
-        Me.btnAddToBill.Location = New System.Drawing.Point(15, 34)
+        Me.btnAddToBill.Location = New System.Drawing.Point(14, 27)
         Me.btnAddToBill.Name = "btnAddToBill"
         Me.btnAddToBill.Size = New System.Drawing.Size(92, 40)
         Me.btnAddToBill.TabIndex = 8
@@ -204,7 +207,7 @@ Partial Class SellerDashboard
         'btnProceedToBill
         '
         Me.btnProceedToBill.BackColor = System.Drawing.Color.CornflowerBlue
-        Me.btnProceedToBill.Location = New System.Drawing.Point(79, 89)
+        Me.btnProceedToBill.Location = New System.Drawing.Point(14, 84)
         Me.btnProceedToBill.Name = "btnProceedToBill"
         Me.btnProceedToBill.Size = New System.Drawing.Size(91, 51)
         Me.btnProceedToBill.TabIndex = 16
@@ -233,19 +236,40 @@ Partial Class SellerDashboard
         Me.PictureBoxProduct.Location = New System.Drawing.Point(823, 382)
         Me.PictureBoxProduct.Name = "PictureBoxProduct"
         Me.PictureBoxProduct.Size = New System.Drawing.Size(183, 214)
+        Me.PictureBoxProduct.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.PictureBoxProduct.TabIndex = 19
         Me.PictureBoxProduct.TabStop = False
         '
         'Panel1
         '
         Me.Panel1.BackColor = System.Drawing.Color.LightCyan
+        Me.Panel1.Controls.Add(Me.btnRemoveItem)
+        Me.Panel1.Controls.Add(Me.btnClearBill)
         Me.Panel1.Controls.Add(Me.btnGenerateTotal)
         Me.Panel1.Controls.Add(Me.btnAddToBill)
         Me.Panel1.Controls.Add(Me.btnProceedToBill)
         Me.Panel1.Location = New System.Drawing.Point(277, 115)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(252, 158)
+        Me.Panel1.Size = New System.Drawing.Size(252, 186)
         Me.Panel1.TabIndex = 20
+        '
+        'btnRemoveItem
+        '
+        Me.btnRemoveItem.Location = New System.Drawing.Point(87, 141)
+        Me.btnRemoveItem.Name = "btnRemoveItem"
+        Me.btnRemoveItem.Size = New System.Drawing.Size(97, 32)
+        Me.btnRemoveItem.TabIndex = 18
+        Me.btnRemoveItem.Text = "remove item"
+        Me.btnRemoveItem.UseVisualStyleBackColor = True
+        '
+        'btnClearBill
+        '
+        Me.btnClearBill.Location = New System.Drawing.Point(117, 84)
+        Me.btnClearBill.Name = "btnClearBill"
+        Me.btnClearBill.Size = New System.Drawing.Size(92, 44)
+        Me.btnClearBill.TabIndex = 17
+        Me.btnClearBill.Text = "Button1"
+        Me.btnClearBill.UseVisualStyleBackColor = True
         '
         'txtBatchID
         '
@@ -265,12 +289,13 @@ Partial Class SellerDashboard
         Me.Panel2.Size = New System.Drawing.Size(789, 71)
         Me.Panel2.TabIndex = 22
         '
-        'DateTimePicker1
+        'PictureBox1
         '
-        Me.DateTimePicker1.Location = New System.Drawing.Point(642, 3)
-        Me.DateTimePicker1.Name = "DateTimePicker1"
-        Me.DateTimePicker1.Size = New System.Drawing.Size(144, 22)
-        Me.DateTimePicker1.TabIndex = 10
+        Me.PictureBox1.Location = New System.Drawing.Point(14, 13)
+        Me.PictureBox1.Name = "PictureBox1"
+        Me.PictureBox1.Size = New System.Drawing.Size(78, 50)
+        Me.PictureBox1.TabIndex = 12
+        Me.PictureBox1.TabStop = False
         '
         'Label8
         '
@@ -281,13 +306,23 @@ Partial Class SellerDashboard
         Me.Label8.TabIndex = 11
         Me.Label8.Text = "Label8"
         '
-        'PictureBox1
+        'DateTimePicker1
         '
-        Me.PictureBox1.Location = New System.Drawing.Point(14, 13)
-        Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(78, 50)
-        Me.PictureBox1.TabIndex = 12
-        Me.PictureBox1.TabStop = False
+        Me.DateTimePicker1.Location = New System.Drawing.Point(642, 3)
+        Me.DateTimePicker1.Name = "DateTimePicker1"
+        Me.DateTimePicker1.Size = New System.Drawing.Size(144, 22)
+        Me.DateTimePicker1.TabIndex = 10
+        '
+        'lblSubTotal
+        '
+        Me.lblSubTotal.AutoSize = True
+        Me.lblSubTotal.Font = New System.Drawing.Font("Times New Roman", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblSubTotal.ForeColor = System.Drawing.Color.DarkRed
+        Me.lblSubTotal.Location = New System.Drawing.Point(845, 344)
+        Me.lblSubTotal.Name = "lblSubTotal"
+        Me.lblSubTotal.Size = New System.Drawing.Size(68, 23)
+        Me.lblSubTotal.TabIndex = 23
+        Me.lblSubTotal.Text = "Label9"
         '
         'SellerDashboard
         '
@@ -295,6 +330,7 @@ Partial Class SellerDashboard
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.LightBlue
         Me.ClientSize = New System.Drawing.Size(1082, 617)
+        Me.Controls.Add(Me.lblSubTotal)
         Me.Controls.Add(Me.Panel2)
         Me.Controls.Add(Me.txtBatchID)
         Me.Controls.Add(Me.Panel1)
@@ -355,4 +391,7 @@ Partial Class SellerDashboard
     Friend WithEvents PictureBox1 As PictureBox
     Friend WithEvents Label8 As Label
     Friend WithEvents DateTimePicker1 As DateTimePicker
+    Friend WithEvents btnClearBill As Button
+    Friend WithEvents lblSubTotal As Label
+    Friend WithEvents btnRemoveItem As Button
 End Class

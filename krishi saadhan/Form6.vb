@@ -17,7 +17,8 @@ Public Class StockManagementForm
                 Dim query As String = "SELECT P.ProductId, P.ProductName, C.CategoryName, P.StockQuantity, S.StockId, S.BatchId, S.BatchQuantity, S.UnitPrice 
                                        FROM Products P 
                                        INNER JOIN Categories C ON P.CategoryId = C.CategoryId
-                                       LEFT JOIN Stock S ON P.ProductId = S.ProductId"
+                                       LEFT JOIN Stock S ON P.ProductId = S.ProductId
+                                       ORDER BY P.ProductId DESC, S.StockId DESC"
                 Dim adapter As New SqlDataAdapter(query, conn)
                 Dim table As New DataTable()
                 adapter.Fill(table)
@@ -83,7 +84,7 @@ Public Class StockManagementForm
             Using conn As New SqlConnection(connectionString)
                 conn.Open()
                 Dim query As String = "INSERT INTO Stock (ProductId, BatchId, BatchQuantity, UnitPrice) VALUES (@ProductId, @BatchId, @BatchQuantity, @UnitPrice);
-                                       UPDATE Products SET StockQuantity = StockQuantity + @BatchQuantity WHERE ProductId = @ProductId"
+                                       UPDATE Products SET StockQuantity = (SELECT SUM(BatchQuantity) FROM Stock WHERE ProductId = @ProductId) WHERE ProductId = @ProductId"
                 Using cmd As New SqlCommand(query, conn)
                     cmd.Parameters.AddWithValue("@ProductId", productId)
                     cmd.Parameters.AddWithValue("@BatchId", batchId)
@@ -187,16 +188,30 @@ Public Class StockManagementForm
                 Return
             End If
 
-            Using conn As New SqlConnection(connectionString)
-                conn.Open()
-                Dim query As String = "DELETE FROM Stock WHERE StockId = @StockId"
-                Using cmd As New SqlCommand(query, conn)
-                    cmd.Parameters.AddWithValue("@StockId", stockId)
-                    cmd.ExecuteNonQuery()
+            Dim result As DialogResult = MessageBox.Show("Are you sure to delete the stock without sale? Is it expired?", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Warning)
+            If result = DialogResult.Yes Then
+                Using conn As New SqlConnection(connectionString)
+                    conn.Open()
+                    ' Get the batch quantity to update the product's stock quantity
+                    Dim batchQuantity As Integer
+                    Dim selectQuery As String = "SELECT BatchQuantity FROM Stock WHERE StockId = @StockId"
+                    Using selectCmd As New SqlCommand(selectQuery, conn)
+                        selectCmd.Parameters.AddWithValue("@StockId", stockId)
+                        batchQuantity = Convert.ToInt32(selectCmd.ExecuteScalar())
+                    End Using
+
+                    ' Delete the stock entry
+                    Dim deleteQuery As String = "DELETE FROM Stock WHERE StockId = @StockId;
+                                                 UPDATE Products SET StockQuantity = StockQuantity - @BatchQuantity WHERE ProductId = (SELECT ProductId FROM Stock WHERE StockId = @StockId)"
+                    Using cmd As New SqlCommand(deleteQuery, conn)
+                        cmd.Parameters.AddWithValue("@StockId", stockId)
+                        cmd.Parameters.AddWithValue("@BatchQuantity", batchQuantity)
+                        cmd.ExecuteNonQuery()
+                    End Using
+                    MessageBox.Show("Stock details deleted successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                    RefreshDataGridView() ' Refresh the products and stock list
                 End Using
-                MessageBox.Show("Stock details deleted successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                RefreshDataGridView() ' Refresh the products and stock list
-            End Using
+            End If
         Catch ex As FormatException
             MessageBox.Show("Invalid input format. Please check your entries.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
         Catch ex As Exception
@@ -219,7 +234,8 @@ Public Class StockManagementForm
                                        FROM Products P 
                                        INNER JOIN Categories C ON P.CategoryId = C.CategoryId
                                        LEFT JOIN Stock S ON P.ProductId = S.ProductId
-                                       WHERE P.ProductName LIKE @SearchText"
+                                       WHERE P.ProductName LIKE @SearchText
+                                       ORDER BY P.ProductId DESC, S.StockId DESC"
                 Dim adapter As New SqlDataAdapter(query, conn)
                 adapter.SelectCommand.Parameters.AddWithValue("@SearchText", "%" & searchText & "%")
                 Dim table As New DataTable()

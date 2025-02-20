@@ -17,4 +17,9 @@
         Dim stockmanagement As New StockManagementForm()
         stockmanagement.Show()
     End Sub
+
+    Private Sub btnManageCustomers_Click(sender As Object, e As EventArgs) Handles btnManageCustomers.Click
+        Dim customermanagement As New CustomerManagementForm()
+        customermanagement.Show()
+    End Sub
 End Class

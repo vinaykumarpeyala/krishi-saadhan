@@ -174,7 +174,7 @@ Partial Class LoginForm
         Me.GroupBox1.Controls.Add(Me.btnLogin)
         Me.GroupBox1.Controls.Add(Me.btnClear)
         Me.GroupBox1.Controls.Add(Me.btnExit)
-        Me.GroupBox1.Location = New System.Drawing.Point(673, 129)
+        Me.GroupBox1.Location = New System.Drawing.Point(679, 100)
         Me.GroupBox1.Name = "GroupBox1"
         Me.GroupBox1.Size = New System.Drawing.Size(434, 425)
         Me.GroupBox1.TabIndex = 13

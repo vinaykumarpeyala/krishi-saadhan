@@ -1,4 +1,5 @@
 ﻿Imports System.Data.SqlClient
+Imports System.Text.RegularExpressions
 
 Public Class BillForm
     Dim connectionString As String = "Data Source=LAPTOP-V6JUA5T5\SQLEXPRESS;Initial Catalog=KrishiSaadhan;Integrated Security=True"
@@ -6,7 +7,8 @@ Public Class BillForm
     Private userId As Integer
     Private currentSaleID As Integer
     Private currentCustomerID As Integer?
-
+    Private formdialogResult As DialogResult = DialogResult.Cancel
+    Public Event StockUpdated()
     Public Sub New(billingTable As DataTable, userId As Integer)
         InitializeComponent()
         Me.billingTable = billingTable
@@ -44,6 +46,20 @@ Public Class BillForm
 
     Private Function IsValidPhoneNumber(phone As String) As Boolean
         Return Not String.IsNullOrWhiteSpace(phone) AndAlso phone.Length = 10 AndAlso phone.All(Function(c) Char.IsDigit(c))
+    End Function
+
+    Private Function IsValidCardNumber(cardNumber As String) As Boolean
+        Return Not String.IsNullOrWhiteSpace(cardNumber) AndAlso cardNumber.Length = 16 AndAlso cardNumber.All(Function(c) Char.IsDigit(c))
+    End Function
+
+    Private Function IsValidCCV(ccv As String) As Boolean
+        Return Not String.IsNullOrWhiteSpace(ccv) AndAlso ccv.Length = 3 AndAlso ccv.All(Function(c) Char.IsDigit(c))
+    End Function
+
+    Private Function IsValidExpiryDate(expiryDate As String) As Boolean
+        If String.IsNullOrWhiteSpace(expiryDate) Then Return False
+        Dim pattern As String = "^(0[1-9]|1[0-2])\/?([0-9]{2})$"
+        Return Regex.IsMatch(expiryDate, pattern)
     End Function
 
     ' TextBox validation events
@@ -115,7 +131,7 @@ Public Class BillForm
             txtCustomerPhone.SelectionStart = txtCustomerPhone.Text.Length
         End If
 
-        If Not String.IsNullOrEmpty(txtCustomerPhone.Text) AndAlso txtCustomerPhone.Text.Length < 10 Then
+        If Not String.IsNullOrEmpty(txtCustomerPhone.Text) And txtCustomerPhone.Text.Length < 10 Then
             txtCustomerPhone.BackColor = Color.LightPink
         Else
             txtCustomerPhone.BackColor = Color.White
@@ -308,7 +324,19 @@ Public Class BillForm
             End Using
 
             btnSaveDetails.Visible = False
-            btnConfirmPayment.Visible = True
+            txtCustomerEmail.Visible = False
+            txtCustomerAddress.Visible = False
+
+            Dim result As DialogResult = MessageBox.Show("Do you want to update additional customer details?", "Update Details", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+            If result = DialogResult.Yes Then
+                txtCustomerEmail.Visible = True
+                txtCustomerAddress.Visible = True
+                btnSaveDetails.Visible = True
+                btnConfirmPayment.Visible = False
+            Else
+                btnConfirmPayment.Visible = True
+            End If
+
             txtCustID.Visible = True
             lblCustID.Visible = True
 
@@ -329,6 +357,23 @@ Public Class BillForm
             Return
         End If
 
+        If rdoCredit.Checked Or rdoDebit.Checked Then
+            If Not IsValidCardNumber(txtCardNumber.Text.Trim()) Then
+                MessageBox.Show("Please enter a valid 16-digit card number.", "Invalid Input", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Return
+            End If
+
+            If Not IsValidCCV(txtCVV.Text.Trim()) Then
+                MessageBox.Show("Please enter a valid 3-digit CCV number.", "Invalid Input", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Return
+            End If
+
+            If Not IsValidExpiryDate(txtExpiryDate.Text.Trim()) Then
+                MessageBox.Show("Please enter a valid expiry date in MM/YY format.", "Invalid Input", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Return
+            End If
+        End If
+
         Try
             ' Insert the sale and get the SaleID
             currentSaleID = InsertSale()
@@ -346,11 +391,10 @@ Public Class BillForm
             printBillForm.ShowDialog()
 
         Catch ex As Exception
-
             MessageBox.Show("An error occurred while processing the payment: " & ex.Message)
-            End
         End Try
     End Sub
+
     Private Function InsertSale() As Integer
         Dim saleID As Integer
         Try
@@ -374,6 +418,20 @@ Public Class BillForm
         Try
             Using conn As New SqlConnection(connectionString)
                 conn.Open()
+
+                ' Check if BatchID exists in Stock table before inserting
+                For Each row As DataRow In billingTable.Rows
+                    Dim checkBatchIDQuery As String = "SELECT COUNT(*) FROM Stock WHERE BatchID = @BatchID"
+                    Using checkCmd As New SqlCommand(checkBatchIDQuery, conn)
+                        checkCmd.Parameters.AddWithValue("@BatchID", row("BatchID"))
+                        Dim batchIDExists As Integer = Convert.ToInt32(checkCmd.ExecuteScalar())
+                        If batchIDExists = 0 Then
+                            Throw New Exception($"BatchID {row("BatchID")} does not exist in the Stock table.")
+                        End If
+                    End Using
+                Next
+
+                ' Insert sale details
                 For Each row As DataRow In billingTable.Rows
                     Dim insertSaleDetailsQuery As String = "INSERT INTO SalesDetails (SaleID, ProductID, Quantity, Price, Total, BatchID) VALUES (@SaleID, @ProductID, @Quantity, @Price, @Total, @BatchID)"
                     Using cmd As New SqlCommand(insertSaleDetailsQuery, conn)
@@ -431,6 +489,10 @@ Public Class BillForm
                         cmd.Parameters.AddWithValue("@SoldQuantity", row("Quantity"))
                         cmd.Parameters.AddWithValue("@BatchID", row("BatchID"))
                         cmd.ExecuteNonQuery()
+                        formdialogResult = DialogResult.OK
+                        Me.DialogResult = DialogResult.OK
+                        Me.Close()
+                        RaiseEvent StockUpdated()
                     End Using
                 Next
             End Using
@@ -459,4 +521,18 @@ Public Class BillForm
         ResetFields()
     End Sub
 
+    Private Sub BillForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        If formdialogResult = DialogResult.Cancel Then
+            ' Ask for confirmation only if payment wasn't successful
+            If billingTable.Rows.Count > 0 Then
+                Dim result = MessageBox.Show("Are you sure you want to cancel the billing process?",
+                                       "Confirm Cancel",
+                                       MessageBoxButtons.YesNo,
+                                       MessageBoxIcon.Question)
+                If result = DialogResult.No Then
+                    e.Cancel = True
+                End If
+            End If
+        End If
+    End Sub
 End Class

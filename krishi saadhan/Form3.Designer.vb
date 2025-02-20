@@ -25,7 +25,7 @@ Partial Class AdminDashboard
         Me.ComboBox1 = New System.Windows.Forms.ComboBox()
         Me.DataGridView1 = New System.Windows.Forms.DataGridView()
         Me.ManageStock = New System.Windows.Forms.Button()
-        Me.Button2 = New System.Windows.Forms.Button()
+        Me.btnManageCustomers = New System.Windows.Forms.Button()
         Me.ManageUsers = New System.Windows.Forms.Button()
         Me.Button4 = New System.Windows.Forms.Button()
         Me.Button5 = New System.Windows.Forms.Button()
@@ -35,8 +35,8 @@ Partial Class AdminDashboard
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Panel2 = New System.Windows.Forms.Panel()
-        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.DateTimePicker1 = New System.Windows.Forms.DateTimePicker()
+        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         CType(Me.DataGridView1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel1.SuspendLayout()
         Me.Panel2.SuspendLayout()
@@ -72,16 +72,16 @@ Partial Class AdminDashboard
         Me.ManageStock.Text = "Manage Stock"
         Me.ManageStock.UseVisualStyleBackColor = False
         '
-        'Button2
+        'btnManageCustomers
         '
-        Me.Button2.BackColor = System.Drawing.Color.LightSteelBlue
-        Me.Button2.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Button2.Location = New System.Drawing.Point(11, 293)
-        Me.Button2.Name = "Button2"
-        Me.Button2.Size = New System.Drawing.Size(175, 75)
-        Me.Button2.TabIndex = 3
-        Me.Button2.Text = "Manage Customers"
-        Me.Button2.UseVisualStyleBackColor = False
+        Me.btnManageCustomers.BackColor = System.Drawing.Color.LightSteelBlue
+        Me.btnManageCustomers.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnManageCustomers.Location = New System.Drawing.Point(11, 293)
+        Me.btnManageCustomers.Name = "btnManageCustomers"
+        Me.btnManageCustomers.Size = New System.Drawing.Size(175, 75)
+        Me.btnManageCustomers.TabIndex = 3
+        Me.btnManageCustomers.Text = "Manage Customers"
+        Me.btnManageCustomers.UseVisualStyleBackColor = False
         '
         'ManageUsers
         '
@@ -124,7 +124,7 @@ Partial Class AdminDashboard
         Me.Panel1.Controls.Add(Me.Button4)
         Me.Panel1.Controls.Add(Me.Button5)
         Me.Panel1.Controls.Add(Me.ManageUsers)
-        Me.Panel1.Controls.Add(Me.Button2)
+        Me.Panel1.Controls.Add(Me.btnManageCustomers)
         Me.Panel1.Location = New System.Drawing.Point(1, 0)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(200, 569)
@@ -167,7 +167,7 @@ Partial Class AdminDashboard
         Me.Label2.Font = New System.Drawing.Font("Times New Roman", 19.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label2.Location = New System.Drawing.Point(139, 20)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(315, 38)
+        Me.Label2.Size = New System.Drawing.Size(306, 37)
         Me.Label2.TabIndex = 12
         Me.Label2.Text = "KRISHI SAADHAN"
         '
@@ -182,6 +182,13 @@ Partial Class AdminDashboard
         Me.Panel2.Size = New System.Drawing.Size(947, 90)
         Me.Panel2.TabIndex = 13
         '
+        'DateTimePicker1
+        '
+        Me.DateTimePicker1.Location = New System.Drawing.Point(788, 9)
+        Me.DateTimePicker1.Name = "DateTimePicker1"
+        Me.DateTimePicker1.Size = New System.Drawing.Size(144, 22)
+        Me.DateTimePicker1.TabIndex = 14
+        '
         'PictureBox1
         '
         Me.PictureBox1.Location = New System.Drawing.Point(23, 9)
@@ -189,13 +196,6 @@ Partial Class AdminDashboard
         Me.PictureBox1.Size = New System.Drawing.Size(100, 69)
         Me.PictureBox1.TabIndex = 13
         Me.PictureBox1.TabStop = False
-        '
-        'DateTimePicker1
-        '
-        Me.DateTimePicker1.Location = New System.Drawing.Point(788, 9)
-        Me.DateTimePicker1.Name = "DateTimePicker1"
-        Me.DateTimePicker1.Size = New System.Drawing.Size(144, 22)
-        Me.DateTimePicker1.TabIndex = 14
         '
         'AdminDashboard
         '
@@ -223,7 +223,7 @@ Partial Class AdminDashboard
     Friend WithEvents ComboBox1 As ComboBox
     Friend WithEvents DataGridView1 As DataGridView
     Friend WithEvents ManageStock As Button
-    Friend WithEvents Button2 As Button
+    Friend WithEvents btnManageCustomers As Button
     Friend WithEvents ManageUsers As Button
     Friend WithEvents Button4 As Button
     Friend WithEvents Button5 As Button

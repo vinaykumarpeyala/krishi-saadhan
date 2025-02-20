@@ -42,17 +42,17 @@ Partial Class BillForm
         Me.rdoCredit = New System.Windows.Forms.RadioButton()
         Me.rdoCash = New System.Windows.Forms.RadioButton()
         Me.PanelCardDetails = New System.Windows.Forms.Panel()
+        Me.Label1 = New System.Windows.Forms.Label()
         Me.Label9 = New System.Windows.Forms.Label()
         Me.txtExpiryDate = New System.Windows.Forms.TextBox()
         Me.Label8 = New System.Windows.Forms.Label()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.Label6 = New System.Windows.Forms.Label()
-        Me.txtCvv = New System.Windows.Forms.TextBox()
+        Me.txtCVV = New System.Windows.Forms.TextBox()
         Me.txtCardNumber = New System.Windows.Forms.TextBox()
         Me.ComboBoxBankName = New System.Windows.Forms.ComboBox()
         Me.DateTimePicker1 = New System.Windows.Forms.DateTimePicker()
         Me.btnProceed = New System.Windows.Forms.Button()
-        Me.Label1 = New System.Windows.Forms.Label()
         Me.Panel1 = New System.Windows.Forms.Panel()
         CType(Me.dgvBillDetails, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.dgvCustomerDetails, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -244,13 +244,23 @@ Partial Class BillForm
         Me.PanelCardDetails.Controls.Add(Me.Label8)
         Me.PanelCardDetails.Controls.Add(Me.Label7)
         Me.PanelCardDetails.Controls.Add(Me.Label6)
-        Me.PanelCardDetails.Controls.Add(Me.txtCvv)
+        Me.PanelCardDetails.Controls.Add(Me.txtCVV)
         Me.PanelCardDetails.Controls.Add(Me.txtCardNumber)
         Me.PanelCardDetails.Controls.Add(Me.ComboBoxBankName)
         Me.PanelCardDetails.Location = New System.Drawing.Point(193, 34)
         Me.PanelCardDetails.Name = "PanelCardDetails"
         Me.PanelCardDetails.Size = New System.Drawing.Size(326, 234)
         Me.PanelCardDetails.TabIndex = 0
+        '
+        'Label1
+        '
+        Me.Label1.AutoSize = True
+        Me.Label1.Font = New System.Drawing.Font("Times New Roman", 10.2!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label1.Location = New System.Drawing.Point(65, 14)
+        Me.Label1.Name = "Label1"
+        Me.Label1.Size = New System.Drawing.Size(139, 19)
+        Me.Label1.TabIndex = 15
+        Me.Label1.Text = "CARD PAYMENT"
         '
         'Label9
         '
@@ -299,12 +309,12 @@ Partial Class BillForm
         Me.Label6.TabIndex = 10
         Me.Label6.Text = "Select Bank:"
         '
-        'txtCvv
+        'txtCVV
         '
-        Me.txtCvv.Location = New System.Drawing.Point(155, 145)
-        Me.txtCvv.Name = "txtCvv"
-        Me.txtCvv.Size = New System.Drawing.Size(100, 22)
-        Me.txtCvv.TabIndex = 2
+        Me.txtCVV.Location = New System.Drawing.Point(155, 145)
+        Me.txtCVV.Name = "txtCVV"
+        Me.txtCVV.Size = New System.Drawing.Size(100, 22)
+        Me.txtCVV.TabIndex = 2
         '
         'txtCardNumber
         '
@@ -336,16 +346,6 @@ Partial Class BillForm
         Me.btnProceed.TabIndex = 17
         Me.btnProceed.Text = "Proceed"
         Me.btnProceed.UseVisualStyleBackColor = True
-        '
-        'Label1
-        '
-        Me.Label1.AutoSize = True
-        Me.Label1.Font = New System.Drawing.Font("Times New Roman", 10.2!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(65, 14)
-        Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(139, 19)
-        Me.Label1.TabIndex = 15
-        Me.Label1.Text = "CARD PAYMENT"
         '
         'Panel1
         '
@@ -415,7 +415,7 @@ Partial Class BillForm
     Friend WithEvents Label8 As Label
     Friend WithEvents Label7 As Label
     Friend WithEvents Label6 As Label
-    Friend WithEvents txtCvv As TextBox
+    Friend WithEvents txtCVV As TextBox
     Friend WithEvents txtCardNumber As TextBox
     Friend WithEvents ComboBoxBankName As ComboBox
     Friend WithEvents DateTimePicker1 As DateTimePicker

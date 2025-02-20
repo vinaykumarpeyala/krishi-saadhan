@@ -56,7 +56,7 @@ Partial Class StockManagementForm
         'dgvProducts
         '
         Me.dgvProducts.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgvProducts.Location = New System.Drawing.Point(168, 344)
+        Me.dgvProducts.Location = New System.Drawing.Point(202, 326)
         Me.dgvProducts.Name = "dgvProducts"
         Me.dgvProducts.RowHeadersWidth = 51
         Me.dgvProducts.RowTemplate.Height = 24
@@ -191,11 +191,12 @@ Partial Class StockManagementForm
         'Label5
         '
         Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(434, 295)
+        Me.Label5.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label5.Location = New System.Drawing.Point(453, 289)
         Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(48, 16)
+        Me.Label5.Size = New System.Drawing.Size(61, 18)
         Me.Label5.TabIndex = 27
-        Me.Label5.Text = "Label5"
+        Me.Label5.Text = "Search"
         '
         'Label6
         '
@@ -292,7 +293,7 @@ Partial Class StockManagementForm
         Me.Label7.Font = New System.Drawing.Font("Times New Roman", 19.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label7.Location = New System.Drawing.Point(430, 27)
         Me.Label7.Name = "Label7"
-        Me.Label7.Size = New System.Drawing.Size(401, 38)
+        Me.Label7.Size = New System.Drawing.Size(389, 37)
         Me.Label7.TabIndex = 35
         Me.Label7.Text = "STOCK MANAGEMENT"
         '
