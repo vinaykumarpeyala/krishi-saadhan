@@ -9,6 +9,7 @@ Public Class ProductManagementForm
     Dim imagePath As String
 
     Private Sub ProductManagementForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Timer1.Enabled = True
         LoadCategories()
         LoadProducts()
         txtProductID.Visible = False
@@ -360,5 +361,10 @@ Public Class ProductManagementForm
     Private Sub homepage_Click(sender As Object, e As EventArgs)
         Dim adminpage As New AdminDashboard()
         adminpage.Show()
+    End Sub
+
+    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
+        Labeldate.Text = DateTime.Now.ToString("dd/MM/yyyy ")
+        Labeltime.Text = DateTime.Now.ToString("hh:mm:ss tt")
     End Sub
 End Class

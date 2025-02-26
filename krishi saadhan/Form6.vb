@@ -4,6 +4,7 @@ Public Class StockManagementForm
     Dim connectionString As String = "Data Source=LAPTOP-V6JUA5T5\SQLEXPRESS;Initial Catalog=KrishiSaadhan;Integrated Security=True"
 
     Private Sub StockManagementForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
+        Timer1.Enabled = True
         LoadProductsAndStock()
         txtStockId.Visible = False
         lblStockId.Visible = False
@@ -312,5 +313,10 @@ Public Class StockManagementForm
     ' Refresh DataGridView button
     Private Sub btnRefresh_Click(sender As Object, e As EventArgs) Handles btnRefresh.Click
         RefreshDataGridView()
+    End Sub
+
+    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
+        Labeldate.Text = DateTime.Now.ToString("dd/MM/yyyy ")
+        Labeltime.Text = DateTime.Now.ToString("hh:mm:ss tt")
     End Sub
 End Class

@@ -22,6 +22,7 @@ Partial Class ResetPasswordForm
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ResetPasswordForm))
         Me.txtNewPassword = New System.Windows.Forms.TextBox()
         Me.txtConfirmPassword = New System.Windows.Forms.TextBox()
         Me.btnSubmit = New System.Windows.Forms.Button()
@@ -35,7 +36,7 @@ Partial Class ResetPasswordForm
         '
         'txtNewPassword
         '
-        Me.txtNewPassword.Location = New System.Drawing.Point(201, 77)
+        Me.txtNewPassword.Location = New System.Drawing.Point(257, 89)
         Me.txtNewPassword.Multiline = True
         Me.txtNewPassword.Name = "txtNewPassword"
         Me.txtNewPassword.Size = New System.Drawing.Size(176, 40)
@@ -43,7 +44,7 @@ Partial Class ResetPasswordForm
         '
         'txtConfirmPassword
         '
-        Me.txtConfirmPassword.Location = New System.Drawing.Point(201, 161)
+        Me.txtConfirmPassword.Location = New System.Drawing.Point(257, 170)
         Me.txtConfirmPassword.Multiline = True
         Me.txtConfirmPassword.Name = "txtConfirmPassword"
         Me.txtConfirmPassword.Size = New System.Drawing.Size(176, 38)
@@ -52,12 +53,13 @@ Partial Class ResetPasswordForm
         'btnSubmit
         '
         Me.btnSubmit.BackColor = System.Drawing.Color.Green
+        Me.btnSubmit.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnSubmit.ForeColor = System.Drawing.SystemColors.ButtonHighlight
         Me.btnSubmit.Location = New System.Drawing.Point(162, 245)
         Me.btnSubmit.Name = "btnSubmit"
         Me.btnSubmit.Size = New System.Drawing.Size(115, 51)
         Me.btnSubmit.TabIndex = 2
-        Me.btnSubmit.Text = "Submit"
+        Me.btnSubmit.Text = "SUBMIT"
         Me.btnSubmit.UseVisualStyleBackColor = False
         '
         'btnClear
@@ -67,12 +69,12 @@ Partial Class ResetPasswordForm
         Me.btnClear.Name = "btnClear"
         Me.btnClear.Size = New System.Drawing.Size(118, 53)
         Me.btnClear.TabIndex = 3
-        Me.btnClear.Text = "Clear"
+        Me.btnClear.Text = "CLEAR"
         Me.btnClear.UseVisualStyleBackColor = False
         '
         'Panel1
         '
-        Me.Panel1.BackColor = System.Drawing.SystemColors.ScrollBar
+        Me.Panel1.BackColor = System.Drawing.Color.Transparent
         Me.Panel1.Controls.Add(Me.Label3)
         Me.Panel1.Controls.Add(Me.Label2)
         Me.Panel1.Controls.Add(Me.Label1)
@@ -80,7 +82,7 @@ Partial Class ResetPasswordForm
         Me.Panel1.Controls.Add(Me.btnClear)
         Me.Panel1.Controls.Add(Me.txtConfirmPassword)
         Me.Panel1.Controls.Add(Me.btnSubmit)
-        Me.Panel1.Location = New System.Drawing.Point(78, 71)
+        Me.Panel1.Location = New System.Drawing.Point(248, 76)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(553, 330)
         Me.Panel1.TabIndex = 4
@@ -98,20 +100,23 @@ Partial Class ResetPasswordForm
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Font = New System.Drawing.Font("Times New Roman", 10.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label2.Location = New System.Drawing.Point(38, 170)
+        Me.Label2.BackColor = System.Drawing.Color.White
+        Me.Label2.Font = New System.Drawing.Font("Times New Roman", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label2.Location = New System.Drawing.Point(82, 170)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(157, 20)
+        Me.Label2.Size = New System.Drawing.Size(169, 23)
         Me.Label2.TabIndex = 5
         Me.Label2.Text = "Confirm password:"
         '
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Font = New System.Drawing.Font("Times New Roman", 10.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(50, 89)
+        Me.Label1.BackColor = System.Drawing.Color.White
+        Me.Label1.Font = New System.Drawing.Font("Times New Roman", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
+        Me.Label1.Location = New System.Drawing.Point(83, 106)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(134, 20)
+        Me.Label1.Size = New System.Drawing.Size(150, 23)
         Me.Label1.TabIndex = 4
         Me.Label1.Text = "Enter Password:"
         '
@@ -120,7 +125,8 @@ Partial Class ResetPasswordForm
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.ActiveCaption
-        Me.ClientSize = New System.Drawing.Size(759, 441)
+        Me.BackgroundImage = CType(resources.GetObject("$this.BackgroundImage"), System.Drawing.Image)
+        Me.ClientSize = New System.Drawing.Size(847, 517)
         Me.Controls.Add(Me.Panel1)
         Me.Name = "ResetPasswordForm"
         Me.Text = "Form11"

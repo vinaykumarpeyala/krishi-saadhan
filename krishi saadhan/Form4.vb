@@ -13,6 +13,7 @@ Public Class SellerDashboard
 
     Private Sub SellerDashboard_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         InitializeBillingTable()
+        Timer1.Enabled = True
         LoadProducts()
     End Sub
 
@@ -251,5 +252,10 @@ Public Class SellerDashboard
                 e.Cancel = True
             End If
         End If
+    End Sub
+
+    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
+        Labeldate.Text = DateTime.Now.ToString("dd/MM/yyyy ")
+        Labeltime.Text = DateTime.Now.ToString("hh:mm:ss tt")
     End Sub
 End Class

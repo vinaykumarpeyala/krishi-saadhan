@@ -190,5 +190,11 @@ Public Class frmUserManagement
     Private Sub frmUserManagement_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         LoadRoles()
         LoadUsers()
+        Timer1.Enabled = True
+    End Sub
+
+    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
+        Label8.Text = DateTime.Now.ToString("dd/MM/yyyy ")
+        Label9.Text = DateTime.Now.ToString("hh:mm:ss tt")
     End Sub
 End Class

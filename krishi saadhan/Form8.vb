@@ -14,9 +14,15 @@ Public Class BillForm
         Me.billingTable = billingTable
         Me.userId = userId
     End Sub
-
+    Private Class StockBatch
+        Public Property StockID As Integer
+        Public Property BatchID As String
+        Public Property BatchQuantity As Integer
+        Public Property StockDate As DateTime
+    End Class
     Private Sub BillForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         ' Set initial visibility
+        Timer1.Enabled = True
         PanelCardDetails.Visible = False
         dgvCustomerDetails.Visible = False
         txtCustID.Visible = False
@@ -460,6 +466,7 @@ Public Class BillForm
         End Try
     End Sub
 
+
     Private Sub ProcessPayment(saleID As Integer)
         Try
             Dim totalAmount As Decimal = billingTable.AsEnumerable().Sum(Function(row) row.Field(Of Decimal)("Total"))
@@ -470,34 +477,131 @@ Public Class BillForm
 
             Using conn As New SqlConnection(connectionString)
                 conn.Open()
-                Dim insertPaymentQuery As String = "INSERT INTO Payments (SaleID, PaymentMode, BankName, CardNumber, ExpiryDate, TotalAmount) " &
-                                      "VALUES (@SaleID, @PaymentMode, @BankName, @CardNumber, @ExpiryDate, @TotalAmount)"
-                Using cmd As New SqlCommand(insertPaymentQuery, conn)
-                    cmd.Parameters.AddWithValue("@SaleID", saleID)
-                    cmd.Parameters.AddWithValue("@PaymentMode", paymentMode)
-                    cmd.Parameters.AddWithValue("@BankName", If(String.IsNullOrEmpty(bankName), DBNull.Value, bankName))
-                    cmd.Parameters.AddWithValue("@CardNumber", If(String.IsNullOrEmpty(cardNumber), DBNull.Value, cardNumber))
-                    cmd.Parameters.AddWithValue("@ExpiryDate", If(String.IsNullOrEmpty(expiryDate), DBNull.Value, expiryDate))
-                    cmd.Parameters.AddWithValue("@TotalAmount", totalAmount)
-                    cmd.ExecuteNonQuery()
-                End Using
+                Using transaction As SqlTransaction = conn.BeginTransaction()
+                    Try
+                        ' Insert payment record
+                        Dim insertPaymentQuery As String = "INSERT INTO Payments (SaleID, PaymentMode, BankName, CardNumber, ExpiryDate, TotalAmount) " &
+                                          "VALUES (@SaleID, @PaymentMode, @BankName, @CardNumber, @ExpiryDate, @TotalAmount)"
+                        Using cmd As New SqlCommand(insertPaymentQuery, conn, transaction)
+                            cmd.Parameters.AddWithValue("@SaleID", saleID)
+                            cmd.Parameters.AddWithValue("@PaymentMode", paymentMode)
+                            cmd.Parameters.AddWithValue("@BankName", If(String.IsNullOrEmpty(bankName), DBNull.Value, bankName))
+                            cmd.Parameters.AddWithValue("@CardNumber", If(String.IsNullOrEmpty(cardNumber), DBNull.Value, cardNumber))
+                            cmd.Parameters.AddWithValue("@ExpiryDate", If(String.IsNullOrEmpty(expiryDate), DBNull.Value, expiryDate))
+                            cmd.Parameters.AddWithValue("@TotalAmount", totalAmount)
+                            cmd.ExecuteNonQuery()
+                        End Using
 
-                ' Update stock quantities
-                For Each row As DataRow In billingTable.Rows
-                    Dim updateStockQuery As String = "UPDATE Stock SET BatchQuantity = BatchQuantity - @SoldQuantity WHERE BatchID = @BatchID"
-                    Using cmd As New SqlCommand(updateStockQuery, conn)
-                        cmd.Parameters.AddWithValue("@SoldQuantity", row("Quantity"))
-                        cmd.Parameters.AddWithValue("@BatchID", row("BatchID"))
-                        cmd.ExecuteNonQuery()
+                        ' Process each product in the billing table
+                        For Each row As DataRow In billingTable.Rows
+                            Dim productID As Integer = row("ProductID")
+                            Dim requiredQuantity As Integer = CInt(row("Quantity"))
+                            Dim productName As String = ""
+
+                            ' Get product name for messages
+                            Using cmdProduct As New SqlCommand("SELECT ProductName FROM Products WHERE ProductID = @ProductID", conn, transaction)
+                                cmdProduct.Parameters.AddWithValue("@ProductID", productID)
+                                productName = cmdProduct.ExecuteScalar().ToString()
+                            End Using
+
+                            ' Get available batches in FIFO order
+                            Dim getBatchesQuery As String = "SELECT StockID, BatchID, BatchQuantity, StockDate " &
+                                                          "FROM Stock " &
+                                                          "WHERE ProductID = @ProductID " &
+                                                          "AND BatchQuantity > 0 " &
+                                                          "ORDER BY StockDate ASC"
+
+                            Using cmdBatches As New SqlCommand(getBatchesQuery, conn, transaction)
+                                cmdBatches.Parameters.AddWithValue("@ProductID", productID)
+                                Using reader As SqlDataReader = cmdBatches.ExecuteReader()
+                                    Dim batches As New List(Of StockBatch)
+                                    While reader.Read()
+                                        batches.Add(New StockBatch With {
+                                            .StockID = reader.GetInt32(0),
+                                            .BatchID = reader.GetString(1),
+                                            .BatchQuantity = reader.GetInt32(2),
+                                            .StockDate = reader.GetDateTime(3)
+                                        })
+                                    End While
+                                    reader.Close()
+
+                                    ' Check if we have enough total stock
+                                    Dim totalAvailable As Integer = batches.Sum(Function(b) b.BatchQuantity)
+                                    If totalAvailable < requiredQuantity Then
+                                        Throw New Exception($"Insufficient stock for {productName}. Required: {requiredQuantity}, Available: {totalAvailable}")
+                                    End If
+
+                                    Dim remainingQuantity As Integer = requiredQuantity
+                                    Dim stockUpdateMessages As New List(Of String)
+
+                                    ' Process each batch in FIFO order
+                                    For Each batch In batches
+                                        If remainingQuantity <= 0 Then Exit For
+
+                                        Dim quantityFromBatch As Integer = Math.Min(remainingQuantity, batch.BatchQuantity)
+                                        Dim newBatchQuantity As Integer = batch.BatchQuantity - quantityFromBatch
+
+                                        If newBatchQuantity = 0 Then
+                                            ' Delete the batch if it's depleted
+                                            Using cmdDelete As New SqlCommand(
+                                                "DELETE FROM Stock WHERE StockID = @StockID", conn, transaction)
+                                                cmdDelete.Parameters.AddWithValue("@StockID", batch.StockID)
+                                                cmdDelete.ExecuteNonQuery()
+                                            End Using
+                                            stockUpdateMessages.Add($"Batch {batch.BatchID} for {productName} has been fully utilized and removed.")
+                                        Else
+                                            ' Update the batch quantity
+                                            Using cmdUpdate As New SqlCommand(
+                                                "UPDATE Stock SET BatchQuantity = @NewQuantity WHERE StockID = @StockID",
+                                                conn, transaction)
+                                                cmdUpdate.Parameters.AddWithValue("@NewQuantity", newBatchQuantity)
+                                                cmdUpdate.Parameters.AddWithValue("@StockID", batch.StockID)
+                                                cmdUpdate.ExecuteNonQuery()
+                                            End Using
+                                            stockUpdateMessages.Add($"Batch {batch.BatchID} for {productName}: {batch.BatchQuantity} → {newBatchQuantity}")
+                                        End If
+
+                                        remainingQuantity -= quantityFromBatch
+                                    Next
+
+                                    ' Update product's total stock
+                                    Using cmdUpdateProduct As New SqlCommand(
+                                        "UPDATE Products SET StockQuantity = (SELECT ISNULL(SUM(BatchQuantity), 0) FROM Stock WHERE ProductID = @ProductID) " &
+                                        "WHERE ProductID = @ProductID", conn, transaction)
+                                        cmdUpdateProduct.Parameters.AddWithValue("@ProductID", productID)
+                                        cmdUpdateProduct.ExecuteNonQuery()
+                                    End Using
+
+                                    ' Get updated total stock
+                                    Using cmdGetNewStock As New SqlCommand(
+                                        "SELECT StockQuantity FROM Products WHERE ProductID = @ProductID",
+                                        conn, transaction)
+                                        cmdGetNewStock.Parameters.AddWithValue("@ProductID", productID)
+                                        Dim newTotalStock As Integer = CInt(cmdGetNewStock.ExecuteScalar())
+                                        stockUpdateMessages.Add($"Total stock for {productName}: {newTotalStock}")
+                                    End Using
+
+                                    ' Show stock update messages
+                                    MessageBox.Show(String.Join(vbNewLine, stockUpdateMessages), "Stock Update Status", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                                End Using
+                            End Using
+                        Next
+
+                        transaction.Commit()
                         formdialogResult = DialogResult.OK
                         Me.DialogResult = DialogResult.OK
-                        Me.Close()
                         RaiseEvent StockUpdated()
-                    End Using
-                Next
+                        Me.Close()
+
+                    Catch ex As Exception
+                        transaction.Rollback()
+                        MessageBox.Show("Transaction failed: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+                        Throw
+                    End Try
+                End Using
             End Using
         Catch ex As Exception
-            MessageBox.Show("Error processing payment: " & ex.Message)
+            MessageBox.Show("Error processing payment: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
             Throw
         End Try
     End Sub
@@ -534,5 +638,10 @@ Public Class BillForm
                 End If
             End If
         End If
+    End Sub
+
+    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
+        Labeldate.Text = DateTime.Now.ToString("dd/MM/yyyy ")
+        Labeltime.Text = DateTime.Now.ToString("hh:mm:ss tt")
     End Sub
 End Class

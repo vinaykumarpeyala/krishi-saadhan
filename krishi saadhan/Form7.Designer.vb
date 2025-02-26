@@ -22,30 +22,43 @@ Partial Class CustomerManagementForm
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(CustomerManagementForm))
         Me.txtCustomerName = New System.Windows.Forms.TextBox()
         Me.txtCustomerEmail = New System.Windows.Forms.TextBox()
         Me.txtCustomerPhone = New System.Windows.Forms.TextBox()
         Me.txtCustomerAddress = New System.Windows.Forms.TextBox()
         Me.dgvCustomerSales = New System.Windows.Forms.DataGridView()
-        Me.btnAddUpdateCustomer = New System.Windows.Forms.Button()
-        Me.btnFetchCustomerSales = New System.Windows.Forms.Button()
-        Me.btnSearchCustomer = New System.Windows.Forms.Button()
+        Me.btnAddCustomer = New System.Windows.Forms.Button()
+        Me.btnDeleteCustomer = New System.Windows.Forms.Button()
+        Me.btnUpdateCustomer = New System.Windows.Forms.Button()
         Me.dgvCustomerDetails = New System.Windows.Forms.DataGridView()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Panel1 = New System.Windows.Forms.Panel()
-        Me.Panel2 = New System.Windows.Forms.Panel()
-        Me.Label5 = New System.Windows.Forms.Label()
         Me.txtCustomerID = New System.Windows.Forms.TextBox()
-        Me.Button1 = New System.Windows.Forms.Button()
+        Me.Label5 = New System.Windows.Forms.Label()
+        Me.Panel2 = New System.Windows.Forms.Panel()
+        Me.btnClear = New System.Windows.Forms.Button()
         Me.VScrollBar1 = New System.Windows.Forms.VScrollBar()
         Me.HScrollBar1 = New System.Windows.Forms.HScrollBar()
+        Me.Panel3 = New System.Windows.Forms.Panel()
+        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
+        Me.Label6 = New System.Windows.Forms.Label()
+        Me.Label7 = New System.Windows.Forms.Label()
+        Me.Labeldate = New System.Windows.Forms.Label()
+        Me.Labeltime = New System.Windows.Forms.Label()
+        Me.Button1 = New System.Windows.Forms.Button()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         CType(Me.dgvCustomerSales, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.dgvCustomerDetails, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel1.SuspendLayout()
         Me.Panel2.SuspendLayout()
+        Me.Panel3.SuspendLayout()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'txtCustomerName
@@ -79,44 +92,48 @@ Partial Class CustomerManagementForm
         'dgvCustomerSales
         '
         Me.dgvCustomerSales.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgvCustomerSales.Location = New System.Drawing.Point(52, 311)
+        Me.dgvCustomerSales.Location = New System.Drawing.Point(27, 331)
         Me.dgvCustomerSales.Name = "dgvCustomerSales"
         Me.dgvCustomerSales.RowHeadersWidth = 51
         Me.dgvCustomerSales.RowTemplate.Height = 24
-        Me.dgvCustomerSales.Size = New System.Drawing.Size(690, 248)
+        Me.dgvCustomerSales.Size = New System.Drawing.Size(869, 248)
         Me.dgvCustomerSales.TabIndex = 4
         '
-        'btnAddUpdateCustomer
+        'btnAddCustomer
         '
-        Me.btnAddUpdateCustomer.Location = New System.Drawing.Point(15, 17)
-        Me.btnAddUpdateCustomer.Name = "btnAddUpdateCustomer"
-        Me.btnAddUpdateCustomer.Size = New System.Drawing.Size(120, 55)
-        Me.btnAddUpdateCustomer.TabIndex = 5
-        Me.btnAddUpdateCustomer.Text = "ADD/UPDATE"
-        Me.btnAddUpdateCustomer.UseVisualStyleBackColor = True
+        Me.btnAddCustomer.BackColor = System.Drawing.Color.Gainsboro
+        Me.btnAddCustomer.Location = New System.Drawing.Point(15, 17)
+        Me.btnAddCustomer.Name = "btnAddCustomer"
+        Me.btnAddCustomer.Size = New System.Drawing.Size(120, 55)
+        Me.btnAddCustomer.TabIndex = 5
+        Me.btnAddCustomer.Text = "ADD"
+        Me.btnAddCustomer.UseVisualStyleBackColor = False
         '
-        'btnFetchCustomerSales
+        'btnDeleteCustomer
         '
-        Me.btnFetchCustomerSales.Location = New System.Drawing.Point(141, 17)
-        Me.btnFetchCustomerSales.Name = "btnFetchCustomerSales"
-        Me.btnFetchCustomerSales.Size = New System.Drawing.Size(120, 51)
-        Me.btnFetchCustomerSales.TabIndex = 6
-        Me.btnFetchCustomerSales.Text = "FETCH"
-        Me.btnFetchCustomerSales.UseVisualStyleBackColor = True
+        Me.btnDeleteCustomer.BackColor = System.Drawing.Color.Red
+        Me.btnDeleteCustomer.ForeColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.btnDeleteCustomer.Location = New System.Drawing.Point(141, 17)
+        Me.btnDeleteCustomer.Name = "btnDeleteCustomer"
+        Me.btnDeleteCustomer.Size = New System.Drawing.Size(120, 51)
+        Me.btnDeleteCustomer.TabIndex = 6
+        Me.btnDeleteCustomer.Text = "DELETE"
+        Me.btnDeleteCustomer.UseVisualStyleBackColor = False
         '
-        'btnSearchCustomer
+        'btnUpdateCustomer
         '
-        Me.btnSearchCustomer.Location = New System.Drawing.Point(20, 92)
-        Me.btnSearchCustomer.Name = "btnSearchCustomer"
-        Me.btnSearchCustomer.Size = New System.Drawing.Size(115, 51)
-        Me.btnSearchCustomer.TabIndex = 7
-        Me.btnSearchCustomer.Text = "Button3"
-        Me.btnSearchCustomer.UseVisualStyleBackColor = True
+        Me.btnUpdateCustomer.BackColor = System.Drawing.Color.GreenYellow
+        Me.btnUpdateCustomer.Location = New System.Drawing.Point(20, 92)
+        Me.btnUpdateCustomer.Name = "btnUpdateCustomer"
+        Me.btnUpdateCustomer.Size = New System.Drawing.Size(115, 51)
+        Me.btnUpdateCustomer.TabIndex = 7
+        Me.btnUpdateCustomer.Text = "UPDATE"
+        Me.btnUpdateCustomer.UseVisualStyleBackColor = False
         '
         'dgvCustomerDetails
         '
         Me.dgvCustomerDetails.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgvCustomerDetails.Location = New System.Drawing.Point(399, 82)
+        Me.dgvCustomerDetails.Location = New System.Drawing.Point(387, 110)
         Me.dgvCustomerDetails.Name = "dgvCustomerDetails"
         Me.dgvCustomerDetails.RowHeadersWidth = 51
         Me.dgvCustomerDetails.RowTemplate.Height = 24
@@ -165,6 +182,7 @@ Partial Class CustomerManagementForm
         '
         'Panel1
         '
+        Me.Panel1.BackColor = System.Drawing.Color.Transparent
         Me.Panel1.Controls.Add(Me.txtCustomerID)
         Me.Panel1.Controls.Add(Me.Label5)
         Me.Panel1.Controls.Add(Me.txtCustomerName)
@@ -175,21 +193,17 @@ Partial Class CustomerManagementForm
         Me.Panel1.Controls.Add(Me.txtCustomerEmail)
         Me.Panel1.Controls.Add(Me.txtCustomerAddress)
         Me.Panel1.Controls.Add(Me.Label1)
-        Me.Panel1.Location = New System.Drawing.Point(27, 15)
+        Me.Panel1.Location = New System.Drawing.Point(27, 63)
         Me.Panel1.Name = "Panel1"
         Me.Panel1.Size = New System.Drawing.Size(311, 257)
         Me.Panel1.TabIndex = 13
         '
-        'Panel2
+        'txtCustomerID
         '
-        Me.Panel2.Controls.Add(Me.Button1)
-        Me.Panel2.Controls.Add(Me.btnAddUpdateCustomer)
-        Me.Panel2.Controls.Add(Me.btnFetchCustomerSales)
-        Me.Panel2.Controls.Add(Me.btnSearchCustomer)
-        Me.Panel2.Location = New System.Drawing.Point(920, 110)
-        Me.Panel2.Name = "Panel2"
-        Me.Panel2.Size = New System.Drawing.Size(278, 172)
-        Me.Panel2.TabIndex = 14
+        Me.txtCustomerID.Location = New System.Drawing.Point(152, 14)
+        Me.txtCustomerID.Name = "txtCustomerID"
+        Me.txtCustomerID.Size = New System.Drawing.Size(100, 22)
+        Me.txtCustomerID.TabIndex = 14
         '
         'Label5
         '
@@ -201,21 +215,27 @@ Partial Class CustomerManagementForm
         Me.Label5.TabIndex = 13
         Me.Label5.Text = "Customer ID"
         '
-        'txtCustomerID
+        'Panel2
         '
-        Me.txtCustomerID.Location = New System.Drawing.Point(152, 14)
-        Me.txtCustomerID.Name = "txtCustomerID"
-        Me.txtCustomerID.Size = New System.Drawing.Size(100, 22)
-        Me.txtCustomerID.TabIndex = 14
+        Me.Panel2.BackColor = System.Drawing.Color.Transparent
+        Me.Panel2.Controls.Add(Me.btnClear)
+        Me.Panel2.Controls.Add(Me.btnAddCustomer)
+        Me.Panel2.Controls.Add(Me.btnDeleteCustomer)
+        Me.Panel2.Controls.Add(Me.btnUpdateCustomer)
+        Me.Panel2.Location = New System.Drawing.Point(918, 119)
+        Me.Panel2.Name = "Panel2"
+        Me.Panel2.Size = New System.Drawing.Size(278, 172)
+        Me.Panel2.TabIndex = 14
         '
-        'Button1
+        'btnClear
         '
-        Me.Button1.Location = New System.Drawing.Point(151, 92)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(110, 51)
-        Me.Button1.TabIndex = 8
-        Me.Button1.Text = "Button1"
-        Me.Button1.UseVisualStyleBackColor = True
+        Me.btnClear.BackColor = System.Drawing.Color.PaleTurquoise
+        Me.btnClear.Location = New System.Drawing.Point(151, 92)
+        Me.btnClear.Name = "btnClear"
+        Me.btnClear.Size = New System.Drawing.Size(110, 51)
+        Me.btnClear.TabIndex = 8
+        Me.btnClear.Text = "CLEAR"
+        Me.btnClear.UseVisualStyleBackColor = False
         '
         'VScrollBar1
         '
@@ -231,12 +251,102 @@ Partial Class CustomerManagementForm
         Me.HScrollBar1.Size = New System.Drawing.Size(1437, 153)
         Me.HScrollBar1.TabIndex = 16
         '
+        'Panel3
+        '
+        Me.Panel3.BackColor = System.Drawing.Color.Brown
+        Me.Panel3.Controls.Add(Me.Label8)
+        Me.Panel3.Controls.Add(Me.Button1)
+        Me.Panel3.Controls.Add(Me.Labeltime)
+        Me.Panel3.Controls.Add(Me.Labeldate)
+        Me.Panel3.Controls.Add(Me.Label7)
+        Me.Panel3.Controls.Add(Me.Label6)
+        Me.Panel3.Controls.Add(Me.PictureBox1)
+        Me.Panel3.Font = New System.Drawing.Font("Times New Roman", 10.2!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Panel3.ForeColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.Panel3.Location = New System.Drawing.Point(-3, 1)
+        Me.Panel3.Name = "Panel3"
+        Me.Panel3.Size = New System.Drawing.Size(1233, 56)
+        Me.Panel3.TabIndex = 17
+        '
+        'PictureBox1
+        '
+        Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
+        Me.PictureBox1.Location = New System.Drawing.Point(15, 4)
+        Me.PictureBox1.Name = "PictureBox1"
+        Me.PictureBox1.Size = New System.Drawing.Size(64, 52)
+        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.PictureBox1.TabIndex = 0
+        Me.PictureBox1.TabStop = False
+        '
+        'Label6
+        '
+        Me.Label6.AutoSize = True
+        Me.Label6.Location = New System.Drawing.Point(871, 8)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(52, 19)
+        Me.Label6.TabIndex = 1
+        Me.Label6.Text = "DATE"
+        '
+        'Label7
+        '
+        Me.Label7.AutoSize = True
+        Me.Label7.Location = New System.Drawing.Point(871, 27)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(52, 19)
+        Me.Label7.TabIndex = 2
+        Me.Label7.Text = "TIME"
+        '
+        'Labeldate
+        '
+        Me.Labeldate.AutoSize = True
+        Me.Labeldate.Location = New System.Drawing.Point(950, 8)
+        Me.Labeldate.Name = "Labeldate"
+        Me.Labeldate.Size = New System.Drawing.Size(60, 19)
+        Me.Labeldate.TabIndex = 3
+        Me.Labeldate.Text = "Label8"
+        '
+        'Labeltime
+        '
+        Me.Labeltime.AutoSize = True
+        Me.Labeltime.Font = New System.Drawing.Font("Times New Roman", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Labeltime.Location = New System.Drawing.Point(950, 27)
+        Me.Labeltime.Name = "Labeltime"
+        Me.Labeltime.Size = New System.Drawing.Size(53, 17)
+        Me.Labeltime.TabIndex = 4
+        Me.Labeltime.Text = "Label9"
+        '
+        'Button1
+        '
+        Me.Button1.BackColor = System.Drawing.Color.Tomato
+        Me.Button1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
+        Me.Button1.Location = New System.Drawing.Point(1134, 11)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(86, 25)
+        Me.Button1.TabIndex = 5
+        Me.Button1.Text = "EXIT"
+        Me.Button1.UseVisualStyleBackColor = False
+        '
+        'Label8
+        '
+        Me.Label8.AutoSize = True
+        Me.Label8.Font = New System.Drawing.Font("Times New Roman", 16.2!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label8.Location = New System.Drawing.Point(121, 11)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(205, 32)
+        Me.Label8.TabIndex = 6
+        Me.Label8.Text = "Krishi Saadhan"
+        '
+        'Timer1
+        '
+        '
         'CustomerManagementForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.BackColor = System.Drawing.SystemColors.GradientInactiveCaption
+        Me.BackColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.BackgroundImage = CType(resources.GetObject("$this.BackgroundImage"), System.Drawing.Image)
         Me.ClientSize = New System.Drawing.Size(1254, 602)
+        Me.Controls.Add(Me.Panel3)
         Me.Controls.Add(Me.HScrollBar1)
         Me.Controls.Add(Me.VScrollBar1)
         Me.Controls.Add(Me.Panel2)
@@ -250,6 +360,9 @@ Partial Class CustomerManagementForm
         Me.Panel1.ResumeLayout(False)
         Me.Panel1.PerformLayout()
         Me.Panel2.ResumeLayout(False)
+        Me.Panel3.ResumeLayout(False)
+        Me.Panel3.PerformLayout()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -259,9 +372,9 @@ Partial Class CustomerManagementForm
     Friend WithEvents txtCustomerPhone As TextBox
     Friend WithEvents txtCustomerAddress As TextBox
     Friend WithEvents dgvCustomerSales As DataGridView
-    Friend WithEvents btnAddUpdateCustomer As Button
-    Friend WithEvents btnFetchCustomerSales As Button
-    Friend WithEvents btnSearchCustomer As Button
+    Friend WithEvents btnAddCustomer As Button
+    Friend WithEvents btnDeleteCustomer As Button
+    Friend WithEvents btnUpdateCustomer As Button
     Friend WithEvents dgvCustomerDetails As DataGridView
     Friend WithEvents Label1 As Label
     Friend WithEvents Label2 As Label
@@ -271,7 +384,16 @@ Partial Class CustomerManagementForm
     Friend WithEvents Panel2 As Panel
     Friend WithEvents txtCustomerID As TextBox
     Friend WithEvents Label5 As Label
-    Friend WithEvents Button1 As Button
     Friend WithEvents VScrollBar1 As VScrollBar
     Friend WithEvents HScrollBar1 As HScrollBar
+    Friend WithEvents btnClear As Button
+    Friend WithEvents Panel3 As Panel
+    Friend WithEvents Label8 As Label
+    Friend WithEvents Button1 As Button
+    Friend WithEvents Labeltime As Label
+    Friend WithEvents Labeldate As Label
+    Friend WithEvents Label7 As Label
+    Friend WithEvents Label6 As Label
+    Friend WithEvents PictureBox1 As PictureBox
+    Friend WithEvents Timer1 As Timer
 End Class

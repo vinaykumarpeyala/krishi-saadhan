@@ -12,10 +12,10 @@ Public Class PrintBillForm
     Private expiryDate As String
     Private printDocument As PrintDocument
     Private printPreviewDialog As PrintPreviewDialog
-    Private companyGST As String = "XXXXXXXXXXXX"
-    Private companyAddress As String = "Your Complete Address Here"
-    Private companyPhone As String = "+91 XXXXXXXXXX"
-    Private companyEmail As String = "contact@krishisaadhan.com"
+    Private companyGST As String = "29AMWXZ234RXt"
+    Private companyAddress As String = "#20,5th main,6th cross,bagalur main road,banagalore-560039"
+    Private companyPhone As String = "+91 8978729151"
+    Private companyEmail As String = "@krishisaadhan.com"
     Public Event PrintCompleted()
 
     Public Sub New(billingTable As DataTable, customerId As String, customerName As String,
@@ -57,7 +57,7 @@ Public Class PrintBillForm
             Dim regularFont As New Font("Arial", 10)
             Dim boldFont As New Font("Arial", 10, FontStyle.Bold)
             Dim titleFont As New Font("Arial", 16, FontStyle.Bold)
-            Dim headerFont As New Font("Arial", 24, FontStyle.Bold)
+            Dim headerFont As New Font("Times new Roman", 24, FontStyle.Bold)
             Dim italicFont As New Font("Arial", 10, FontStyle.Italic)
 
             ' Define colors

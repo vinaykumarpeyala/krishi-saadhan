@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class frmUserManagement
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,40 +20,51 @@ Partial Class frmUserManagement
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Me.components = New System.ComponentModel.Container()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(frmUserManagement))
         Me.txtUsername = New System.Windows.Forms.TextBox()
         Me.txtPassword = New System.Windows.Forms.TextBox()
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.cmbRole = New System.Windows.Forms.ComboBox()
         Me.grpUserDetails = New System.Windows.Forms.GroupBox()
-        Me.btnRegister = New System.Windows.Forms.Button()
-        Me.btnUpdate = New System.Windows.Forms.Button()
         Me.btnDelete = New System.Windows.Forms.Button()
-        Me.GroupBox1 = New System.Windows.Forms.GroupBox()
+        Me.btnUpdate = New System.Windows.Forms.Button()
+        Me.btnRegister = New System.Windows.Forms.Button()
         Me.dgvUsers = New System.Windows.Forms.DataGridView()
         Me.GroupBoxResetPassword = New System.Windows.Forms.GroupBox()
+        Me.Label4 = New System.Windows.Forms.Label()
+        Me.Label3 = New System.Windows.Forms.Label()
         Me.btnResetPassword = New System.Windows.Forms.Button()
         Me.txtNewPassword = New System.Windows.Forms.TextBox()
         Me.txtSellerUsername = New System.Windows.Forms.TextBox()
-        Me.btnReset = New System.Windows.Forms.Button()
+        Me.Panel1 = New System.Windows.Forms.Panel()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.Label7 = New System.Windows.Forms.Label()
+        Me.Label6 = New System.Windows.Forms.Label()
+        Me.Label5 = New System.Windows.Forms.Label()
+        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
+        Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me.grpUserDetails.SuspendLayout()
-        Me.GroupBox1.SuspendLayout()
         CType(Me.dgvUsers, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.GroupBoxResetPassword.SuspendLayout()
+        Me.Panel1.SuspendLayout()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
         'txtUsername
         '
-        Me.txtUsername.Location = New System.Drawing.Point(86, 64)
+        Me.txtUsername.Location = New System.Drawing.Point(141, 50)
         Me.txtUsername.Name = "txtUsername"
         Me.txtUsername.Size = New System.Drawing.Size(162, 22)
         Me.txtUsername.TabIndex = 0
         '
         'txtPassword
         '
-        Me.txtPassword.Location = New System.Drawing.Point(86, 115)
+        Me.txtPassword.Location = New System.Drawing.Point(141, 105)
         Me.txtPassword.Name = "txtPassword"
         Me.txtPassword.Size = New System.Drawing.Size(162, 22)
         Me.txtPassword.TabIndex = 1
@@ -61,154 +72,261 @@ Partial Class frmUserManagement
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(6, 70)
+        Me.Label1.BackColor = System.Drawing.Color.Transparent
+        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label1.ForeColor = System.Drawing.SystemColors.HighlightText
+        Me.Label1.Location = New System.Drawing.Point(19, 50)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(48, 16)
+        Me.Label1.Size = New System.Drawing.Size(106, 18)
         Me.Label1.TabIndex = 2
-        Me.Label1.Text = "Label1"
+        Me.Label1.Text = "USERNAME:"
         '
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(6, 130)
+        Me.Label2.BackColor = System.Drawing.Color.Transparent
+        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label2.ForeColor = System.Drawing.SystemColors.HighlightText
+        Me.Label2.Location = New System.Drawing.Point(19, 109)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(48, 16)
+        Me.Label2.Size = New System.Drawing.Size(109, 18)
         Me.Label2.TabIndex = 3
-        Me.Label2.Text = "Label2"
+        Me.Label2.Text = "PASSWORD:"
         '
         'cmbRole
         '
         Me.cmbRole.FormattingEnabled = True
-        Me.cmbRole.Location = New System.Drawing.Point(102, 172)
+        Me.cmbRole.Location = New System.Drawing.Point(141, 154)
         Me.cmbRole.Name = "cmbRole"
         Me.cmbRole.Size = New System.Drawing.Size(121, 24)
         Me.cmbRole.TabIndex = 4
         '
         'grpUserDetails
         '
+        Me.grpUserDetails.BackColor = System.Drawing.Color.Transparent
+        Me.grpUserDetails.Controls.Add(Me.btnDelete)
         Me.grpUserDetails.Controls.Add(Me.txtUsername)
+        Me.grpUserDetails.Controls.Add(Me.btnUpdate)
+        Me.grpUserDetails.Controls.Add(Me.btnRegister)
         Me.grpUserDetails.Controls.Add(Me.Label2)
         Me.grpUserDetails.Controls.Add(Me.cmbRole)
         Me.grpUserDetails.Controls.Add(Me.Label1)
         Me.grpUserDetails.Controls.Add(Me.txtPassword)
-        Me.grpUserDetails.Location = New System.Drawing.Point(94, 56)
+        Me.grpUserDetails.Location = New System.Drawing.Point(31, 92)
         Me.grpUserDetails.Name = "grpUserDetails"
-        Me.grpUserDetails.Size = New System.Drawing.Size(329, 228)
+        Me.grpUserDetails.Size = New System.Drawing.Size(375, 270)
         Me.grpUserDetails.TabIndex = 5
         Me.grpUserDetails.TabStop = False
         Me.grpUserDetails.Text = "GroupBox1"
         '
-        'btnRegister
+        'btnDelete
         '
-        Me.btnRegister.Location = New System.Drawing.Point(35, 25)
-        Me.btnRegister.Name = "btnRegister"
-        Me.btnRegister.Size = New System.Drawing.Size(75, 23)
-        Me.btnRegister.TabIndex = 6
-        Me.btnRegister.Text = "Button1"
-        Me.btnRegister.UseVisualStyleBackColor = True
+        Me.btnDelete.BackColor = System.Drawing.Color.Red
+        Me.btnDelete.Location = New System.Drawing.Point(257, 209)
+        Me.btnDelete.Name = "btnDelete"
+        Me.btnDelete.Size = New System.Drawing.Size(97, 39)
+        Me.btnDelete.TabIndex = 8
+        Me.btnDelete.Text = "Delete"
+        Me.btnDelete.UseVisualStyleBackColor = False
         '
         'btnUpdate
         '
-        Me.btnUpdate.Location = New System.Drawing.Point(207, 25)
+        Me.btnUpdate.BackColor = System.Drawing.Color.PaleTurquoise
+        Me.btnUpdate.Location = New System.Drawing.Point(141, 209)
         Me.btnUpdate.Name = "btnUpdate"
-        Me.btnUpdate.Size = New System.Drawing.Size(75, 23)
+        Me.btnUpdate.Size = New System.Drawing.Size(87, 39)
         Me.btnUpdate.TabIndex = 7
-        Me.btnUpdate.Text = "Button1"
-        Me.btnUpdate.UseVisualStyleBackColor = True
+        Me.btnUpdate.Text = "update"
+        Me.btnUpdate.UseVisualStyleBackColor = False
         '
-        'btnDelete
+        'btnRegister
         '
-        Me.btnDelete.Location = New System.Drawing.Point(389, 25)
-        Me.btnDelete.Name = "btnDelete"
-        Me.btnDelete.Size = New System.Drawing.Size(75, 23)
-        Me.btnDelete.TabIndex = 8
-        Me.btnDelete.Text = "Button1"
-        Me.btnDelete.UseVisualStyleBackColor = True
-        '
-        'GroupBox1
-        '
-        Me.GroupBox1.Controls.Add(Me.btnRegister)
-        Me.GroupBox1.Controls.Add(Me.btnDelete)
-        Me.GroupBox1.Controls.Add(Me.btnUpdate)
-        Me.GroupBox1.Location = New System.Drawing.Point(35, 404)
-        Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(486, 54)
-        Me.GroupBox1.TabIndex = 9
-        Me.GroupBox1.TabStop = False
-        Me.GroupBox1.Text = "GroupBox1"
+        Me.btnRegister.BackColor = System.Drawing.Color.GreenYellow
+        Me.btnRegister.Location = New System.Drawing.Point(19, 209)
+        Me.btnRegister.Name = "btnRegister"
+        Me.btnRegister.Size = New System.Drawing.Size(98, 39)
+        Me.btnRegister.TabIndex = 6
+        Me.btnRegister.Text = "Register"
+        Me.btnRegister.UseVisualStyleBackColor = False
         '
         'dgvUsers
         '
         Me.dgvUsers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgvUsers.Location = New System.Drawing.Point(539, 345)
+        Me.dgvUsers.Location = New System.Drawing.Point(31, 385)
         Me.dgvUsers.Name = "dgvUsers"
         Me.dgvUsers.RowHeadersWidth = 51
         Me.dgvUsers.RowTemplate.Height = 24
-        Me.dgvUsers.Size = New System.Drawing.Size(544, 193)
+        Me.dgvUsers.Size = New System.Drawing.Size(395, 161)
         Me.dgvUsers.TabIndex = 10
         '
         'GroupBoxResetPassword
         '
+        Me.GroupBoxResetPassword.BackColor = System.Drawing.Color.Transparent
+        Me.GroupBoxResetPassword.Controls.Add(Me.Label4)
+        Me.GroupBoxResetPassword.Controls.Add(Me.Label3)
         Me.GroupBoxResetPassword.Controls.Add(Me.btnResetPassword)
         Me.GroupBoxResetPassword.Controls.Add(Me.txtNewPassword)
         Me.GroupBoxResetPassword.Controls.Add(Me.txtSellerUsername)
-        Me.GroupBoxResetPassword.Location = New System.Drawing.Point(645, 83)
+        Me.GroupBoxResetPassword.Location = New System.Drawing.Point(799, 92)
         Me.GroupBoxResetPassword.Name = "GroupBoxResetPassword"
-        Me.GroupBoxResetPassword.Size = New System.Drawing.Size(352, 201)
+        Me.GroupBoxResetPassword.Size = New System.Drawing.Size(390, 221)
         Me.GroupBoxResetPassword.TabIndex = 11
         Me.GroupBoxResetPassword.TabStop = False
-        Me.GroupBoxResetPassword.Text = "GroupBox2"
+        Me.GroupBoxResetPassword.Text = "PASSWORD RESET "
+        '
+        'Label4
+        '
+        Me.Label4.AutoSize = True
+        Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label4.ForeColor = System.Drawing.SystemColors.Desktop
+        Me.Label4.Location = New System.Drawing.Point(15, 133)
+        Me.Label4.Name = "Label4"
+        Me.Label4.Size = New System.Drawing.Size(217, 18)
+        Me.Label4.TabIndex = 4
+        Me.Label4.Text = "TEMPORARY PASSWORD:"
+        '
+        'Label3
+        '
+        Me.Label3.AutoSize = True
+        Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label3.ForeColor = System.Drawing.SystemColors.Desktop
+        Me.Label3.Location = New System.Drawing.Point(15, 52)
+        Me.Label3.Name = "Label3"
+        Me.Label3.Size = New System.Drawing.Size(174, 18)
+        Me.Label3.TabIndex = 3
+        Me.Label3.Text = "SELLER USERNAME:"
         '
         'btnResetPassword
         '
-        Me.btnResetPassword.Location = New System.Drawing.Point(105, 145)
+        Me.btnResetPassword.BackColor = System.Drawing.Color.Gainsboro
+        Me.btnResetPassword.Location = New System.Drawing.Point(157, 173)
         Me.btnResetPassword.Name = "btnResetPassword"
-        Me.btnResetPassword.Size = New System.Drawing.Size(75, 23)
+        Me.btnResetPassword.Size = New System.Drawing.Size(107, 34)
         Me.btnResetPassword.TabIndex = 2
-        Me.btnResetPassword.Text = "Button1"
-        Me.btnResetPassword.UseVisualStyleBackColor = True
+        Me.btnResetPassword.Text = "GENERATE"
+        Me.btnResetPassword.UseVisualStyleBackColor = False
         '
         'txtNewPassword
         '
-        Me.txtNewPassword.Location = New System.Drawing.Point(79, 96)
+        Me.txtNewPassword.Location = New System.Drawing.Point(238, 120)
+        Me.txtNewPassword.Multiline = True
         Me.txtNewPassword.Name = "txtNewPassword"
-        Me.txtNewPassword.Size = New System.Drawing.Size(100, 22)
+        Me.txtNewPassword.Size = New System.Drawing.Size(133, 31)
         Me.txtNewPassword.TabIndex = 1
         '
         'txtSellerUsername
         '
-        Me.txtSellerUsername.Location = New System.Drawing.Point(79, 43)
+        Me.txtSellerUsername.Location = New System.Drawing.Point(238, 51)
+        Me.txtSellerUsername.Multiline = True
         Me.txtSellerUsername.Name = "txtSellerUsername"
-        Me.txtSellerUsername.Size = New System.Drawing.Size(100, 22)
+        Me.txtSellerUsername.Size = New System.Drawing.Size(133, 35)
         Me.txtSellerUsername.TabIndex = 0
         '
-        'btnReset
+        'Panel1
         '
-        Me.btnReset.Location = New System.Drawing.Point(487, 277)
-        Me.btnReset.Name = "btnReset"
-        Me.btnReset.Size = New System.Drawing.Size(75, 23)
-        Me.btnReset.TabIndex = 12
-        Me.btnReset.Text = "Button1"
-        Me.btnReset.UseVisualStyleBackColor = True
+        Me.Panel1.BackColor = System.Drawing.Color.DarkGreen
+        Me.Panel1.Controls.Add(Me.Label9)
+        Me.Panel1.Controls.Add(Me.Label8)
+        Me.Panel1.Controls.Add(Me.Label7)
+        Me.Panel1.Controls.Add(Me.Label6)
+        Me.Panel1.Controls.Add(Me.Label5)
+        Me.Panel1.Controls.Add(Me.PictureBox1)
+        Me.Panel1.Location = New System.Drawing.Point(-5, 0)
+        Me.Panel1.Name = "Panel1"
+        Me.Panel1.Size = New System.Drawing.Size(1203, 66)
+        Me.Panel1.TabIndex = 12
+        '
+        'Label9
+        '
+        Me.Label9.AutoSize = True
+        Me.Label9.Font = New System.Drawing.Font("Times New Roman", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label9.ForeColor = System.Drawing.Color.Gold
+        Me.Label9.Location = New System.Drawing.Point(1110, 36)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(53, 17)
+        Me.Label9.TabIndex = 6
+        Me.Label9.Text = "Label9"
+        '
+        'Label8
+        '
+        Me.Label8.AutoSize = True
+        Me.Label8.Font = New System.Drawing.Font("Times New Roman", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label8.ForeColor = System.Drawing.Color.Gold
+        Me.Label8.Location = New System.Drawing.Point(1110, 9)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(53, 17)
+        Me.Label8.TabIndex = 5
+        Me.Label8.Text = "Label8"
+        '
+        'Label7
+        '
+        Me.Label7.AutoSize = True
+        Me.Label7.Font = New System.Drawing.Font("Times New Roman", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label7.ForeColor = System.Drawing.Color.Chartreuse
+        Me.Label7.Location = New System.Drawing.Point(1006, 36)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(49, 17)
+        Me.Label7.TabIndex = 4
+        Me.Label7.Text = "TIME"
+        '
+        'Label6
+        '
+        Me.Label6.AutoSize = True
+        Me.Label6.Font = New System.Drawing.Font("Times New Roman", 10.2!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label6.ForeColor = System.Drawing.Color.Chartreuse
+        Me.Label6.Location = New System.Drawing.Point(1006, 9)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(52, 19)
+        Me.Label6.TabIndex = 3
+        Me.Label6.Text = "DATE"
+        '
+        'Label5
+        '
+        Me.Label5.AutoSize = True
+        Me.Label5.Font = New System.Drawing.Font("Times New Roman", 16.2!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label5.ForeColor = System.Drawing.Color.Gold
+        Me.Label5.Location = New System.Drawing.Point(114, 12)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(205, 32)
+        Me.Label5.TabIndex = 2
+        Me.Label5.Text = "Krishi Saadhan"
+        '
+        'PictureBox1
+        '
+        Me.PictureBox1.BackColor = System.Drawing.Color.Transparent
+        Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
+        Me.PictureBox1.InitialImage = Nothing
+        Me.PictureBox1.Location = New System.Drawing.Point(17, 3)
+        Me.PictureBox1.Name = "PictureBox1"
+        Me.PictureBox1.Size = New System.Drawing.Size(71, 60)
+        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
+        Me.PictureBox1.TabIndex = 1
+        Me.PictureBox1.TabStop = False
+        '
+        'Timer1
+        '
         '
         'frmUserManagement
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1098, 558)
-        Me.Controls.Add(Me.btnReset)
-        Me.Controls.Add(Me.GroupBoxResetPassword)
-        Me.Controls.Add(Me.dgvUsers)
-        Me.Controls.Add(Me.GroupBox1)
+        Me.BackColor = System.Drawing.Color.Chartreuse
+        Me.BackgroundImage = CType(resources.GetObject("$this.BackgroundImage"), System.Drawing.Image)
+        Me.ClientSize = New System.Drawing.Size(1201, 615)
+        Me.Controls.Add(Me.Panel1)
         Me.Controls.Add(Me.grpUserDetails)
+        Me.Controls.Add(Me.dgvUsers)
+        Me.Controls.Add(Me.GroupBoxResetPassword)
         Me.Name = "frmUserManagement"
-        Me.Text = "Form10"
+        Me.Text = "TEMPORARY PASSWORD:"
         Me.grpUserDetails.ResumeLayout(False)
         Me.grpUserDetails.PerformLayout()
-        Me.GroupBox1.ResumeLayout(False)
         CType(Me.dgvUsers, System.ComponentModel.ISupportInitialize).EndInit()
         Me.GroupBoxResetPassword.ResumeLayout(False)
         Me.GroupBoxResetPassword.PerformLayout()
+        Me.Panel1.ResumeLayout(False)
+        Me.Panel1.PerformLayout()
+        CType(Me.PictureBox1, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
 
     End Sub
@@ -222,11 +340,19 @@ Partial Class frmUserManagement
     Friend WithEvents btnRegister As Button
     Friend WithEvents btnUpdate As Button
     Friend WithEvents btnDelete As Button
-    Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents dgvUsers As DataGridView
     Friend WithEvents GroupBoxResetPassword As GroupBox
     Friend WithEvents btnResetPassword As Button
     Friend WithEvents txtNewPassword As TextBox
     Friend WithEvents txtSellerUsername As TextBox
-    Friend WithEvents btnReset As Button
+    Friend WithEvents Label4 As Label
+    Friend WithEvents Label3 As Label
+    Friend WithEvents Panel1 As Panel
+    Friend WithEvents Label5 As Label
+    Friend WithEvents PictureBox1 As PictureBox
+    Friend WithEvents Label9 As Label
+    Friend WithEvents Label8 As Label
+    Friend WithEvents Label7 As Label
+    Friend WithEvents Label6 As Label
+    Friend WithEvents Timer1 As Timer
 End Class

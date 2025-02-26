@@ -1,105 +1,204 @@
 ﻿Imports System.Data.SqlClient
+Imports System.Text.RegularExpressions
 
 Public Class CustomerManagementForm
-    Dim connectionString As String = "Data Source=LAPTOP-V6JUA5T5\SQLEXPRESS;Initial Catalog=KrishiSaadhan;Integrated Security=True"
-    Private currentCustomerID As Integer?
+    Private connectionString As String = "Data Source=LAPTOP-V6JUA5T5\SQLEXPRESS;Initial Catalog=KrishiSaadhan;Integrated Security=True"
 
-    Public Sub New()
-        InitializeComponent()
-    End Sub
-    Private Sub loaddetails()
-
-    End Sub
+    ' Load all customers and their sales when the form loads
     Private Sub CustomerManagementForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        ' Set initial visibility
-        dgvCustomerDetails.Visible = True
-        dgvCustomerSales.Visible = True
+        Timer1.Enabled = True
+        LoadAllCustomers()
+        LoadRecentSales()
     End Sub
 
-
-    ' Search for customers by name
-    Private Sub btnSearchCustomer_Click(sender As Object, e As EventArgs) Handles btnSearchCustomer.Click
-        Dim customerName As String = txtCustomerName.Text.Trim()
-        If String.IsNullOrEmpty(customerName) Then
-            MessageBox.Show("Please enter a customer name to search.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Return
-        End If
-
+    ' Load all customers into DataGridView
+    Private Sub LoadAllCustomers()
         Try
             Using conn As New SqlConnection(connectionString)
                 conn.Open()
-                Dim query As String = "SELECT CustomerID, CustomerName, CustomerPhone, CustomerEmail, CustomerAddress FROM Customers WHERE CustomerName LIKE @CustomerName"
-                Using cmd As New SqlCommand(query, conn)
-                    cmd.Parameters.AddWithValue("@CustomerName", "%" & customerName & "%")
-                    Using adapter As New SqlDataAdapter(cmd)
-                        Dim dt As New DataTable()
-                        adapter.Fill(dt)
-
-                        If dt.Rows.Count > 0 Then
-                            dgvCustomerDetails.DataSource = dt
-                        Else
-                            MessageBox.Show("No customers found with the given name.", "Search Result", MessageBoxButtons.OK, MessageBoxIcon.Information)
-                        End If
-                    End Using
+                Dim query As String = "SELECT CustomerID, CustomerName, CustomerPhone, CustomerEmail, CustomerAddress FROM Customers"
+                Using adapter As New SqlDataAdapter(query, conn)
+                    Dim dt As New DataTable()
+                    adapter.Fill(dt)
+                    dgvCustomerDetails.DataSource = dt
                 End Using
             End Using
         Catch ex As Exception
-            MessageBox.Show("Error searching for customer: " & ex.Message)
+            MessageBox.Show("Error loading customers: " & ex.Message)
         End Try
     End Sub
 
-    ' Add or update customer details
-    Private Sub btnAddUpdateCustomer_Click(sender As Object, e As EventArgs) Handles btnAddUpdateCustomer.Click
-        If Not ValidateCustomerDetails() Then
-            Return
-        End If
-
+    ' Load recent sales into DataGridView with proper table references
+    Private Sub LoadRecentSales()
         Try
             Using conn As New SqlConnection(connectionString)
                 conn.Open()
-                If currentCustomerID Is Nothing Then
-                    ' Insert new customer
-                    Dim insertQuery As String = "INSERT INTO Customers (CustomerName, CustomerPhone, CustomerEmail, CustomerAddress) OUTPUT INSERTED.CustomerID VALUES (@CustomerName, @CustomerPhone, @CustomerEmail, @CustomerAddress)"
-                    Using cmd As New SqlCommand(insertQuery, conn)
-                        cmd.Parameters.AddWithValue("@CustomerName", txtCustomerName.Text.Trim())
-                        cmd.Parameters.AddWithValue("@CustomerPhone", txtCustomerPhone.Text.Trim())
-                        cmd.Parameters.AddWithValue("@CustomerEmail", If(String.IsNullOrEmpty(txtCustomerEmail.Text), DBNull.Value, txtCustomerEmail.Text))
-                        cmd.Parameters.AddWithValue("@CustomerAddress", If(String.IsNullOrEmpty(txtCustomerAddress.Text), DBNull.Value, txtCustomerAddress.Text))
-                        currentCustomerID = Convert.ToInt32(cmd.ExecuteScalar())
-                    End Using
-                    MessageBox.Show("New customer added successfully.")
-                Else
-                    ' Update existing customer
-                    Dim updateQuery As String = "UPDATE Customers SET CustomerName = @CustomerName, CustomerPhone = @CustomerPhone, CustomerEmail = @CustomerEmail, CustomerAddress = @CustomerAddress WHERE CustomerID = @CustomerID"
-                    Using cmd As New SqlCommand(updateQuery, conn)
-                        cmd.Parameters.AddWithValue("@CustomerID", currentCustomerID)
-                        cmd.Parameters.AddWithValue("@CustomerName", txtCustomerName.Text.Trim())
-                        cmd.Parameters.AddWithValue("@CustomerPhone", txtCustomerPhone.Text.Trim())
-                        cmd.Parameters.AddWithValue("@CustomerEmail", If(String.IsNullOrEmpty(txtCustomerEmail.Text), DBNull.Value, txtCustomerEmail.Text))
-                        cmd.Parameters.AddWithValue("@CustomerAddress", If(String.IsNullOrEmpty(txtCustomerAddress.Text), DBNull.Value, txtCustomerAddress.Text))
-                        cmd.ExecuteNonQuery()
-                    End Using
-                    MessageBox.Show("Customer details updated successfully.")
-                End If
+                Dim query As String = "SELECT s.SaleID, s.CustomerID, c.CustomerName, s.SaleDate, s.TotalAmount, " &
+                                   "s.PaymentStatus, p.PaymentDate, p.PaymentMode, " &
+                                   "STUFF((SELECT ', ' + pr.ProductName " &
+                                   "       FROM SalesDetails sd " &
+                                   "       JOIN Products pr ON sd.ProductID = pr.ProductID " &
+                                   "       WHERE sd.SaleID = s.SaleID " &
+                                   "       FOR XML PATH('')), 1, 2, '') AS Products " &
+                                   "FROM Sales s " &
+                                   "INNER JOIN Customers c ON s.CustomerID = c.CustomerID " &
+                                   "LEFT JOIN Payments p ON s.SaleID = p.SaleID " &
+                                   "ORDER BY s.SaleDate DESC"
+                Using adapter As New SqlDataAdapter(query, conn)
+                    Dim dt As New DataTable()
+                    adapter.Fill(dt)
+                    dgvCustomerSales.DataSource = dt
+                End Using
             End Using
         Catch ex As Exception
-            MessageBox.Show("Error saving customer details: " & ex.Message)
+            MessageBox.Show("Error loading sales: " & ex.Message)
         End Try
     End Sub
 
-    ' Fetch sales made by the selected customer
-    Private Sub btnFetchCustomerSales_Click(sender As Object, e As EventArgs) Handles btnFetchCustomerSales.Click
-        If currentCustomerID Is Nothing Then
-            MessageBox.Show("Please select a customer to fetch sales details.", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+    ' Add a new customer with validations
+    Private Sub btnAddCustomer_Click(sender As Object, e As EventArgs) Handles btnAddCustomer.Click
+        If Not ValidateCustomerInputs() Then
             Return
         End If
 
         Try
             Using conn As New SqlConnection(connectionString)
                 conn.Open()
-                Dim query As String = "SELECT SaleID, SaleDate, TotalAmount FROM Sales WHERE CustomerID = @CustomerID"
+                Dim query As String = "INSERT INTO Customers (CustomerName, CustomerPhone, CustomerEmail, CustomerAddress) VALUES (@Name, @Phone, @Email, @Address)"
                 Using cmd As New SqlCommand(query, conn)
-                    cmd.Parameters.AddWithValue("@CustomerID", currentCustomerID)
+                    cmd.Parameters.AddWithValue("@Name", txtCustomerName.Text.Trim())
+                    cmd.Parameters.AddWithValue("@Phone", txtCustomerPhone.Text.Trim())
+                    cmd.Parameters.AddWithValue("@Email", If(String.IsNullOrWhiteSpace(txtCustomerEmail.Text), DBNull.Value, txtCustomerEmail.Text.Trim()))
+                    cmd.Parameters.AddWithValue("@Address", If(String.IsNullOrWhiteSpace(txtCustomerAddress.Text), DBNull.Value, txtCustomerAddress.Text.Trim()))
+                    cmd.ExecuteNonQuery()
+                End Using
+            End Using
+            MessageBox.Show("Customer added successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            LoadAllCustomers()
+            ClearFields()
+        Catch ex As Exception
+            MessageBox.Show("Error adding customer: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    ' Update selected customer with validations
+    Private Sub btnUpdateCustomer_Click(sender As Object, e As EventArgs) Handles btnUpdateCustomer.Click
+        If String.IsNullOrWhiteSpace(txtCustomerID.Text) Then
+            MessageBox.Show("Please select a customer to update.", "Selection Required", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Return
+        End If
+
+        If Not ValidateCustomerInputs() Then
+            Return
+        End If
+
+        Try
+            Using conn As New SqlConnection(connectionString)
+                conn.Open()
+                Dim query As String = "UPDATE Customers SET CustomerName=@Name, CustomerPhone=@Phone, CustomerEmail=@Email, CustomerAddress=@Address WHERE CustomerID=@ID"
+                Using cmd As New SqlCommand(query, conn)
+                    cmd.Parameters.AddWithValue("@ID", txtCustomerID.Text)
+                    cmd.Parameters.AddWithValue("@Name", txtCustomerName.Text.Trim())
+                    cmd.Parameters.AddWithValue("@Phone", txtCustomerPhone.Text.Trim())
+                    cmd.Parameters.AddWithValue("@Email", If(String.IsNullOrWhiteSpace(txtCustomerEmail.Text), DBNull.Value, txtCustomerEmail.Text.Trim()))
+                    cmd.Parameters.AddWithValue("@Address", If(String.IsNullOrWhiteSpace(txtCustomerAddress.Text), DBNull.Value, txtCustomerAddress.Text.Trim()))
+                    cmd.ExecuteNonQuery()
+                End Using
+            End Using
+            MessageBox.Show("Customer updated successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            LoadAllCustomers()
+            ClearFields()
+        Catch ex As Exception
+            MessageBox.Show("Error updating customer: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    ' Delete selected customer
+    Private Sub btnDeleteCustomer_Click(sender As Object, e As EventArgs) Handles btnDeleteCustomer.Click
+        If String.IsNullOrWhiteSpace(txtCustomerID.Text) Then
+            MessageBox.Show("Please select a customer to delete.", "Selection Required", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            Return
+        End If
+
+        ' Confirm before deleting
+        Dim result As DialogResult = MessageBox.Show("Are you sure you want to delete this customer? This action cannot be undone.", "Confirm Delete", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+        If result = DialogResult.No Then
+            Return
+        End If
+
+        Try
+            Using conn As New SqlConnection(connectionString)
+                conn.Open()
+                ' Check if customer has sales
+                Dim checkQuery As String = "SELECT COUNT(*) FROM Sales WHERE CustomerID=@ID"
+                Using checkCmd As New SqlCommand(checkQuery, conn)
+                    checkCmd.Parameters.AddWithValue("@ID", txtCustomerID.Text)
+                    Dim count As Integer = CInt(checkCmd.ExecuteScalar())
+                    If count > 0 Then
+                        MessageBox.Show("Cannot delete customer with existing sales. Please delete the sales first.", "Delete Failed", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                        Return
+                    End If
+                End Using
+
+                ' Delete customer
+                Dim query As String = "DELETE FROM Customers WHERE CustomerID=@ID"
+                Using cmd As New SqlCommand(query, conn)
+                    cmd.Parameters.AddWithValue("@ID", txtCustomerID.Text)
+                    cmd.ExecuteNonQuery()
+                End Using
+            End Using
+            MessageBox.Show("Customer deleted successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+            LoadAllCustomers()
+            ClearFields()
+        Catch ex As Exception
+            MessageBox.Show("Error deleting customer: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
+    ' Clear button click event
+    Private Sub btnClear_Click(sender As Object, e As EventArgs) Handles btnClear.Click
+        ClearFields()
+    End Sub
+
+    ' Populate textboxes when a customer is clicked
+    Private Sub dgvCustomerDetails_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvCustomerDetails.CellClick
+        If e.RowIndex >= 0 Then
+            Try
+                Dim row As DataGridViewRow = dgvCustomerDetails.Rows(e.RowIndex)
+
+                txtCustomerID.Text = row.Cells("CustomerID").Value.ToString()
+                txtCustomerName.Text = row.Cells("CustomerName").Value.ToString()
+                txtCustomerPhone.Text = If(row.Cells("CustomerPhone").Value IsNot DBNull.Value, row.Cells("CustomerPhone").Value.ToString(), "")
+                txtCustomerEmail.Text = If(row.Cells("CustomerEmail").Value IsNot DBNull.Value, row.Cells("CustomerEmail").Value.ToString(), "")
+                txtCustomerAddress.Text = If(row.Cells("CustomerAddress").Value IsNot DBNull.Value, row.Cells("CustomerAddress").Value.ToString(), "")
+
+                ' Load Sales for selected customer
+                LoadCustomerSales(txtCustomerID.Text)
+
+            Catch ex As Exception
+                MessageBox.Show("Error selecting customer: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+            End Try
+        End If
+    End Sub
+
+    ' Load sales for selected customer with detailed information using correct table names
+    Private Sub LoadCustomerSales(customerID As String)
+        Try
+            Using conn As New SqlConnection(connectionString)
+                conn.Open()
+                Dim query As String = "SELECT s.SaleID, s.SaleDate, s.TotalAmount, s.PaymentStatus, " &
+                                   "p.PaymentDate, p.PaymentMode, p.BankName, " &
+                                   "STUFF((SELECT ', ' + pr.ProductName " &
+                                   "       FROM SalesDetails sd " &
+                                   "       JOIN Products pr ON sd.ProductID = pr.ProductID " &
+                                   "       WHERE sd.SaleID = s.SaleID " &
+                                   "       FOR XML PATH('')), 1, 2, '') AS Products " &
+                                   "FROM Sales s " &
+                                   "LEFT JOIN Payments p ON s.SaleID = p.SaleID " &
+                                   "WHERE s.CustomerID=@ID " &
+                                   "ORDER BY s.SaleDate DESC"
+                Using cmd As New SqlCommand(query, conn)
+                    cmd.Parameters.AddWithValue("@ID", customerID)
                     Using adapter As New SqlDataAdapter(cmd)
                         Dim dt As New DataTable()
                         adapter.Fill(dt)
@@ -108,39 +207,58 @@ Public Class CustomerManagementForm
                 End Using
             End Using
         Catch ex As Exception
-            MessageBox.Show("Error fetching customer sales: " & ex.Message)
+            MessageBox.Show("Error loading customer sales: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
         End Try
     End Sub
 
-    ' DataGridView cell click handler for customer details
-    Private Sub dgvCustomerDetails_CellClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvCustomerDetails.CellClick
-        If e.RowIndex >= 0 Then
-            Try
-                Dim row As DataGridViewRow = dgvCustomerDetails.Rows(e.RowIndex)
-                currentCustomerID = Convert.ToInt32(row.Cells("CustomerID").Value)
-                txtCustomerName.Text = row.Cells("CustomerName").Value.ToString()
-                txtCustomerPhone.Text = row.Cells("CustomerPhone").Value.ToString()
-                txtCustomerEmail.Text = row.Cells("CustomerEmail").Value.ToString()
-                txtCustomerAddress.Text = row.Cells("CustomerAddress").Value.ToString()
-            Catch ex As Exception
-                MessageBox.Show("Error selecting customer: " & ex.Message)
-            End Try
-        End If
-    End Sub
-
-    ' Validate customer details
-    Private Function ValidateCustomerDetails() As Boolean
-        If String.IsNullOrWhiteSpace(txtCustomerName.Text) OrElse Not txtCustomerName.Text.All(Function(c) Char.IsLetter(c) OrElse Char.IsWhiteSpace(c)) Then
-            MessageBox.Show("Please enter a valid customer name using only letters and spaces.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+    ' Validate customer input fields
+    Private Function ValidateCustomerInputs() As Boolean
+        ' Validate Customer Name
+        If String.IsNullOrWhiteSpace(txtCustomerName.Text) Then
+            MessageBox.Show("Customer Name is required.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            txtCustomerName.Focus()
             Return False
         End If
 
-        If String.IsNullOrWhiteSpace(txtCustomerPhone.Text) OrElse txtCustomerPhone.Text.Length <> 10 OrElse Not txtCustomerPhone.Text.All(Function(c) Char.IsDigit(c)) Then
-            MessageBox.Show("Please enter a valid 10-digit phone number.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+        ' Validate Phone Number (allow only digits and proper length)
+        If String.IsNullOrWhiteSpace(txtCustomerPhone.Text) Then
+            MessageBox.Show("Phone Number is required.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            txtCustomerPhone.Focus()
+            Return False
+        ElseIf Not Regex.IsMatch(txtCustomerPhone.Text.Trim(), "^[0-9]{10}$") Then
+            MessageBox.Show("Phone Number must be 10 digits.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            txtCustomerPhone.Focus()
+            Return False
+        End If
+
+        ' Validate Email if provided
+        If Not String.IsNullOrWhiteSpace(txtCustomerEmail.Text) AndAlso
+           Not Regex.IsMatch(txtCustomerEmail.Text.Trim(), "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$") Then
+            MessageBox.Show("Invalid Email format.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            txtCustomerEmail.Focus()
             Return False
         End If
 
         Return True
     End Function
 
+    ' Clear input fields
+    Private Sub ClearFields()
+        txtCustomerID.Clear()
+        txtCustomerName.Clear()
+        txtCustomerPhone.Clear()
+        txtCustomerEmail.Clear()
+        txtCustomerAddress.Clear()
+        txtCustomerName.Focus()
+    End Sub
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        Dim logout As New AdminDashboard()
+        logout.Show()
+    End Sub
+
+    Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
+        Labeldate.Text = DateTime.Now.ToString("dd/MM/yyyy ")
+        Labeltime.Text = DateTime.Now.ToString("hh:mm:ss tt")
+    End Sub
 End Class

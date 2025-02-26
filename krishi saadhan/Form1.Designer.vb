@@ -36,11 +36,11 @@ Partial Class SplashScreen
         'lblLoading
         '
         Me.lblLoading.AutoSize = True
-        Me.lblLoading.BackColor = System.Drawing.SystemColors.ActiveCaption
-        Me.lblLoading.Font = New System.Drawing.Font("Vani", 13.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.lblLoading.Location = New System.Drawing.Point(424, 364)
+        Me.lblLoading.BackColor = System.Drawing.Color.Transparent
+        Me.lblLoading.Font = New System.Drawing.Font("Algerian", 22.2!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblLoading.Location = New System.Drawing.Point(309, 367)
         Me.lblLoading.Name = "lblLoading"
-        Me.lblLoading.Size = New System.Drawing.Size(349, 41)
+        Me.lblLoading.Size = New System.Drawing.Size(568, 41)
         Me.lblLoading.TabIndex = 1
         Me.lblLoading.Text = "Welcome to Krishi Saadhan"
         '
@@ -56,10 +56,12 @@ Partial Class SplashScreen
         '
         'PictureBox2
         '
-        Me.PictureBox2.Location = New System.Drawing.Point(534, 75)
+        Me.PictureBox2.BackColor = System.Drawing.Color.Transparent
+        Me.PictureBox2.Image = CType(resources.GetObject("PictureBox2.Image"), System.Drawing.Image)
+        Me.PictureBox2.Location = New System.Drawing.Point(508, 142)
         Me.PictureBox2.Name = "PictureBox2"
-        Me.PictureBox2.Size = New System.Drawing.Size(144, 99)
-        Me.PictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.PictureBox2.Size = New System.Drawing.Size(144, 81)
+        Me.PictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom
         Me.PictureBox2.TabIndex = 4
         Me.PictureBox2.TabStop = False
         '
