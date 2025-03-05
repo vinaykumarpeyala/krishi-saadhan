@@ -36,7 +36,7 @@ Partial Class ResetPasswordForm
         '
         'txtNewPassword
         '
-        Me.txtNewPassword.Location = New System.Drawing.Point(257, 89)
+        Me.txtNewPassword.Location = New System.Drawing.Point(276, 89)
         Me.txtNewPassword.Multiline = True
         Me.txtNewPassword.Name = "txtNewPassword"
         Me.txtNewPassword.Size = New System.Drawing.Size(176, 40)
@@ -44,7 +44,7 @@ Partial Class ResetPasswordForm
         '
         'txtConfirmPassword
         '
-        Me.txtConfirmPassword.Location = New System.Drawing.Point(257, 170)
+        Me.txtConfirmPassword.Location = New System.Drawing.Point(276, 170)
         Me.txtConfirmPassword.Multiline = True
         Me.txtConfirmPassword.Name = "txtConfirmPassword"
         Me.txtConfirmPassword.Size = New System.Drawing.Size(176, 38)
@@ -91,18 +91,18 @@ Partial Class ResetPasswordForm
         '
         Me.Label3.AutoSize = True
         Me.Label3.Font = New System.Drawing.Font("Times New Roman", 16.2!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.Location = New System.Drawing.Point(167, 18)
+        Me.Label3.Location = New System.Drawing.Point(135, 24)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(200, 32)
+        Me.Label3.Size = New System.Drawing.Size(270, 32)
         Me.Label3.TabIndex = 6
-        Me.Label3.Text = "Reset Password"
+        Me.Label3.Text = "RESET PASSWORD"
         '
         'Label2
         '
         Me.Label2.AutoSize = True
         Me.Label2.BackColor = System.Drawing.Color.White
         Me.Label2.Font = New System.Drawing.Font("Times New Roman", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label2.Location = New System.Drawing.Point(82, 170)
+        Me.Label2.Location = New System.Drawing.Point(83, 185)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(169, 23)
         Me.Label2.TabIndex = 5
@@ -114,7 +114,7 @@ Partial Class ResetPasswordForm
         Me.Label1.BackColor = System.Drawing.Color.White
         Me.Label1.Font = New System.Drawing.Font("Times New Roman", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
-        Me.Label1.Location = New System.Drawing.Point(83, 106)
+        Me.Label1.Location = New System.Drawing.Point(102, 106)
         Me.Label1.Name = "Label1"
         Me.Label1.Size = New System.Drawing.Size(150, 23)
         Me.Label1.TabIndex = 4

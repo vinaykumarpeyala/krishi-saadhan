@@ -1,9 +1,9 @@
-﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+﻿<Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()>
 Partial Class StockManagementForm
     Inherits System.Windows.Forms.Form
 
     'Form overrides dispose to clean up the component list.
-    <System.Diagnostics.DebuggerNonUserCode()> _
+    <System.Diagnostics.DebuggerNonUserCode()>
     Protected Overrides Sub Dispose(ByVal disposing As Boolean)
         Try
             If disposing AndAlso components IsNot Nothing Then
@@ -20,7 +20,7 @@ Partial Class StockManagementForm
     'NOTE: The following procedure is required by the Windows Form Designer
     'It can be modified using the Windows Form Designer.  
     'Do not modify it using the code editor.
-    <System.Diagnostics.DebuggerStepThrough()> _
+    <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(StockManagementForm))
@@ -50,12 +50,12 @@ Partial Class StockManagementForm
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.Label7 = New System.Windows.Forms.Label()
         Me.Panel3 = New System.Windows.Forms.Panel()
-        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
-        Me.Label8 = New System.Windows.Forms.Label()
-        Me.Label9 = New System.Windows.Forms.Label()
-        Me.Label10 = New System.Windows.Forms.Label()
-        Me.Labeltime = New System.Windows.Forms.Label()
         Me.Labeldate = New System.Windows.Forms.Label()
+        Me.Labeltime = New System.Windows.Forms.Label()
+        Me.Label10 = New System.Windows.Forms.Label()
+        Me.Label9 = New System.Windows.Forms.Label()
+        Me.Label8 = New System.Windows.Forms.Label()
+        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
         Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         CType(Me.dgvProducts, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.Panel1.SuspendLayout()
@@ -67,7 +67,7 @@ Partial Class StockManagementForm
         'dgvProducts
         '
         Me.dgvProducts.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgvProducts.Location = New System.Drawing.Point(204, 393)
+        Me.dgvProducts.Location = New System.Drawing.Point(64, 396)
         Me.dgvProducts.Name = "dgvProducts"
         Me.dgvProducts.RowHeadersWidth = 51
         Me.dgvProducts.RowTemplate.Height = 24
@@ -87,30 +87,36 @@ Partial Class StockManagementForm
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.ForeColor = System.Drawing.SystemColors.ButtonHighlight
-        Me.Label1.Location = New System.Drawing.Point(48, 99)
+        Me.Label1.BackColor = System.Drawing.Color.NavajoWhite
+        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
+        Me.Label1.Location = New System.Drawing.Point(34, 100)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(93, 16)
+        Me.Label1.Size = New System.Drawing.Size(116, 18)
         Me.Label1.TabIndex = 13
         Me.Label1.Text = "Product Name"
         '
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.ForeColor = System.Drawing.SystemColors.ButtonHighlight
-        Me.Label2.Location = New System.Drawing.Point(48, 189)
+        Me.Label2.BackColor = System.Drawing.Color.PapayaWhip
+        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label2.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
+        Me.Label2.Location = New System.Drawing.Point(24, 183)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(92, 16)
+        Me.Label2.Size = New System.Drawing.Size(118, 18)
         Me.Label2.TabIndex = 14
         Me.Label2.Text = "Batch Quantity"
         '
         'Label3
         '
         Me.Label3.AutoSize = True
-        Me.Label3.ForeColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.Label3.BackColor = System.Drawing.Color.Moccasin
+        Me.Label3.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label3.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.Label3.Location = New System.Drawing.Point(60, 142)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(57, 16)
+        Me.Label3.Size = New System.Drawing.Size(72, 18)
         Me.Label3.TabIndex = 15
         Me.Label3.Text = "Batch ID"
         '
@@ -189,10 +195,12 @@ Partial Class StockManagementForm
         'Label4
         '
         Me.Label4.AutoSize = True
-        Me.Label4.ForeColor = System.Drawing.SystemColors.ControlLightLight
-        Me.Label4.Location = New System.Drawing.Point(69, 230)
+        Me.Label4.BackColor = System.Drawing.Color.NavajoWhite
+        Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label4.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
+        Me.Label4.Location = New System.Drawing.Point(55, 230)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(67, 16)
+        Me.Label4.Size = New System.Drawing.Size(87, 18)
         Me.Label4.TabIndex = 26
         Me.Label4.Text = "Unit Price:"
         '
@@ -209,10 +217,12 @@ Partial Class StockManagementForm
         'Label6
         '
         Me.Label6.AutoSize = True
-        Me.Label6.ForeColor = System.Drawing.SystemColors.ButtonHighlight
-        Me.Label6.Location = New System.Drawing.Point(48, 58)
+        Me.Label6.BackColor = System.Drawing.Color.PapayaWhip
+        Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label6.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
+        Me.Label6.Location = New System.Drawing.Point(60, 58)
         Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(69, 16)
+        Me.Label6.Size = New System.Drawing.Size(88, 18)
         Me.Label6.TabIndex = 28
         Me.Label6.Text = "Product ID"
         '
@@ -221,7 +231,7 @@ Partial Class StockManagementForm
         Me.btnReturnToHomePage.BackColor = System.Drawing.Color.Pink
         Me.btnReturnToHomePage.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.btnReturnToHomePage.ForeColor = System.Drawing.Color.FromArgb(CType(CType(64, Byte), Integer), CType(CType(0, Byte), Integer), CType(CType(64, Byte), Integer))
-        Me.btnReturnToHomePage.Location = New System.Drawing.Point(1173, 10)
+        Me.btnReturnToHomePage.Location = New System.Drawing.Point(929, 26)
         Me.btnReturnToHomePage.Name = "btnReturnToHomePage"
         Me.btnReturnToHomePage.Size = New System.Drawing.Size(83, 28)
         Me.btnReturnToHomePage.TabIndex = 29
@@ -270,31 +280,33 @@ Partial Class StockManagementForm
         Me.Panel1.Controls.Add(Me.Label1)
         Me.Panel1.Controls.Add(Me.Label3)
         Me.Panel1.Controls.Add(Me.Label2)
-        Me.Panel1.Location = New System.Drawing.Point(31, 93)
+        Me.Panel1.Location = New System.Drawing.Point(27, 86)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(365, 281)
+        Me.Panel1.Size = New System.Drawing.Size(329, 281)
         Me.Panel1.TabIndex = 33
         '
         'lblStockId
         '
         Me.lblStockId.AutoSize = True
-        Me.lblStockId.ForeColor = System.Drawing.SystemColors.ButtonHighlight
-        Me.lblStockId.Location = New System.Drawing.Point(60, 21)
+        Me.lblStockId.BackColor = System.Drawing.Color.NavajoWhite
+        Me.lblStockId.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblStockId.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
+        Me.lblStockId.Location = New System.Drawing.Point(69, 16)
         Me.lblStockId.Name = "lblStockId"
-        Me.lblStockId.Size = New System.Drawing.Size(57, 16)
+        Me.lblStockId.Size = New System.Drawing.Size(73, 18)
         Me.lblStockId.TabIndex = 31
         Me.lblStockId.Text = "StockID:"
         '
         'Panel2
         '
-        Me.Panel2.BackColor = System.Drawing.Color.PaleTurquoise
+        Me.Panel2.BackColor = System.Drawing.Color.Transparent
         Me.Panel2.Controls.Add(Me.btnAddStock)
         Me.Panel2.Controls.Add(Me.btnUpdateStock)
         Me.Panel2.Controls.Add(Me.btnRefresh)
         Me.Panel2.Controls.Add(Me.btnDeleteBatchQuantity)
         Me.Panel2.Controls.Add(Me.btnDeleteStock)
         Me.Panel2.Controls.Add(Me.btnCheckLowStock)
-        Me.Panel2.Location = New System.Drawing.Point(524, 151)
+        Me.Panel2.Location = New System.Drawing.Point(412, 144)
         Me.Panel2.Name = "Panel2"
         Me.Panel2.Size = New System.Drawing.Size(544, 172)
         Me.Panel2.TabIndex = 34
@@ -303,7 +315,7 @@ Partial Class StockManagementForm
         '
         Me.Label7.AutoSize = True
         Me.Label7.Font = New System.Drawing.Font("Times New Roman", 19.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label7.Location = New System.Drawing.Point(573, 93)
+        Me.Label7.Location = New System.Drawing.Point(436, 70)
         Me.Label7.Name = "Label7"
         Me.Label7.Size = New System.Drawing.Size(389, 37)
         Me.Label7.TabIndex = 35
@@ -326,6 +338,56 @@ Partial Class StockManagementForm
         Me.Panel3.Size = New System.Drawing.Size(1266, 65)
         Me.Panel3.TabIndex = 36
         '
+        'Labeldate
+        '
+        Me.Labeldate.AutoSize = True
+        Me.Labeldate.Font = New System.Drawing.Font("Times New Roman", 10.2!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Labeldate.Location = New System.Drawing.Point(792, 3)
+        Me.Labeldate.Name = "Labeldate"
+        Me.Labeldate.Size = New System.Drawing.Size(40, 19)
+        Me.Labeldate.TabIndex = 35
+        Me.Labeldate.Text = "date"
+        '
+        'Labeltime
+        '
+        Me.Labeltime.AutoSize = True
+        Me.Labeltime.Font = New System.Drawing.Font("Times New Roman", 10.2!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Labeltime.Location = New System.Drawing.Point(779, 35)
+        Me.Labeltime.Name = "Labeltime"
+        Me.Labeltime.Size = New System.Drawing.Size(68, 19)
+        Me.Labeltime.TabIndex = 34
+        Me.Labeltime.Text = "Label11"
+        '
+        'Label10
+        '
+        Me.Label10.AutoSize = True
+        Me.Label10.Font = New System.Drawing.Font("Times New Roman", 10.2!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label10.Location = New System.Drawing.Point(709, 7)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Size = New System.Drawing.Size(52, 19)
+        Me.Label10.TabIndex = 33
+        Me.Label10.Text = "DATE"
+        '
+        'Label9
+        '
+        Me.Label9.AutoSize = True
+        Me.Label9.Font = New System.Drawing.Font("Times New Roman", 10.2!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label9.Location = New System.Drawing.Point(709, 35)
+        Me.Label9.Name = "Label9"
+        Me.Label9.Size = New System.Drawing.Size(52, 19)
+        Me.Label9.TabIndex = 32
+        Me.Label9.Text = "TIME"
+        '
+        'Label8
+        '
+        Me.Label8.AutoSize = True
+        Me.Label8.Font = New System.Drawing.Font("Times New Roman", 22.2!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label8.Location = New System.Drawing.Point(95, 12)
+        Me.Label8.Name = "Label8"
+        Me.Label8.Size = New System.Drawing.Size(268, 42)
+        Me.Label8.TabIndex = 31
+        Me.Label8.Text = "Krishi Saadhan"
+        '
         'PictureBox1
         '
         Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
@@ -336,55 +398,6 @@ Partial Class StockManagementForm
         Me.PictureBox1.TabIndex = 30
         Me.PictureBox1.TabStop = False
         '
-        'Label8
-        '
-        Me.Label8.AutoSize = True
-        Me.Label8.Location = New System.Drawing.Point(106, 22)
-        Me.Label8.Name = "Label8"
-        Me.Label8.Size = New System.Drawing.Size(205, 32)
-        Me.Label8.TabIndex = 31
-        Me.Label8.Text = "Krishi Saadhan"
-        '
-        'Label9
-        '
-        Me.Label9.AutoSize = True
-        Me.Label9.Font = New System.Drawing.Font("Times New Roman", 10.2!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label9.Location = New System.Drawing.Point(948, 35)
-        Me.Label9.Name = "Label9"
-        Me.Label9.Size = New System.Drawing.Size(52, 19)
-        Me.Label9.TabIndex = 32
-        Me.Label9.Text = "TIME"
-        '
-        'Label10
-        '
-        Me.Label10.AutoSize = True
-        Me.Label10.Font = New System.Drawing.Font("Times New Roman", 10.2!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label10.Location = New System.Drawing.Point(948, 10)
-        Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(52, 19)
-        Me.Label10.TabIndex = 33
-        Me.Label10.Text = "DATE"
-        '
-        'Labeltime
-        '
-        Me.Labeltime.AutoSize = True
-        Me.Labeltime.Font = New System.Drawing.Font("Times New Roman", 10.2!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Labeltime.Location = New System.Drawing.Point(1037, 35)
-        Me.Labeltime.Name = "Labeltime"
-        Me.Labeltime.Size = New System.Drawing.Size(68, 19)
-        Me.Labeltime.TabIndex = 34
-        Me.Labeltime.Text = "Label11"
-        '
-        'Labeldate
-        '
-        Me.Labeldate.AutoSize = True
-        Me.Labeldate.Font = New System.Drawing.Font("Times New Roman", 10.2!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Labeldate.Location = New System.Drawing.Point(1036, 10)
-        Me.Labeldate.Name = "Labeldate"
-        Me.Labeldate.Size = New System.Drawing.Size(40, 19)
-        Me.Labeldate.TabIndex = 35
-        Me.Labeldate.Text = "date"
-        '
         'Timer1
         '
         '
@@ -394,7 +407,7 @@ Partial Class StockManagementForm
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.Color.White
         Me.BackgroundImage = CType(resources.GetObject("$this.BackgroundImage"), System.Drawing.Image)
-        Me.ClientSize = New System.Drawing.Size(1272, 629)
+        Me.ClientSize = New System.Drawing.Size(1029, 642)
         Me.Controls.Add(Me.Panel3)
         Me.Controls.Add(Me.Label7)
         Me.Controls.Add(Me.Panel2)

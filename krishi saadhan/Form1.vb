@@ -7,7 +7,7 @@ Public Class SplashScreen
     End Sub
 
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
-        ProgressBar1.Increment(15)
+        ProgressBar1.Increment(10)
 
         If ProgressBar1.Value >= 100 Then
             Timer1.Stop()
@@ -15,4 +15,6 @@ Public Class SplashScreen
             LoginForm.Show() ' Open Login Form
         End If
     End Sub
+
+
 End Class

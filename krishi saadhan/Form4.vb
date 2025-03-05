@@ -207,7 +207,7 @@ Public Class SellerDashboard
 
     Private Sub UpdateSubtotal()
         Dim subtotal As Decimal = billingTable.AsEnumerable().Sum(Function(row) row.Field(Of Decimal)("Total"))
-        lblSubtotal.Text = $"Subtotal: {subtotal:C2}"
+        lblSubTotal.Text = $"Subtotal: {subtotal:C2}"
     End Sub
 
     Private Sub btnRemoveItem_Click(sender As Object, e As EventArgs) Handles btnRemoveItem.Click
@@ -225,6 +225,17 @@ Public Class SellerDashboard
                 UpdateSubtotal()
             End If
         End If
+        ClearFields()
+    End Sub
+
+    Private Sub ClearFields()
+        txtProductName.Clear()
+        txtCategory.Clear()
+        txtPrice.Clear()
+        txtAvailableStock.Clear()
+        txtBatchID.Clear()
+        numericQuantity.Value = 1
+        PictureBoxProduct.Image = Nothing
     End Sub
 
     Private Sub btnProceedToBill_Click(sender As Object, e As EventArgs) Handles btnProceedToBill.Click

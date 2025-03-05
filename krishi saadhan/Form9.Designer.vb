@@ -22,9 +22,9 @@ Partial Class ReportGenerationForm
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()> _
     Private Sub InitializeComponent()
-        Dim ChartArea2 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
-        Dim Legend2 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
-        Dim Series2 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
+        Dim ChartArea1 As System.Windows.Forms.DataVisualization.Charting.ChartArea = New System.Windows.Forms.DataVisualization.Charting.ChartArea()
+        Dim Legend1 As System.Windows.Forms.DataVisualization.Charting.Legend = New System.Windows.Forms.DataVisualization.Charting.Legend()
+        Dim Series1 As System.Windows.Forms.DataVisualization.Charting.Series = New System.Windows.Forms.DataVisualization.Charting.Series()
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(ReportGenerationForm))
         Me.salesReportButton = New System.Windows.Forms.Button()
         Me.stockReportButton = New System.Windows.Forms.Button()
@@ -49,6 +49,7 @@ Partial Class ReportGenerationForm
         'salesReportButton
         '
         Me.salesReportButton.BackColor = System.Drawing.Color.PaleGoldenrod
+        Me.salesReportButton.Font = New System.Drawing.Font("Times New Roman", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.salesReportButton.Location = New System.Drawing.Point(382, 224)
         Me.salesReportButton.Name = "salesReportButton"
         Me.salesReportButton.Size = New System.Drawing.Size(116, 37)
@@ -59,6 +60,7 @@ Partial Class ReportGenerationForm
         'stockReportButton
         '
         Me.stockReportButton.BackColor = System.Drawing.Color.NavajoWhite
+        Me.stockReportButton.Font = New System.Drawing.Font("Times New Roman", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.stockReportButton.Location = New System.Drawing.Point(213, 224)
         Me.stockReportButton.Name = "stockReportButton"
         Me.stockReportButton.Size = New System.Drawing.Size(133, 37)
@@ -78,46 +80,50 @@ Partial Class ReportGenerationForm
         '
         'endDatePicker
         '
-        Me.endDatePicker.Location = New System.Drawing.Point(55, 108)
+        Me.endDatePicker.Font = New System.Drawing.Font("Times New Roman", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.endDatePicker.Location = New System.Drawing.Point(55, 133)
         Me.endDatePicker.Name = "endDatePicker"
-        Me.endDatePicker.Size = New System.Drawing.Size(165, 22)
+        Me.endDatePicker.Size = New System.Drawing.Size(190, 25)
         Me.endDatePicker.TabIndex = 4
         '
         'startDatePicker
         '
+        Me.startDatePicker.Font = New System.Drawing.Font("Times New Roman", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.startDatePicker.Location = New System.Drawing.Point(55, 64)
         Me.startDatePicker.Name = "startDatePicker"
-        Me.startDatePicker.Size = New System.Drawing.Size(164, 22)
+        Me.startDatePicker.Size = New System.Drawing.Size(190, 25)
         Me.startDatePicker.TabIndex = 5
         '
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Location = New System.Drawing.Point(129, 89)
+        Me.Label1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label1.Location = New System.Drawing.Point(124, 98)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(26, 16)
+        Me.Label1.Size = New System.Drawing.Size(31, 18)
         Me.Label1.TabIndex = 7
         Me.Label1.Text = "TO"
         '
         'SalesChart
         '
-        ChartArea2.Name = "ChartArea1"
-        Me.SalesChart.ChartAreas.Add(ChartArea2)
-        Legend2.Name = "Legend1"
-        Me.SalesChart.Legends.Add(Legend2)
-        Me.SalesChart.Location = New System.Drawing.Point(804, 24)
+        ChartArea1.Name = "ChartArea1"
+        Me.SalesChart.ChartAreas.Add(ChartArea1)
+        Legend1.Name = "Legend1"
+        Me.SalesChart.Legends.Add(Legend1)
+        Me.SalesChart.Location = New System.Drawing.Point(795, 24)
         Me.SalesChart.Name = "SalesChart"
-        Series2.ChartArea = "ChartArea1"
-        Series2.Legend = "Legend1"
-        Series2.Name = "Series1"
-        Me.SalesChart.Series.Add(Series2)
-        Me.SalesChart.Size = New System.Drawing.Size(412, 523)
+        Series1.ChartArea = "ChartArea1"
+        Series1.Legend = "Legend1"
+        Series1.Name = "Series1"
+        Me.SalesChart.Series.Add(Series1)
+        Me.SalesChart.Size = New System.Drawing.Size(437, 553)
         Me.SalesChart.TabIndex = 8
         Me.SalesChart.Text = "Chart1"
         '
         'chartDisplayButton
         '
         Me.chartDisplayButton.BackColor = System.Drawing.Color.PaleTurquoise
+        Me.chartDisplayButton.Font = New System.Drawing.Font("Times New Roman", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.chartDisplayButton.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
         Me.chartDisplayButton.Location = New System.Drawing.Point(55, 222)
         Me.chartDisplayButton.Name = "chartDisplayButton"
@@ -141,51 +147,52 @@ Partial Class ReportGenerationForm
         Me.topProductsGridView.Name = "topProductsGridView"
         Me.topProductsGridView.RowHeadersWidth = 51
         Me.topProductsGridView.RowTemplate.Height = 24
-        Me.topProductsGridView.Size = New System.Drawing.Size(447, 91)
+        Me.topProductsGridView.Size = New System.Drawing.Size(447, 131)
         Me.topProductsGridView.TabIndex = 12
         '
         'HScrollBar1
         '
-        Me.HScrollBar1.Location = New System.Drawing.Point(0, 583)
+        Me.HScrollBar1.Location = New System.Drawing.Point(0, 590)
         Me.HScrollBar1.Name = "HScrollBar1"
-        Me.HScrollBar1.Size = New System.Drawing.Size(1248, 22)
+        Me.HScrollBar1.Size = New System.Drawing.Size(1276, 15)
         Me.HScrollBar1.TabIndex = 13
         '
         'VScrollBar1
         '
-        Me.VScrollBar1.Location = New System.Drawing.Point(1229, 3)
+        Me.VScrollBar1.Location = New System.Drawing.Point(1257, -8)
         Me.VScrollBar1.Name = "VScrollBar1"
-        Me.VScrollBar1.Size = New System.Drawing.Size(18, 602)
+        Me.VScrollBar1.Size = New System.Drawing.Size(19, 613)
         Me.VScrollBar1.TabIndex = 14
         '
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Font = New System.Drawing.Font("Microsoft Sans Serif", 10.2!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label2.Location = New System.Drawing.Point(34, 34)
+        Me.Label2.Font = New System.Drawing.Font("Times New Roman", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label2.Location = New System.Drawing.Point(34, 24)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(211, 20)
+        Me.Label2.Size = New System.Drawing.Size(228, 23)
         Me.Label2.TabIndex = 15
         Me.Label2.Text = "SELECT DATE RANGE:"
         '
         'Label3
         '
         Me.Label3.AutoSize = True
-        Me.Label3.Font = New System.Drawing.Font("Times New Roman", 10.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label3.ForeColor = System.Drawing.Color.DarkGreen
-        Me.Label3.Location = New System.Drawing.Point(424, 34)
+        Me.Label3.BackColor = System.Drawing.SystemColors.Window
+        Me.Label3.Font = New System.Drawing.Font("Times New Roman", 13.2!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label3.ForeColor = System.Drawing.Color.DarkBlue
+        Me.Label3.Location = New System.Drawing.Point(377, 24)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(236, 20)
+        Me.Label3.Size = New System.Drawing.Size(310, 25)
         Me.Label3.TabIndex = 16
         Me.Label3.Text = "TOP SELLING PRODUCTS:"
         '
         'Label4
         '
         Me.Label4.AutoSize = True
-        Me.Label4.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label4.Location = New System.Drawing.Point(23, 177)
+        Me.Label4.Font = New System.Drawing.Font("Times New Roman", 10.2!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label4.Location = New System.Drawing.Point(34, 178)
         Me.Label4.Name = "Label4"
-        Me.Label4.Size = New System.Drawing.Size(132, 18)
+        Me.Label4.Size = New System.Drawing.Size(133, 19)
         Me.Label4.TabIndex = 17
         Me.Label4.Text = "CHOOSE TYPE:"
         '
@@ -195,7 +202,7 @@ Partial Class ReportGenerationForm
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.GradientInactiveCaption
         Me.BackgroundImage = CType(resources.GetObject("$this.BackgroundImage"), System.Drawing.Image)
-        Me.ClientSize = New System.Drawing.Size(1247, 603)
+        Me.ClientSize = New System.Drawing.Size(1275, 603)
         Me.Controls.Add(Me.Label4)
         Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.Label2)

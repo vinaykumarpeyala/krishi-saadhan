@@ -1,5 +1,6 @@
 ﻿Imports System.Data.SqlClient
 Imports System.Text.RegularExpressions
+Imports System.IO
 
 Public Class BillForm
     Dim connectionString As String = "Data Source=LAPTOP-V6JUA5T5\SQLEXPRESS;Initial Catalog=KrishiSaadhan;Integrated Security=True"
@@ -9,19 +10,21 @@ Public Class BillForm
     Private currentCustomerID As Integer?
     Private formdialogResult As DialogResult = DialogResult.Cancel
     Public Event StockUpdated()
+
     Public Sub New(billingTable As DataTable, userId As Integer)
         InitializeComponent()
         Me.billingTable = billingTable
         Me.userId = userId
     End Sub
+
     Private Class StockBatch
         Public Property StockID As Integer
         Public Property BatchID As String
         Public Property BatchQuantity As Integer
         Public Property StockDate As DateTime
     End Class
+
     Private Sub BillForm_Load(sender As Object, e As EventArgs) Handles MyBase.Load
-        ' Set initial visibility
         Timer1.Enabled = True
         PanelCardDetails.Visible = False
         dgvCustomerDetails.Visible = False
@@ -34,15 +37,15 @@ Public Class BillForm
         btnConfirmPayment.Visible = False
         dgvBillDetails.DataSource = billingTable
 
-        ' Populate ComboBox with bank names
         ComboBoxBankName.Items.AddRange(New String() {
             "Bank of Baroda", "Canara", "ICICI", "SBI", "HDFC",
             "Yes Bank", "Kotak Mahindra Bank", "TJSB"})
-
-        ' Remove initial radio button selection
         rdoCash.Checked = False
         rdoCredit.Checked = False
         rdoDebit.Checked = False
+
+        ' Add Clear button dynamically
+
     End Sub
 
     ' Validation functions
@@ -80,14 +83,12 @@ Public Class BillForm
         Dim customerName As String = txtCustomerName.Text.Trim()
         ResetFields()
 
-        If String.IsNullOrEmpty(customerName) Then
-            Return
-        End If
+        If String.IsNullOrEmpty(customerName) Then Return
 
         Try
             Using conn As New SqlConnection(connectionString)
                 conn.Open()
-                Dim query As String = "SELECT CustomerID, CustomerName, CustomerPhone FROM Customers WHERE CustomerName LIKE @CustomerName"
+                Dim query As String = "SELECT CustomerID, CustomerName,CustomerPhone FROM Customers WHERE CustomerName LIKE @CustomerName"
                 Using cmd As New SqlCommand(query, conn)
                     cmd.Parameters.AddWithValue("@CustomerName", "%" & customerName & "%")
                     Using adapter As New SqlDataAdapter(cmd)
@@ -97,23 +98,13 @@ Public Class BillForm
                         If dt.Rows.Count > 0 Then
                             dgvCustomerDetails.AutoGenerateColumns = False
                             dgvCustomerDetails.Columns.Clear()
-
                             With dgvCustomerDetails
                                 .Columns.Add(New DataGridViewTextBoxColumn With {
-                                    .Name = "CustomerID",
-                                    .HeaderText = "Customer ID",
-                                    .DataPropertyName = "CustomerID"
-                                })
+                                    .Name = "CustomerID", .HeaderText = "Customer ID", .DataPropertyName = "CustomerID"})
                                 .Columns.Add(New DataGridViewTextBoxColumn With {
-                                    .Name = "CustomerName",
-                                    .HeaderText = "Name",
-                                    .DataPropertyName = "CustomerName"
-                                })
+                                    .Name = "CustomerName", .HeaderText = "Name", .DataPropertyName = "CustomerName"})
                                 .Columns.Add(New DataGridViewTextBoxColumn With {
-                                    .Name = "CustomerPhone",
-                                    .HeaderText = "Phone",
-                                    .DataPropertyName = "CustomerPhone"
-                                })
+                                    .Name = "CustomerPhone", .HeaderText = "Phone", .DataPropertyName = "CustomerPhone"})
                                 .DataSource = dt
                                 .Visible = True
                             End With
@@ -154,7 +145,6 @@ Public Class BillForm
                 txtCustomerName.Text = row.Cells("CustomerName").Value.ToString()
                 txtCustomerPhone.Text = row.Cells("CustomerPhone").Value.ToString()
 
-                ' Load additional customer details
                 Using conn As New SqlConnection(connectionString)
                     conn.Open()
                     Dim query As String = "SELECT CustomerEmail, CustomerAddress FROM Customers WHERE CustomerID = @CustomerID"
@@ -181,12 +171,11 @@ Public Class BillForm
         End If
     End Sub
 
-    ' Updated Proceed button functionality
+    ' Proceed button
     Private Sub btnProceed_Click(sender As Object, e As EventArgs) Handles btnProceed.Click
         Dim customerName As String = txtCustomerName.Text.Trim()
         Dim customerPhone As String = txtCustomerPhone.Text.Trim()
 
-        ' Validate inputs
         If Not IsValidName(customerName) Then
             MessageBox.Show("Please enter a valid customer name using only letters and spaces.", "Invalid Input", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Return
@@ -200,19 +189,16 @@ Public Class BillForm
         Try
             Using conn As New SqlConnection(connectionString)
                 conn.Open()
-                ' Check if customer exists by phone number
                 Dim checkQuery As String = "SELECT CustomerID FROM Customers WHERE CustomerPhone = @CustomerPhone"
                 Using checkCmd As New SqlCommand(checkQuery, conn)
                     checkCmd.Parameters.AddWithValue("@CustomerPhone", customerPhone)
                     Dim existingCustomerId = checkCmd.ExecuteScalar()
 
                     If existingCustomerId IsNot Nothing Then
-                        ' Customer exists - load their details
                         currentCustomerID = Convert.ToInt32(existingCustomerId)
                         LoadCustomerDetails(currentCustomerID)
                         btnConfirmPayment.Visible = True
                     Else
-                        ' Show additional fields for new customer
                         txtCustomerEmail.Visible = True
                         txtCustomerAddress.Visible = True
                         btnSaveDetails.Visible = True
@@ -239,7 +225,6 @@ Public Class BillForm
                             txtCustomerPhone.Text = reader("CustomerPhone").ToString()
                             txtCustomerEmail.Text = If(reader("CustomerEmail") Is DBNull.Value, "", reader("CustomerEmail").ToString())
                             txtCustomerAddress.Text = If(reader("CustomerAddress") Is DBNull.Value, "", reader("CustomerAddress").ToString())
-
                             txtCustID.Visible = True
                             lblCustID.Visible = True
                             txtCustomerEmail.Visible = True
@@ -255,31 +240,21 @@ Public Class BillForm
 
     ' Payment mode radio button handlers
     Private Sub rdoCash_CheckedChanged(sender As Object, e As EventArgs) Handles rdoCash.CheckedChanged
-        If rdoCash.Checked Then
-            PanelCardDetails.Visible = False
-        End If
+        If rdoCash.Checked Then PanelCardDetails.Visible = False
     End Sub
 
     Private Sub rdoCredit_CheckedChanged(sender As Object, e As EventArgs) Handles rdoCredit.CheckedChanged
-        If rdoCredit.Checked Then
-            PanelCardDetails.Visible = True
-        End If
+        If rdoCredit.Checked Then PanelCardDetails.Visible = True
     End Sub
 
     Private Sub rdoDebit_CheckedChanged(sender As Object, e As EventArgs) Handles rdoDebit.CheckedChanged
-        If rdoDebit.Checked Then
-            PanelCardDetails.Visible = True
-        End If
+        If rdoDebit.Checked Then PanelCardDetails.Visible = True
     End Sub
 
     Private Function GetPaymentMode() As String
-        If rdoCash.Checked Then
-            Return "Cash"
-        ElseIf rdoCredit.Checked Then
-            Return "Credit Card"
-        Else
-            Return "Debit Card"
-        End If
+        If rdoCash.Checked Then Return "Cash"
+        If rdoCredit.Checked Then Return "Credit Card"
+        Return "Debit Card"
     End Function
 
     Private Sub ResetFields()
@@ -305,7 +280,6 @@ Public Class BillForm
             Using conn As New SqlConnection(connectionString)
                 conn.Open()
                 If currentCustomerID Is Nothing Then
-                    ' Insert new customer
                     Dim insertQuery As String = "INSERT INTO Customers (CustomerName, CustomerPhone, CustomerEmail, CustomerAddress) OUTPUT INSERTED.CustomerID VALUES (@CustomerName, @CustomerPhone, @CustomerEmail, @CustomerAddress)"
                     Using cmd As New SqlCommand(insertQuery, conn)
                         cmd.Parameters.AddWithValue("@CustomerName", txtCustomerName.Text.Trim())
@@ -317,7 +291,6 @@ Public Class BillForm
                     End Using
                     MessageBox.Show("New customer added successfully.")
                 Else
-                    ' Update existing customer
                     Dim updateQuery As String = "UPDATE Customers SET CustomerEmail = @CustomerEmail, CustomerAddress = @CustomerAddress WHERE CustomerID = @CustomerID"
                     Using cmd As New SqlCommand(updateQuery, conn)
                         cmd.Parameters.AddWithValue("@CustomerID", currentCustomerID)
@@ -345,7 +318,6 @@ Public Class BillForm
 
             txtCustID.Visible = True
             lblCustID.Visible = True
-
         Catch ex As Exception
             MessageBox.Show("Error saving customer details: " & ex.Message)
         End Try
@@ -381,21 +353,13 @@ Public Class BillForm
         End If
 
         Try
-            ' Insert the sale and get the SaleID
             currentSaleID = InsertSale()
-
-            ' Insert the sale details
             InsertSaleDetails(currentSaleID)
-
-            ' Process the payment
             ProcessPayment(currentSaleID)
 
             MessageBox.Show("Payment processed successfully!")
-
-            ' Show print bill form
             Dim printBillForm As New PrintBillForm(billingTable, txtCustID.Text, txtCustomerName.Text, txtCustomerPhone.Text, GetPaymentMode(), ComboBoxBankName.SelectedItem?.ToString(), txtCardNumber.Text, txtExpiryDate.Text)
             printBillForm.ShowDialog()
-
         Catch ex As Exception
             MessageBox.Show("An error occurred while processing the payment: " & ex.Message)
         End Try
@@ -424,8 +388,6 @@ Public Class BillForm
         Try
             Using conn As New SqlConnection(connectionString)
                 conn.Open()
-
-                ' Check if BatchID exists in Stock table before inserting
                 For Each row As DataRow In billingTable.Rows
                     Dim checkBatchIDQuery As String = "SELECT COUNT(*) FROM Stock WHERE BatchID = @BatchID"
                     Using checkCmd As New SqlCommand(checkBatchIDQuery, conn)
@@ -437,7 +399,6 @@ Public Class BillForm
                     End Using
                 Next
 
-                ' Insert sale details
                 For Each row As DataRow In billingTable.Rows
                     Dim insertSaleDetailsQuery As String = "INSERT INTO SalesDetails (SaleID, ProductID, Quantity, Price, Total, BatchID) VALUES (@SaleID, @ProductID, @Quantity, @Price, @Total, @BatchID)"
                     Using cmd As New SqlCommand(insertSaleDetailsQuery, conn)
@@ -451,7 +412,6 @@ Public Class BillForm
                     End Using
                 Next
 
-                ' Update the total amount in the Sales table
                 Dim totalAmount As Decimal = billingTable.AsEnumerable().Sum(Function(row) row.Field(Of Decimal)("Total"))
                 Dim updateTotalAmountQuery As String = "UPDATE Sales SET TotalAmount = @TotalAmount WHERE SaleID = @SaleID"
                 Using cmd As New SqlCommand(updateTotalAmountQuery, conn)
@@ -465,7 +425,6 @@ Public Class BillForm
             Throw
         End Try
     End Sub
-
 
     Private Sub ProcessPayment(saleID As Integer)
         Try
@@ -492,25 +451,22 @@ Public Class BillForm
                             cmd.ExecuteNonQuery()
                         End Using
 
-                        ' Process each product in the billing table
+                        ' Process each product in the billing table with expiry check
                         For Each row As DataRow In billingTable.Rows
                             Dim productID As Integer = row("ProductID")
                             Dim requiredQuantity As Integer = CInt(row("Quantity"))
                             Dim productName As String = ""
 
-                            ' Get product name for messages
                             Using cmdProduct As New SqlCommand("SELECT ProductName FROM Products WHERE ProductID = @ProductID", conn, transaction)
                                 cmdProduct.Parameters.AddWithValue("@ProductID", productID)
                                 productName = cmdProduct.ExecuteScalar().ToString()
                             End Using
 
-                            ' Get available batches in FIFO order
                             Dim getBatchesQuery As String = "SELECT StockID, BatchID, BatchQuantity, StockDate " &
-                                                          "FROM Stock " &
-                                                          "WHERE ProductID = @ProductID " &
-                                                          "AND BatchQuantity > 0 " &
-                                                          "ORDER BY StockDate ASC"
-
+                                                      "FROM Stock " &
+                                                      "WHERE ProductID = @ProductID " &
+                                                      "AND BatchQuantity > 0 " &
+                                                      "ORDER BY StockDate ASC"
                             Using cmdBatches As New SqlCommand(getBatchesQuery, conn, transaction)
                                 cmdBatches.Parameters.AddWithValue("@ProductID", productID)
                                 Using reader As SqlDataReader = cmdBatches.ExecuteReader()
@@ -525,35 +481,57 @@ Public Class BillForm
                                     End While
                                     reader.Close()
 
-                                    ' Check if we have enough total stock
-                                    Dim totalAvailable As Integer = batches.Sum(Function(b) b.BatchQuantity)
+                                    Dim expiryThreshold As DateTime = DateTime.Now.AddYears(-1)
+                                    Dim expiredBatches As New List(Of String)
+                                    For Each batch In batches
+                                        If batch.StockDate < expiryThreshold Then
+                                            expiredBatches.Add($"Batch {batch.BatchID} (Expiry: {batch.StockDate:dd/MM/yyyy})")
+                                        End If
+                                    Next
+
+                                    If expiredBatches.Count > 0 Then
+                                        Dim expiryMessage As String = $"Expired stock detected for {productName}:" & vbNewLine &
+                                                                      String.Join(vbNewLine, expiredBatches) & vbNewLine &
+                                                                      "Please remove from stock and order new stock."
+                                        MessageBox.Show(expiryMessage, "Stock Expiry Warning", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+
+                                        Dim logFilePath As String = Path.Combine(Application.StartupPath, "ExpiredStockLog.txt")
+                                        Directory.CreateDirectory(Path.GetDirectoryName(logFilePath))
+                                        Dim logEntry As String = $"{DateTime.Now:dd/MM/yyyy HH:mm:ss} - {expiryMessage}"
+                                        Try
+                                            File.AppendAllText(logFilePath, logEntry & vbNewLine)
+                                        Catch ex As Exception
+                                            MessageBox.Show("Error writing to log file: " & ex.Message)
+                                        End Try
+                                    End If
+
+                                    Dim totalAvailable As Integer = batches.Where(Function(b) b.StockDate >= expiryThreshold).Sum(Function(b) b.BatchQuantity)
                                     If totalAvailable < requiredQuantity Then
-                                        Throw New Exception($"Insufficient stock for {productName}. Required: {requiredQuantity}, Available: {totalAvailable}")
+                                        Dim adjustMessage As String = $"Insufficient valid stock for {productName}. Required: {requiredQuantity}, Available (non-expired): {totalAvailable}." & vbNewLine &
+                                                                      $"Sale will proceed with available quantity ({totalAvailable} units) instead."
+                                        MessageBox.Show(adjustMessage, "Stock Adjustment", MessageBoxButtons.OK, MessageBoxIcon.Information)
+                                        requiredQuantity = totalAvailable
+                                        row("Quantity") = totalAvailable
+                                        row("Total") = totalAvailable * CDec(row("Price"))
                                     End If
 
                                     Dim remainingQuantity As Integer = requiredQuantity
                                     Dim stockUpdateMessages As New List(Of String)
 
-                                    ' Process each batch in FIFO order
-                                    For Each batch In batches
+                                    For Each batch In batches.Where(Function(b) b.StockDate >= expiryThreshold)
                                         If remainingQuantity <= 0 Then Exit For
 
                                         Dim quantityFromBatch As Integer = Math.Min(remainingQuantity, batch.BatchQuantity)
                                         Dim newBatchQuantity As Integer = batch.BatchQuantity - quantityFromBatch
 
                                         If newBatchQuantity = 0 Then
-                                            ' Delete the batch if it's depleted
-                                            Using cmdDelete As New SqlCommand(
-                                                "DELETE FROM Stock WHERE StockID = @StockID", conn, transaction)
+                                            Using cmdDelete As New SqlCommand("DELETE FROM Stock WHERE StockID = @StockID", conn, transaction)
                                                 cmdDelete.Parameters.AddWithValue("@StockID", batch.StockID)
                                                 cmdDelete.ExecuteNonQuery()
                                             End Using
                                             stockUpdateMessages.Add($"Batch {batch.BatchID} for {productName} has been fully utilized and removed.")
                                         Else
-                                            ' Update the batch quantity
-                                            Using cmdUpdate As New SqlCommand(
-                                                "UPDATE Stock SET BatchQuantity = @NewQuantity WHERE StockID = @StockID",
-                                                conn, transaction)
+                                            Using cmdUpdate As New SqlCommand("UPDATE Stock SET BatchQuantity = @NewQuantity WHERE StockID = @StockID", conn, transaction)
                                                 cmdUpdate.Parameters.AddWithValue("@NewQuantity", newBatchQuantity)
                                                 cmdUpdate.Parameters.AddWithValue("@StockID", batch.StockID)
                                                 cmdUpdate.ExecuteNonQuery()
@@ -564,7 +542,6 @@ Public Class BillForm
                                         remainingQuantity -= quantityFromBatch
                                     Next
 
-                                    ' Update product's total stock
                                     Using cmdUpdateProduct As New SqlCommand(
                                         "UPDATE Products SET StockQuantity = (SELECT ISNULL(SUM(BatchQuantity), 0) FROM Stock WHERE ProductID = @ProductID) " &
                                         "WHERE ProductID = @ProductID", conn, transaction)
@@ -572,27 +549,29 @@ Public Class BillForm
                                         cmdUpdateProduct.ExecuteNonQuery()
                                     End Using
 
-                                    ' Get updated total stock
-                                    Using cmdGetNewStock As New SqlCommand(
-                                        "SELECT StockQuantity FROM Products WHERE ProductID = @ProductID",
-                                        conn, transaction)
+                                    Using cmdGetNewStock As New SqlCommand("SELECT StockQuantity FROM Products WHERE ProductID = @ProductID", conn, transaction)
                                         cmdGetNewStock.Parameters.AddWithValue("@ProductID", productID)
                                         Dim newTotalStock As Integer = CInt(cmdGetNewStock.ExecuteScalar())
                                         stockUpdateMessages.Add($"Total stock for {productName}: {newTotalStock}")
                                     End Using
 
-                                    ' Show stock update messages
                                     MessageBox.Show(String.Join(vbNewLine, stockUpdateMessages), "Stock Update Status", MessageBoxButtons.OK, MessageBoxIcon.Information)
                                 End Using
                             End Using
                         Next
+
+                        totalAmount = billingTable.AsEnumerable().Sum(Function(row) row.Field(Of Decimal)("Total"))
+                        Using cmdUpdateSale As New SqlCommand("UPDATE Sales SET TotalAmount = @TotalAmount WHERE SaleID = @SaleID", conn, transaction)
+                            cmdUpdateSale.Parameters.AddWithValue("@TotalAmount", totalAmount)
+                            cmdUpdateSale.Parameters.AddWithValue("@SaleID", saleID)
+                            cmdUpdateSale.ExecuteNonQuery()
+                        End Using
 
                         transaction.Commit()
                         formdialogResult = DialogResult.OK
                         Me.DialogResult = DialogResult.OK
                         RaiseEvent StockUpdated()
                         Me.Close()
-
                     Catch ex As Exception
                         transaction.Rollback()
                         MessageBox.Show("Transaction failed: " & ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
@@ -614,6 +593,7 @@ Public Class BillForm
         txtCustID.Clear()
         txtCardNumber.Clear()
         txtExpiryDate.Clear()
+        txtCVV.Clear() ' Assuming txtCVV exists
         ComboBoxBankName.SelectedIndex = -1
         rdoCash.Checked = False
         rdoCredit.Checked = False
@@ -621,13 +601,19 @@ Public Class BillForm
         PanelCardDetails.Visible = False
         currentCustomerID = Nothing
         currentSaleID = 0
-        billingTable.Clear()
         ResetFields()
+    End Sub
+
+    ' Clear button handler
+    Private Sub btnClear_Click(sender As Object, e As EventArgs) Handles btnClear.Click
+        Dim result As DialogResult = MessageBox.Show("Are you sure you want to clear all fields?", "Confirm Clear", MessageBoxButtons.YesNo, MessageBoxIcon.Question)
+        If result = DialogResult.Yes Then
+            ClearForm()
+        End If
     End Sub
 
     Private Sub BillForm_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
         If formdialogResult = DialogResult.Cancel Then
-            ' Ask for confirmation only if payment wasn't successful
             If billingTable.Rows.Count > 0 Then
                 Dim result = MessageBox.Show("Are you sure you want to cancel the billing process?",
                                        "Confirm Cancel",
@@ -643,5 +629,10 @@ Public Class BillForm
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
         Labeldate.Text = DateTime.Now.ToString("dd/MM/yyyy ")
         Labeltime.Text = DateTime.Now.ToString("hh:mm:ss tt")
+    End Sub
+
+    Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+        Dim a As New LoginForm()
+        a.Show()
     End Sub
 End Class

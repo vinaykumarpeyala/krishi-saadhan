@@ -197,4 +197,8 @@ Public Class frmUserManagement
         Label8.Text = DateTime.Now.ToString("dd/MM/yyyy ")
         Label9.Text = DateTime.Now.ToString("hh:mm:ss tt")
     End Sub
+
+    Private Sub grpUserDetails_Enter(sender As Object, e As EventArgs) Handles grpUserDetails.Enter
+
+    End Sub
 End Class

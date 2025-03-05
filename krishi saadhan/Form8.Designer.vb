@@ -38,7 +38,7 @@ Partial Class BillForm
         Me.Label3 = New System.Windows.Forms.Label()
         Me.Label4 = New System.Windows.Forms.Label()
         Me.Label5 = New System.Windows.Forms.Label()
-        Me.btnPrintBill = New System.Windows.Forms.Button()
+        Me.btnClear = New System.Windows.Forms.Button()
         Me.GroupBox1 = New System.Windows.Forms.GroupBox()
         Me.rdoDebit = New System.Windows.Forms.RadioButton()
         Me.rdoCredit = New System.Windows.Forms.RadioButton()
@@ -57,14 +57,14 @@ Partial Class BillForm
         Me.Panel1 = New System.Windows.Forms.Panel()
         Me.Panel2 = New System.Windows.Forms.Panel()
         Me.Panel3 = New System.Windows.Forms.Panel()
-        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
-        Me.Label10 = New System.Windows.Forms.Label()
-        Me.Label11 = New System.Windows.Forms.Label()
-        Me.Labeltime = New System.Windows.Forms.Label()
-        Me.Labeldate = New System.Windows.Forms.Label()
-        Me.Label14 = New System.Windows.Forms.Label()
-        Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me.Button1 = New System.Windows.Forms.Button()
+        Me.Label14 = New System.Windows.Forms.Label()
+        Me.Labeldate = New System.Windows.Forms.Label()
+        Me.Labeltime = New System.Windows.Forms.Label()
+        Me.Label11 = New System.Windows.Forms.Label()
+        Me.Label10 = New System.Windows.Forms.Label()
+        Me.PictureBox1 = New System.Windows.Forms.PictureBox()
+        Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
         Me.Label12 = New System.Windows.Forms.Label()
         CType(Me.dgvBillDetails, System.ComponentModel.ISupportInitialize).BeginInit()
         CType(Me.dgvCustomerDetails, System.ComponentModel.ISupportInitialize).BeginInit()
@@ -107,11 +107,11 @@ Partial Class BillForm
         'dgvBillDetails
         '
         Me.dgvBillDetails.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgvBillDetails.Location = New System.Drawing.Point(23, 369)
+        Me.dgvBillDetails.Location = New System.Drawing.Point(12, 394)
         Me.dgvBillDetails.Name = "dgvBillDetails"
         Me.dgvBillDetails.RowHeadersWidth = 51
         Me.dgvBillDetails.RowTemplate.Height = 24
-        Me.dgvBillDetails.Size = New System.Drawing.Size(603, 217)
+        Me.dgvBillDetails.Size = New System.Drawing.Size(632, 209)
         Me.dgvBillDetails.TabIndex = 4
         '
         'txtCustID
@@ -123,39 +123,42 @@ Partial Class BillForm
         '
         'btnConfirmPayment
         '
+        Me.btnConfirmPayment.BackColor = System.Drawing.Color.PaleGreen
         Me.btnConfirmPayment.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnConfirmPayment.Location = New System.Drawing.Point(24, 74)
+        Me.btnConfirmPayment.Location = New System.Drawing.Point(10, 74)
         Me.btnConfirmPayment.Name = "btnConfirmPayment"
-        Me.btnConfirmPayment.Size = New System.Drawing.Size(109, 52)
+        Me.btnConfirmPayment.Size = New System.Drawing.Size(119, 52)
         Me.btnConfirmPayment.TabIndex = 6
-        Me.btnConfirmPayment.Text = "Confirm Payment"
-        Me.btnConfirmPayment.UseVisualStyleBackColor = True
+        Me.btnConfirmPayment.Text = "CONFIRM PAYMENT"
+        Me.btnConfirmPayment.UseVisualStyleBackColor = False
         '
         'btnSaveDetails
         '
+        Me.btnSaveDetails.BackColor = System.Drawing.Color.FloralWhite
         Me.btnSaveDetails.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnSaveDetails.Location = New System.Drawing.Point(152, 21)
+        Me.btnSaveDetails.Location = New System.Drawing.Point(163, 16)
         Me.btnSaveDetails.Name = "btnSaveDetails"
         Me.btnSaveDetails.Size = New System.Drawing.Size(109, 48)
         Me.btnSaveDetails.TabIndex = 7
-        Me.btnSaveDetails.Text = "Save"
-        Me.btnSaveDetails.UseVisualStyleBackColor = True
+        Me.btnSaveDetails.Text = "SAVE"
+        Me.btnSaveDetails.UseVisualStyleBackColor = False
         Me.btnSaveDetails.Visible = False
         '
         'dgvCustomerDetails
         '
         Me.dgvCustomerDetails.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dgvCustomerDetails.Location = New System.Drawing.Point(280, 89)
+        Me.dgvCustomerDetails.Location = New System.Drawing.Point(275, 118)
         Me.dgvCustomerDetails.Name = "dgvCustomerDetails"
         Me.dgvCustomerDetails.RowHeadersWidth = 51
         Me.dgvCustomerDetails.RowTemplate.Height = 24
-        Me.dgvCustomerDetails.Size = New System.Drawing.Size(366, 176)
+        Me.dgvCustomerDetails.Size = New System.Drawing.Size(583, 176)
         Me.dgvCustomerDetails.TabIndex = 8
         '
         'lblCustID
         '
         Me.lblCustID.AutoSize = True
-        Me.lblCustID.Location = New System.Drawing.Point(32, 35)
+        Me.lblCustID.BackColor = System.Drawing.Color.White
+        Me.lblCustID.Location = New System.Drawing.Point(20, 29)
         Me.lblCustID.Name = "lblCustID"
         Me.lblCustID.Size = New System.Drawing.Size(95, 16)
         Me.lblCustID.TabIndex = 9
@@ -165,7 +168,8 @@ Partial Class BillForm
         'Label2
         '
         Me.Label2.AutoSize = True
-        Me.Label2.Location = New System.Drawing.Point(8, 75)
+        Me.Label2.BackColor = System.Drawing.Color.White
+        Me.Label2.Location = New System.Drawing.Point(2, 78)
         Me.Label2.Name = "Label2"
         Me.Label2.Size = New System.Drawing.Size(121, 16)
         Me.Label2.TabIndex = 10
@@ -174,7 +178,8 @@ Partial Class BillForm
         'Label3
         '
         Me.Label3.AutoSize = True
-        Me.Label3.Location = New System.Drawing.Point(15, 126)
+        Me.Label3.BackColor = System.Drawing.Color.White
+        Me.Label3.Location = New System.Drawing.Point(8, 123)
         Me.Label3.Name = "Label3"
         Me.Label3.Size = New System.Drawing.Size(113, 16)
         Me.Label3.TabIndex = 11
@@ -183,6 +188,7 @@ Partial Class BillForm
         'Label4
         '
         Me.Label4.AutoSize = True
+        Me.Label4.BackColor = System.Drawing.Color.White
         Me.Label4.Location = New System.Drawing.Point(60, 166)
         Me.Label4.Name = "Label4"
         Me.Label4.Size = New System.Drawing.Size(55, 16)
@@ -192,21 +198,23 @@ Partial Class BillForm
         'Label5
         '
         Me.Label5.AutoSize = True
+        Me.Label5.BackColor = System.Drawing.Color.White
         Me.Label5.Location = New System.Drawing.Point(54, 208)
         Me.Label5.Name = "Label5"
         Me.Label5.Size = New System.Drawing.Size(69, 16)
         Me.Label5.TabIndex = 13
         Me.Label5.Text = "Address:"
         '
-        'btnPrintBill
+        'btnClear
         '
-        Me.btnPrintBill.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnPrintBill.Location = New System.Drawing.Point(150, 75)
-        Me.btnPrintBill.Name = "btnPrintBill"
-        Me.btnPrintBill.Size = New System.Drawing.Size(111, 51)
-        Me.btnPrintBill.TabIndex = 14
-        Me.btnPrintBill.Text = "Print Bill"
-        Me.btnPrintBill.UseVisualStyleBackColor = True
+        Me.btnClear.BackColor = System.Drawing.Color.Khaki
+        Me.btnClear.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.btnClear.Location = New System.Drawing.Point(163, 78)
+        Me.btnClear.Name = "btnClear"
+        Me.btnClear.Size = New System.Drawing.Size(111, 51)
+        Me.btnClear.TabIndex = 14
+        Me.btnClear.Text = "CLEAR"
+        Me.btnClear.UseVisualStyleBackColor = False
         '
         'GroupBox1
         '
@@ -215,9 +223,9 @@ Partial Class BillForm
         Me.GroupBox1.Controls.Add(Me.rdoCredit)
         Me.GroupBox1.Controls.Add(Me.rdoCash)
         Me.GroupBox1.Controls.Add(Me.PanelCardDetails)
-        Me.GroupBox1.Location = New System.Drawing.Point(668, 277)
+        Me.GroupBox1.Location = New System.Drawing.Point(679, 308)
         Me.GroupBox1.Name = "GroupBox1"
-        Me.GroupBox1.Size = New System.Drawing.Size(540, 288)
+        Me.GroupBox1.Size = New System.Drawing.Size(570, 308)
         Me.GroupBox1.TabIndex = 15
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Payment"
@@ -250,7 +258,7 @@ Partial Class BillForm
         '
         Me.rdoCash.AutoSize = True
         Me.rdoCash.BackColor = System.Drawing.Color.BlanchedAlmond
-        Me.rdoCash.Location = New System.Drawing.Point(46, 51)
+        Me.rdoCash.Location = New System.Drawing.Point(46, 60)
         Me.rdoCash.Name = "rdoCash"
         Me.rdoCash.Size = New System.Drawing.Size(65, 20)
         Me.rdoCash.TabIndex = 1
@@ -260,7 +268,7 @@ Partial Class BillForm
         '
         'PanelCardDetails
         '
-        Me.PanelCardDetails.BackColor = System.Drawing.Color.White
+        Me.PanelCardDetails.BackColor = System.Drawing.Color.Transparent
         Me.PanelCardDetails.Controls.Add(Me.Label1)
         Me.PanelCardDetails.Controls.Add(Me.Label9)
         Me.PanelCardDetails.Controls.Add(Me.txtExpiryDate)
@@ -278,16 +286,18 @@ Partial Class BillForm
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Font = New System.Drawing.Font("Times New Roman", 10.2!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label1.Location = New System.Drawing.Point(65, 14)
+        Me.Label1.BackColor = System.Drawing.Color.White
+        Me.Label1.Font = New System.Drawing.Font("Times New Roman", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label1.Location = New System.Drawing.Point(63, 10)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(139, 19)
+        Me.Label1.Size = New System.Drawing.Size(165, 23)
         Me.Label1.TabIndex = 15
         Me.Label1.Text = "CARD PAYMENT"
         '
         'Label9
         '
         Me.Label9.AutoSize = True
+        Me.Label9.BackColor = System.Drawing.Color.Silver
         Me.Label9.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label9.Location = New System.Drawing.Point(54, 194)
         Me.Label9.Name = "Label9"
@@ -305,6 +315,7 @@ Partial Class BillForm
         'Label8
         '
         Me.Label8.AutoSize = True
+        Me.Label8.BackColor = System.Drawing.Color.Silver
         Me.Label8.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label8.Location = New System.Drawing.Point(96, 145)
         Me.Label8.Name = "Label8"
@@ -315,6 +326,7 @@ Partial Class BillForm
         'Label7
         '
         Me.Label7.AutoSize = True
+        Me.Label7.BackColor = System.Drawing.Color.Silver
         Me.Label7.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label7.Location = New System.Drawing.Point(65, 94)
         Me.Label7.Name = "Label7"
@@ -325,6 +337,7 @@ Partial Class BillForm
         'Label6
         '
         Me.Label6.AutoSize = True
+        Me.Label6.BackColor = System.Drawing.Color.LightGray
         Me.Label6.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Label6.Location = New System.Drawing.Point(39, 50)
         Me.Label6.Name = "Label6"
@@ -356,24 +369,25 @@ Partial Class BillForm
         '
         'btnProceed
         '
+        Me.btnProceed.BackColor = System.Drawing.Color.PeachPuff
         Me.btnProceed.Font = New System.Drawing.Font("Microsoft Sans Serif", 7.8!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.btnProceed.Location = New System.Drawing.Point(22, 23)
+        Me.btnProceed.Location = New System.Drawing.Point(10, 16)
         Me.btnProceed.Name = "btnProceed"
-        Me.btnProceed.Size = New System.Drawing.Size(111, 45)
+        Me.btnProceed.Size = New System.Drawing.Size(119, 48)
         Me.btnProceed.TabIndex = 17
-        Me.btnProceed.Text = "Proceed"
-        Me.btnProceed.UseVisualStyleBackColor = True
+        Me.btnProceed.Text = "PROCEED"
+        Me.btnProceed.UseVisualStyleBackColor = False
         '
         'Panel1
         '
         Me.Panel1.BackColor = System.Drawing.Color.Transparent
         Me.Panel1.Controls.Add(Me.btnProceed)
         Me.Panel1.Controls.Add(Me.btnSaveDetails)
-        Me.Panel1.Controls.Add(Me.btnPrintBill)
+        Me.Panel1.Controls.Add(Me.btnClear)
         Me.Panel1.Controls.Add(Me.btnConfirmPayment)
-        Me.Panel1.Location = New System.Drawing.Point(767, 104)
+        Me.Panel1.Location = New System.Drawing.Point(904, 89)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(281, 154)
+        Me.Panel1.Size = New System.Drawing.Size(335, 173)
         Me.Panel1.TabIndex = 18
         '
         'Panel2
@@ -407,47 +421,30 @@ Partial Class BillForm
         Me.Panel3.Controls.Add(Me.PictureBox1)
         Me.Panel3.Font = New System.Drawing.Font("Times New Roman", 9.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
         Me.Panel3.ForeColor = System.Drawing.SystemColors.ButtonHighlight
-        Me.Panel3.Location = New System.Drawing.Point(2, 3)
+        Me.Panel3.Location = New System.Drawing.Point(2, -4)
         Me.Panel3.Name = "Panel3"
-        Me.Panel3.Size = New System.Drawing.Size(1278, 66)
+        Me.Panel3.Size = New System.Drawing.Size(1282, 73)
         Me.Panel3.TabIndex = 20
         '
-        'PictureBox1
+        'Button1
         '
-        Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
-        Me.PictureBox1.Location = New System.Drawing.Point(10, 9)
-        Me.PictureBox1.Name = "PictureBox1"
-        Me.PictureBox1.Size = New System.Drawing.Size(59, 49)
-        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
-        Me.PictureBox1.TabIndex = 0
-        Me.PictureBox1.TabStop = False
+        Me.Button1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
+        Me.Button1.Location = New System.Drawing.Point(1190, 20)
+        Me.Button1.Name = "Button1"
+        Me.Button1.Size = New System.Drawing.Size(79, 24)
+        Me.Button1.TabIndex = 6
+        Me.Button1.Text = "EXIT"
+        Me.Button1.UseVisualStyleBackColor = True
         '
-        'Label10
+        'Label14
         '
-        Me.Label10.AutoSize = True
-        Me.Label10.Location = New System.Drawing.Point(955, 8)
-        Me.Label10.Name = "Label10"
-        Me.Label10.Size = New System.Drawing.Size(49, 17)
-        Me.Label10.TabIndex = 1
-        Me.Label10.Text = "DATE"
-        '
-        'Label11
-        '
-        Me.Label11.AutoSize = True
-        Me.Label11.Location = New System.Drawing.Point(955, 41)
-        Me.Label11.Name = "Label11"
-        Me.Label11.Size = New System.Drawing.Size(49, 17)
-        Me.Label11.TabIndex = 2
-        Me.Label11.Text = "TIME"
-        '
-        'Labeltime
-        '
-        Me.Labeltime.AutoSize = True
-        Me.Labeltime.Location = New System.Drawing.Point(1038, 41)
-        Me.Labeltime.Name = "Labeltime"
-        Me.Labeltime.Size = New System.Drawing.Size(61, 17)
-        Me.Labeltime.TabIndex = 3
-        Me.Labeltime.Text = "Label12"
+        Me.Label14.AutoSize = True
+        Me.Label14.Font = New System.Drawing.Font("Times New Roman", 16.2!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label14.Location = New System.Drawing.Point(90, 12)
+        Me.Label14.Name = "Label14"
+        Me.Label14.Size = New System.Drawing.Size(205, 32)
+        Me.Label14.TabIndex = 5
+        Me.Label14.Text = "Krishi Saadhan"
         '
         'Labeldate
         '
@@ -459,36 +456,53 @@ Partial Class BillForm
         Me.Labeldate.TabIndex = 4
         Me.Labeldate.Text = "Label13"
         '
-        'Label14
+        'Labeltime
         '
-        Me.Label14.AutoSize = True
-        Me.Label14.Font = New System.Drawing.Font("Times New Roman", 16.2!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label14.Location = New System.Drawing.Point(104, 20)
-        Me.Label14.Name = "Label14"
-        Me.Label14.Size = New System.Drawing.Size(205, 32)
-        Me.Label14.TabIndex = 5
-        Me.Label14.Text = "Krishi Saadhan"
+        Me.Labeltime.AutoSize = True
+        Me.Labeltime.Location = New System.Drawing.Point(1038, 41)
+        Me.Labeltime.Name = "Labeltime"
+        Me.Labeltime.Size = New System.Drawing.Size(61, 17)
+        Me.Labeltime.TabIndex = 3
+        Me.Labeltime.Text = "Label12"
+        '
+        'Label11
+        '
+        Me.Label11.AutoSize = True
+        Me.Label11.Location = New System.Drawing.Point(955, 41)
+        Me.Label11.Name = "Label11"
+        Me.Label11.Size = New System.Drawing.Size(49, 17)
+        Me.Label11.TabIndex = 2
+        Me.Label11.Text = "TIME"
+        '
+        'Label10
+        '
+        Me.Label10.AutoSize = True
+        Me.Label10.Location = New System.Drawing.Point(955, 8)
+        Me.Label10.Name = "Label10"
+        Me.Label10.Size = New System.Drawing.Size(49, 17)
+        Me.Label10.TabIndex = 1
+        Me.Label10.Text = "DATE"
+        '
+        'PictureBox1
+        '
+        Me.PictureBox1.Image = CType(resources.GetObject("PictureBox1.Image"), System.Drawing.Image)
+        Me.PictureBox1.Location = New System.Drawing.Point(10, 9)
+        Me.PictureBox1.Name = "PictureBox1"
+        Me.PictureBox1.Size = New System.Drawing.Size(59, 49)
+        Me.PictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage
+        Me.PictureBox1.TabIndex = 0
+        Me.PictureBox1.TabStop = False
         '
         'Timer1
         '
         '
-        'Button1
-        '
-        Me.Button1.ForeColor = System.Drawing.SystemColors.ActiveCaptionText
-        Me.Button1.Location = New System.Drawing.Point(1179, 20)
-        Me.Button1.Name = "Button1"
-        Me.Button1.Size = New System.Drawing.Size(78, 23)
-        Me.Button1.TabIndex = 6
-        Me.Button1.Text = "EXIT"
-        Me.Button1.UseVisualStyleBackColor = True
-        '
         'Label12
         '
         Me.Label12.AutoSize = True
-        Me.Label12.Font = New System.Drawing.Font("Microsoft Sans Serif", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-        Me.Label12.Location = New System.Drawing.Point(301, 328)
+        Me.Label12.Font = New System.Drawing.Font("Microsoft YaHei", 18.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.Label12.Location = New System.Drawing.Point(294, 338)
         Me.Label12.Name = "Label12"
-        Me.Label12.Size = New System.Drawing.Size(56, 25)
+        Me.Label12.Size = New System.Drawing.Size(80, 40)
         Me.Label12.TabIndex = 21
         Me.Label12.Text = "BILL"
         '
@@ -498,7 +512,7 @@ Partial Class BillForm
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.BackColor = System.Drawing.SystemColors.ButtonHighlight
         Me.BackgroundImage = CType(resources.GetObject("$this.BackgroundImage"), System.Drawing.Image)
-        Me.ClientSize = New System.Drawing.Size(1282, 598)
+        Me.ClientSize = New System.Drawing.Size(1283, 628)
         Me.Controls.Add(Me.Label12)
         Me.Controls.Add(Me.Panel3)
         Me.Controls.Add(Me.Panel2)
@@ -539,7 +553,7 @@ Partial Class BillForm
     Friend WithEvents Label3 As Label
     Friend WithEvents Label4 As Label
     Friend WithEvents Label5 As Label
-    Friend WithEvents btnPrintBill As Button
+    Friend WithEvents btnClear As Button
     Friend WithEvents GroupBox1 As GroupBox
     Friend WithEvents PanelCardDetails As Panel
     Friend WithEvents Label9 As Label

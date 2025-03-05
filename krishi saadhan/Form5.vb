@@ -73,12 +73,8 @@ Public Class ProductManagementForm
 
     ' Button to Add Product
     Private Sub btnAdd_Click(sender As Object, e As EventArgs) Handles btnAdd.Click
-        If String.IsNullOrWhiteSpace(txtProductName.Text) OrElse
-           String.IsNullOrWhiteSpace(txtPrice.Text) OrElse
-           cmbCategory.SelectedIndex = -1 Then
-            MessageBox.Show("Please fill all fields except quantity!", "Input Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
-            Exit Sub
-        End If
+        ' Validate fields
+        If Not ValidateFields() Then Exit Sub
 
         ' Check if an image has been uploaded
         If pbProductImage.Image Is Nothing Then
@@ -158,6 +154,9 @@ Public Class ProductManagementForm
             MessageBox.Show("Please select a product!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
             Exit Sub
         End If
+
+        ' Validate fields
+        If Not ValidateFields() Then Exit Sub
 
         Dim updateImagePath As Boolean = False
         Dim imageData As Byte() = Nothing
@@ -273,6 +272,11 @@ Public Class ProductManagementForm
         txtQuantity.Visible = False
         lblQuantity.Visible = False
         imagePath = String.Empty
+
+        ' Reset field colors
+        txtProductName.BackColor = Color.White
+        txtPrice.BackColor = Color.White
+        cmbCategory.BackColor = Color.White
     End Sub
 
     Private Sub btnClear_Click(sender As Object, e As EventArgs) Handles btnClear.Click
@@ -367,4 +371,38 @@ Public Class ProductManagementForm
         Labeldate.Text = DateTime.Now.ToString("dd/MM/yyyy ")
         Labeltime.Text = DateTime.Now.ToString("hh:mm:ss tt")
     End Sub
+
+    Private Function ValidateFields() As Boolean
+        Dim isValid As Boolean = True
+
+        ' Validate Product Name
+        If String.IsNullOrWhiteSpace(txtProductName.Text) Then
+            txtProductName.BackColor = Color.LightCoral
+            MessageBox.Show("Product name cannot be empty!", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            isValid = False
+        Else
+            txtProductName.BackColor = Color.White
+        End If
+
+        ' Validate Price
+        Dim price As Decimal
+        If Not Decimal.TryParse(txtPrice.Text, price) OrElse price <= 0 Then
+            txtPrice.BackColor = Color.LightCoral
+            MessageBox.Show("Please enter a valid price greater than 0!", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            isValid = False
+        Else
+            txtPrice.BackColor = Color.White
+        End If
+
+        ' Validate Category
+        If cmbCategory.SelectedIndex = -1 Then
+            cmbCategory.BackColor = Color.LightCoral
+            MessageBox.Show("Please select a category!", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+            isValid = False
+        Else
+            cmbCategory.BackColor = Color.White
+        End If
+
+        Return isValid
+    End Function
 End Class

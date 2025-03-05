@@ -1,25 +1,21 @@
 ﻿Imports System.Data.SqlClient
-Imports System.Reflection.Emit
+Imports System.IO
 
 Public Class AdminDashboard
-    ' Define your connection string
     Dim connectionString As String = "Data Source=LAPTOP-V6JUA5T5\SQLEXPRESS;Initial Catalog=KrishiSaadhan;Integrated Security=True;"
     Dim isCategoriesLoaded As Boolean = False ' Flag to handle ComboBox initialization
 
+
     Private Sub AdminDashboard_Load(sender As Object, e As EventArgs) Handles MyBase.Load
         Timer1.Enabled = True
-        Try
-            ' Load categories into the ComboBox
-            LoadCategories()
-            ' Load product data into the DataGridView
+
+        LoadCategories()
             LoadProductData()
-            ' Set the panel and its controls to invisible by default
             PanelManageCategories.Visible = False
             TextBoxCategory.Visible = False
             ButtonAddCategory.Visible = False
-        Catch ex As Exception
-            MessageBox.Show("Error initializing the form: " & ex.Message)
-        End Try
+            LoadExpiredStockMessages()
+
     End Sub
 
     ' Method to load categories into the ComboBox
@@ -33,12 +29,11 @@ Public Class AdminDashboard
                     Dim categories As New DataTable()
                     categories.Load(reader)
                     ComboBoxCategory.DataSource = categories
-                    ComboBoxCategory.DisplayMember = "CategoryName" ' Set display member to show CategoryName
-                    ComboBoxCategory.ValueMember = "CategoryID" ' Set value member to use CategoryID
+                    ComboBoxCategory.DisplayMember = "CategoryName"
+                    ComboBoxCategory.ValueMember = "CategoryID"
                 End Using
             End Using
-
-            isCategoriesLoaded = True ' Mark categories as loaded
+            isCategoriesLoaded = True
         Catch ex As Exception
             MessageBox.Show("Error loading categories: " & ex.Message)
         End Try
@@ -50,11 +45,9 @@ Public Class AdminDashboard
             Dim query As String = "SELECT p.ProductID, p.ProductName, c.CategoryName, p.Price, p.StockQuantity " &
                                   "FROM Products p " &
                                   "JOIN Categories c ON p.CategoryID = c.CategoryID"
-
             If categoryID.HasValue Then
                 query &= " WHERE c.CategoryID = @CategoryID"
             End If
-
             If sortByStock Then
                 query &= " ORDER BY p.StockQuantity ASC"
             End If
@@ -67,7 +60,7 @@ Public Class AdminDashboard
                     Dim adapter As New SqlDataAdapter(command)
                     Dim products As New DataTable()
                     adapter.Fill(products)
-                    DataGridViewProducts.DataSource = products ' Bind the data to the DataGridView
+                    DataGridViewProducts.DataSource = products
                 End Using
             End Using
         Catch ex As Exception
@@ -75,13 +68,63 @@ Public Class AdminDashboard
         End Try
     End Sub
 
+    ' Method to load expired stock messages from the log file
+    Private Sub LoadExpiredStockMessages()
+        Try
+            Dim logFilePath As String = Path.Combine(Application.StartupPath, "ExpiredStockLog.txt")
+            If File.Exists(logFilePath) Then
+                Dim messages As String() = File.ReadAllLines(logFilePath)
+                lstExpiredStockMessages.Items.Clear()
+
+                ' Only add non-empty messages
+                Dim hasValidMessages As Boolean = False
+                For Each msg In messages
+                    If Not String.IsNullOrWhiteSpace(msg) Then
+                        lstExpiredStockMessages.Items.Add(msg)
+                        hasValidMessages = True
+                    End If
+                Next
+
+                ' Only show the alert and make controls visible if there are valid messages
+                If hasValidMessages Then
+                    lstExpiredStockMessages.Visible = True
+                    btnHideExpiredMessages.Visible = True
+                    MessageBox.Show($"Attention: {lstExpiredStockMessages.Items.Count} expired stock messages found. Please review and take action.",
+                               "Stock Expiry Alert", MessageBoxButtons.OK, MessageBoxIcon.Warning)
+                Else
+                    lstExpiredStockMessages.Visible = False
+                    btnHideExpiredMessages.Visible = False
+                End If
+            Else
+                lstExpiredStockMessages.Items.Add("No expired stock messages found.")
+                lstExpiredStockMessages.Visible = False
+                btnHideExpiredMessages.Visible = False
+            End If
+        Catch ex As Exception
+            MessageBox.Show("Error loading expired stock messages: " & ex.Message)
+        End Try
+    End Sub
+
+    ' Button click event to hide the ListBox and clear the log file
+    Private Sub btnHideExpiredMessages_Click(sender As Object, e As EventArgs) Handles btnHideExpiredMessages.Click
+        Try
+            Dim logFilePath As String = Path.Combine(Application.StartupPath, "ExpiredStockLog.txt")
+            If File.Exists(logFilePath) Then
+                File.WriteAllText(logFilePath, "") ' Clear the log file
+            End If
+            lstExpiredStockMessages.Items.Clear()
+            lstExpiredStockMessages.Visible = False
+            btnHideExpiredMessages.Visible = False
+            MessageBox.Show("Expired stock messages cleared.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information)
+        Catch ex As Exception
+            MessageBox.Show("Error clearing expired stock messages: " & ex.Message)
+        End Try
+    End Sub
+
     ' Event triggered when the category is selected from ComboBox
     Private Sub ComboBoxCategory_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ComboBoxCategory.SelectedIndexChanged
-        ' Skip logic if categories haven't finished loading
         If Not isCategoriesLoaded Then Exit Sub
-
         Try
-            ' Ensure SelectedValue is valid and can be converted to an integer
             If ComboBoxCategory.SelectedValue IsNot Nothing AndAlso IsNumeric(ComboBoxCategory.SelectedValue) Then
                 Dim selectedCategoryID As Integer = Convert.ToInt32(ComboBoxCategory.SelectedValue)
                 LoadProductData(selectedCategoryID)
@@ -94,7 +137,7 @@ Public Class AdminDashboard
     ' Button click event for "Manage Products"
     Private Sub ManageProducts_Click(sender As Object, e As EventArgs) Handles ManageProducts.Click
         Dim productForm As New ProductManagementForm()
-        productForm.Show()  ' Open Product Management Form
+        productForm.Show()
     End Sub
 
     ' Button click event for "Manage Users"
@@ -129,12 +172,12 @@ Public Class AdminDashboard
 
     ' Button click event for "Manage Categories"
     Private Sub ButtonManageCategories_Click(sender As Object, e As EventArgs) Handles ButtonManageCategories.Click
-        PanelManageCategories.Visible = True ' Show the panel with category textbox and button
-        TextBoxCategory.Visible = True ' Show the category textbox
-        ButtonAddCategory.Visible = True ' Show the add category button
+        PanelManageCategories.Visible = True
+        TextBoxCategory.Visible = True
+        ButtonAddCategory.Visible = True
     End Sub
 
-    ' Button click event for "Add Category" in the manage categories panel
+    ' Button click event for "Add Category"
     Private Sub ButtonAddCategory_Click(sender As Object, e As EventArgs) Handles ButtonAddCategory.Click
         Try
             Dim categoryName As String = TextBoxCategory.Text.Trim()
@@ -148,11 +191,10 @@ Public Class AdminDashboard
                     End Using
                 End Using
                 MessageBox.Show("Category added successfully.")
-                LoadCategories() ' Reload categories to update the ComboBox
+                LoadCategories()
                 PanelManageCategories.Visible = False
             Else
                 MessageBox.Show("Please enter a category name.")
-
             End If
         Catch ex As Exception
             MessageBox.Show("Error adding category: " & ex.Message)
@@ -162,5 +204,9 @@ Public Class AdminDashboard
     Private Sub Timer1_Tick(sender As Object, e As EventArgs) Handles Timer1.Tick
         Labeldate.Text = DateTime.Now.ToString("dd/MM/yyyy ")
         Labeltime.Text = DateTime.Now.ToString("hh:mm:ss tt")
+    End Sub
+
+    Private Sub PictureBox2_Click(sender As Object, e As EventArgs)
+
     End Sub
 End Class

@@ -220,5 +220,11 @@
     </None>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bluehide.jpeg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bey1.jpeg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
